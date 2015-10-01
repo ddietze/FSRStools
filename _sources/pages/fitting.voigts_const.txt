@@ -1,0 +1,6 @@
+fitting.voigts_const
+====================
+
+.. currentmodule:: fitting
+
+.. autofunction:: voigts_const

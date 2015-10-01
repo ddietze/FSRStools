@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>raman.loadFSRS &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
+    <link rel="next" title="raman.loadTA" href="raman.loadTA.html" />
+    <link rel="prev" title="raman.loadRaman" href="raman.loadRaman.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="raman.loadTA.html" title="raman.loadTA"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="raman.loadRaman.html" title="raman.loadRaman"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../raman.html" accesskey="U"><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="raman.loadRaman.html"
+                        title="previous chapter">raman.loadRaman</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="raman.loadTA.html"
+                        title="next chapter">raman.loadTA</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/raman.loadFSRS.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="raman-loadfsrs">
+<h1>raman.loadFSRS<a class="headerlink" href="#raman-loadfsrs" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="raman.loadFSRS">
+<code class="descclassname">raman.</code><code class="descname">loadFSRS</code><span class="sig-paren">(</span><em>basename</em>, <em>wn=None</em>, <em>timesteps=None</em>, <em>excstr='exc*'</em>, <em>filteroutliers=False</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.loadFSRS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and average all FSRS files matching the basename (e.g. using wildcards).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>basename</strong> (<em>mixed</em>) &#8211; If basename is a <cite>str</cite>, use <code class="xref py py-mod docutils literal"><span class="pre">glob</span></code> to load all matching files using wildcards. If basename is a list, use this list directly without wildcards (only works when no time steps are given).</li>
+<li><strong>wn</strong> (<em>array</em>) &#8211; If a wavenumber axis is given, the first column is interpolated over this axis (default = None).</li>
+<li><strong>timesteps</strong> (<em>array</em>) &#8211; If not None, load excited state data using the given time points. The time value is converted to a string and inserted into a <cite>%s</cite> tag in basename, or appended if no <cite>%s</cite> tag is found. Ground state data is not loaded.</li>
+<li><strong>excstr</strong> (<em>str</em>) &#8211; String that gets appended to the basename to indicate excited state spectra (default = &#8216;exc*&#8217;).</li>
+<li><strong>filteroutliers</strong> (<em>bool</em>) &#8211; If True, outliers, i.e., invalid data sets, are removed before averaging. An outlier is defined as a spectrum whose sum over amplitude squared deviates from the mean by more than two standard deviations.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">When no time steps are given, return the three columns of the FSRS file averaged over all input spectra, i.e. (Raman gain, probe with pump on, probe with pump off). When time steps are given, return three 2d arrays corresponding to the three columns with timesteps along axis 0 and data along axis 1.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="raman.loadTA.html" title="raman.loadTA"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="raman.loadRaman.html" title="raman.loadRaman"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../raman.html" ><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

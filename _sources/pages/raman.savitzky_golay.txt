@@ -1,0 +1,6 @@
+raman.savitzky_golay
+====================
+
+.. currentmodule:: raman
+
+.. autofunction:: savitzky_golay

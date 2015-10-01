@@ -1,0 +1,6 @@
+profilometer.load_sdf
+=====================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: load_sdf

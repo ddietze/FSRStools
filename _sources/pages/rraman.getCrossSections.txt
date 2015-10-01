@@ -1,0 +1,6 @@
+rraman.getCrossSections
+=======================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getCrossSections

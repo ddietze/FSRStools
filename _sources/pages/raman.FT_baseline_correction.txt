@@ -1,0 +1,6 @@
+raman.FT_baseline_correction
+============================
+
+.. currentmodule:: raman
+
+.. autofunction:: FT_baseline_correction

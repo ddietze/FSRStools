@@ -1,0 +1,6 @@
+rraman.t00A
+===========
+
+.. currentmodule:: rraman
+
+.. autofunction:: t00A

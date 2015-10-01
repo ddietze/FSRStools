@@ -1,0 +1,6 @@
+uvvis.binsmooth
+===============
+
+.. currentmodule:: uvvis
+
+.. autofunction:: binsmooth

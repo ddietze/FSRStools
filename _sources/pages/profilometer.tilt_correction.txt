@@ -1,0 +1,6 @@
+profilometer.tilt_correction
+============================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: tilt_correction

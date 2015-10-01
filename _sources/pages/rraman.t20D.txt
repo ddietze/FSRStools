@@ -1,0 +1,6 @@
+rraman.t20D
+===========
+
+.. currentmodule:: rraman
+
+.. autofunction:: t20D

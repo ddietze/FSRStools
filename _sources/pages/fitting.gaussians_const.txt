@@ -1,0 +1,6 @@
+fitting.gaussians_const
+=======================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians_const

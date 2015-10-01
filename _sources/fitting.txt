@@ -1,0 +1,187 @@
+:py:mod:`fitting` - A collection of general fitting routines
+============================================================
+
+.. automodule:: fitting
+
+.. currentmodule:: fitting
+
+Utility Functions
+-----------------
+
+.. autosummary::
+   :toctree: pages
+
+   curve_fit
+   weighted_mean
+   stft
+
+Polynomials
+-----------
+
+.. autosummary::
+   :toctree: pages
+
+   const
+   proportional
+   line
+   parabola
+   parabola2
+   cubic
+   quartic
+   poly
+   lagrange
+
+Powers
+------
+
+.. autosummary::
+   :toctree: pages
+
+   power
+   power_const
+
+Exponentials and Related Decay Functions
+----------------------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   exponentials
+   exp_gauss
+
+Trigonometric Functions
+-----------------------
+
+.. autosummary::
+   :toctree: pages
+
+   cosine
+   cosine2
+   sinusoids
+   sinusoidsFT
+
+Lorentzians
+-----------
+
+.. autosummary::
+   :toctree: pages
+
+   lor
+   lorentzians
+   lorentzians_const
+   lorentzians_line
+   lorentzians_parabola
+   lorentzians_cubic
+   lorentzians_quartic
+
+Dispersive Lorentzians
+----------------------
+
+.. autosummary::
+   :toctree: pages
+
+   displor
+   displorentzians
+   displorentzians_const
+   displorentzians_line
+   displorentzians_parabola
+   displorentzians_cubic
+   displorentzians_quartic
+
+Gaussians
+---------
+
+.. autosummary::
+   :toctree: pages
+
+   gauss
+   gaussians
+   gaussians_const
+   gaussians_line
+   gaussians_parabola
+   gaussians_cubic
+   gaussians_quartic
+
+Dispersive Gaussians
+--------------------
+
+.. autosummary::
+   :toctree: pages
+
+   dispgauss
+   dispgaussians
+   dispgaussians_const
+   dispgaussians_line
+   dispgaussians_parabola
+   dispgaussians_cubic
+   dispgaussians_quartic
+
+Pseudo-Voigt Profiles
+---------------------
+
+.. autosummary::
+   :toctree: pages
+
+   voigt
+   voigts
+   voigts_const
+   voigts_line
+   voigts_parabola
+   voigts_cubic
+   voigts_quartic
+
+Saturation Curves
+-----------------
+
+.. autosummary::
+   :toctree: pages
+
+   saturation
+
+Step Functions
+--------------
+
+.. autosummary::
+   :toctree: pages
+
+   heaviside
+   step
+   smoothstep
+
+Lorentz Oscillator Model
+------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   lorOscRe
+   lorOscIm
+
+Beam Waist Fitting
+------------------
+
+.. autosummary::
+   :toctree: pages
+
+   waist
+   rayleigh
+   fit_waist
+
+Linear Prediction and Singular Value Decomposition
+--------------------------------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   lpsvd
+   lpsvd2
+
+Principal Component Analysis
+----------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   nipals
+   getRdimer
+   getR23mer

@@ -1,0 +1,6 @@
+fitting.lorentzians_line
+========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorentzians_line

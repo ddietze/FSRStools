@@ -1,0 +1,6 @@
+fitting.lorentzians_quartic
+===========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorentzians_quartic

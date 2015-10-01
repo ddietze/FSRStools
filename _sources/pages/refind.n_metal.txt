@@ -1,0 +1,6 @@
+refind.n_metal
+==============
+
+.. currentmodule:: refind
+
+.. autofunction:: n_metal

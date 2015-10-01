@@ -1,0 +1,6 @@
+yeh_tm.System.txy
+=================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.txy

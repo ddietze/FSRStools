@@ -1,0 +1,6 @@
+uvvis.fit_OO_spectrum
+=====================
+
+.. currentmodule:: uvvis
+
+.. autofunction:: fit_OO_spectrum

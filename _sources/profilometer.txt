@@ -1,0 +1,42 @@
+:py:mod:`profilometer` - Tools for optical profilometers and film thickness measurements
+========================================================================================
+
+.. automodule:: profilometer
+
+.. currentmodule:: profilometer
+
+Load / Save Functions
+---------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   load_sdf
+   save_xyz
+   convert
+   
+Data Manipulation Functions
+---------------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   tilt_correction
+
+Measurement Functions
+---------------------
+
+.. autosummary::
+   :toctree: pages
+   
+    get_film_thickness
+   
+Plotting Functions
+------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   plot_profile
+   
+   

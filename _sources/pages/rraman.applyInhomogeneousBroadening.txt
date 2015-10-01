@@ -1,0 +1,6 @@
+rraman.applyInhomogeneousBroadening
+===================================
+
+.. currentmodule:: rraman
+
+.. autofunction:: applyInhomogeneousBroadening

@@ -1,0 +1,6 @@
+raman.calibrate
+===============
+
+.. currentmodule:: raman
+
+.. autofunction:: calibrate

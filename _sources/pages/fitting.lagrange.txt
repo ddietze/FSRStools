@@ -1,0 +1,6 @@
+fitting.lagrange
+================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lagrange

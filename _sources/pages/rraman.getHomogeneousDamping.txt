@@ -1,0 +1,6 @@
+rraman.getHomogeneousDamping
+============================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getHomogeneousDamping

@@ -1,0 +1,6 @@
+fitting.dispgaussians_parabola
+==============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: dispgaussians_parabola

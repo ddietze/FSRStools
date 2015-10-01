@@ -1,0 +1,6 @@
+raman.interpolate
+=================
+
+.. currentmodule:: raman
+
+.. autofunction:: interpolate

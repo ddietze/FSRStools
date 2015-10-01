@@ -1,0 +1,6 @@
+yeh_tm.System.rxy
+=================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.rxy

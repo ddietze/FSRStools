@@ -1,0 +1,6 @@
+uvvis.getOD
+===========
+
+.. currentmodule:: uvvis
+
+.. autofunction:: getOD

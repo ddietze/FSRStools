@@ -1,0 +1,6 @@
+fitting.getR23mer
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: getR23mer

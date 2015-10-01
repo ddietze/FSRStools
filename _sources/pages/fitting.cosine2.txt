@@ -1,0 +1,6 @@
+fitting.cosine2
+===============
+
+.. currentmodule:: fitting
+
+.. autofunction:: cosine2

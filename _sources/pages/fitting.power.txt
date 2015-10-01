@@ -1,0 +1,6 @@
+fitting.power
+=============
+
+.. currentmodule:: fitting
+
+.. autofunction:: power

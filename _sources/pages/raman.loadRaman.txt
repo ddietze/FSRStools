@@ -1,0 +1,6 @@
+raman.loadRaman
+===============
+
+.. currentmodule:: raman
+
+.. autofunction:: loadRaman

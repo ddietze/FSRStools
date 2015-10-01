@@ -1,0 +1,88 @@
+:py:mod:`yeh_tm` - Yeh's 4x4 Transfer Matrix Formalism
+======================================================
+
+.. automodule:: yeh_tm
+
+.. currentmodule:: yeh_tm
+
+Class :py:class:`Layer`
+-----------------------
+
+Each layer is represented by an instance of the :py:class:`Layer` class. This class holds all the physical parameters like thickness, dielectric tensor and orientation.
+
+.. autosummary::
+   :toctree: pages
+
+   Layer
+   Layer.calculate_epsilon
+   Layer.calculate_g
+   Layer.calculate_p_q
+   Layer.calculate_D
+   Layer.calculate_P
+   Layer.calculate_T
+   Layer.update
+
+Class :py:class:`System`
+------------------------
+
+The :py:class:`System` class represents the optical system whose reflection and transmission coefficients are to be calculated. It manages the layer stacking and the external physical properties like wavelength and angle of incidence.
+
+An optical system consists of the first (semi-infinite) layer (substrate), the intermediate layers and the last (semi-infinite) layer (superstrate). The *superstrate* is assumed to be **isotropic** and only the xx component of the dielectric tensor is used for the calculation of the in-plane (x, y) propagation constants.
+
+.. autosummary::
+   :toctree: pages
+
+   System
+   System.add_layer
+   System.calculate_T
+   System.get_field_coefficients
+   System.get_intensity_coefficients
+   System.get_field_coefficients_AOI
+   System.get_intensity_coefficients_AOI
+   System.set_substrate
+   System.set_superstrate
+   System.set_theta
+   System.set_phi
+   System.rxx
+   System.rxy
+   System.ryx
+   System.ryy
+   System.txx
+   System.txy
+   System.tyx
+   System.tyy
+
+
+Needle Algorithm
+----------------
+
+The following functions provide support for the so-called needle algorithm for automated design of dielectric / metallic multilayer components.
+The algorithm is a simplified version based on Sullivan and Dobrowolski, *Appl. Opt.* **35**, 5484 (1996).
+Given a set of target optical properties and an initial system class with at least one optical layer, the needle algorithm tries to optimize the
+design by varying the thickness of each layer followed by insertion of a very thin layer with different refractive index.
+Currently, the design can only be optimized for one of the following properties: Rxx, Rxy, Ryx, Ryy, Txx, Txy, Tyx, Tyy.
+
+.. autosummary::
+   :toctree: pages
+
+   needle
+   get_merit
+   optimize_thicknesses
+   insert_needle
+   remove_needle
+   remove_all_needles
+   optimized_insert_needle
+
+
+Utility Functions
+-----------------
+
+These functions are called internally by the :py:class:`Layer` and :py:class:`System` class methods.
+
+.. autosummary::
+   :toctree: pages
+
+   null_space
+   eroot
+   norm
+   evacuum

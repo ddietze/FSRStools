@@ -1,0 +1,6 @@
+raman.shift_data
+================
+
+.. currentmodule:: raman
+
+.. autofunction:: shift_data

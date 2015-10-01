@@ -1,0 +1,6 @@
+fitting.sinusoidsFT
+===================
+
+.. currentmodule:: fitting
+
+.. autofunction:: sinusoidsFT

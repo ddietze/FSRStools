@@ -1,0 +1,47 @@
+:py:mod:`uvvis` - Analysis of UV/VIS and fluorescence data
+==========================================================
+
+.. automodule:: uvvis
+
+.. currentmodule:: uvvis
+
+Load Spectra
+------------
+
+.. autosummary::
+   :toctree: pages
+
+   load
+   load_sp
+
+Smoothing
+---------
+
+.. autosummary::
+   :toctree: pages
+
+   binning
+   denoise
+   binsmooth
+
+Data Selection
+--------------
+
+.. autosummary::
+   :toctree: pages
+
+   at
+   cut
+   get_OD
+   getOD
+
+Fitting / Analysis
+------------------
+
+This module provides a limited set of fitting functions. For more elaborated tasks take a view at the :py:mod:`FSRStools.fitting` module.
+
+.. autosummary::
+   :toctree: pages
+
+   fit_OO_spectrum
+   get_concentration

@@ -1,0 +1,6 @@
+fitting.quartic
+===============
+
+.. currentmodule:: fitting
+
+.. autofunction:: quartic

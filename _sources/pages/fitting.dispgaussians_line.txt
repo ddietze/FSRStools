@@ -1,0 +1,6 @@
+fitting.dispgaussians_line
+==========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: dispgaussians_line

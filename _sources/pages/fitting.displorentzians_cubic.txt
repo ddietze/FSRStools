@@ -1,0 +1,6 @@
+fitting.displorentzians_cubic
+=============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: displorentzians_cubic

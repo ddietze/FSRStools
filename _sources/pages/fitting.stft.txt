@@ -1,0 +1,6 @@
+fitting.stft
+============
+
+.. currentmodule:: fitting
+
+.. autofunction:: stft

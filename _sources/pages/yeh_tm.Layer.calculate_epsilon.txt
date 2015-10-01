@@ -1,0 +1,6 @@
+yeh_tm.Layer.calculate_epsilon
+==============================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: Layer.calculate_epsilon

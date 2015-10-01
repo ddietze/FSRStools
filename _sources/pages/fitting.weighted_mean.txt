@@ -1,0 +1,6 @@
+fitting.weighted_mean
+=====================
+
+.. currentmodule:: fitting
+
+.. autofunction:: weighted_mean

@@ -1,0 +1,6 @@
+fitting.displorentzians_line
+============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: displorentzians_line

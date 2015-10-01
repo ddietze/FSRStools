@@ -1,0 +1,54 @@
+yeh_tm.System
+=============
+
+.. currentmodule:: yeh_tm
+
+.. autoclass:: System
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~System.__init__
+      ~System.add_layer
+      ~System.calculate_T
+      ~System.get_electric_field
+      ~System.get_field_coefficients
+      ~System.get_field_coefficients_AOI
+      ~System.get_intensity_coefficients
+      ~System.get_intensity_coefficients_AOI
+      ~System.get_layer
+      ~System.get_layers
+      ~System.get_num_layers
+      ~System.get_substrate
+      ~System.get_superstrate
+      ~System.insert_layer
+      ~System.remove_layer
+      ~System.rxx
+      ~System.rxy
+      ~System.ryx
+      ~System.ryy
+      ~System.set_phi
+      ~System.set_substrate
+      ~System.set_superstrate
+      ~System.set_theta
+      ~System.txx
+      ~System.txy
+      ~System.tyx
+      ~System.tyy
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~System.c
+   
+   

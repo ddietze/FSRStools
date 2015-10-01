@@ -1,0 +1,6 @@
+yeh_tm.get_merit
+================
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: get_merit

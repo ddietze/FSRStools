@@ -1,0 +1,6 @@
+refind.d2N
+==========
+
+.. currentmodule:: refind
+
+.. autofunction:: d2N

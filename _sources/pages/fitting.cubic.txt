@@ -1,0 +1,6 @@
+fitting.cubic
+=============
+
+.. currentmodule:: fitting
+
+.. autofunction:: cubic

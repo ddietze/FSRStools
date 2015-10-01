@@ -1,0 +1,6 @@
+fitting.lor
+===========
+
+.. currentmodule:: fitting
+
+.. autofunction:: lor

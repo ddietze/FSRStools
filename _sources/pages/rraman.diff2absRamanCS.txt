@@ -1,0 +1,6 @@
+rraman.diff2absRamanCS
+======================
+
+.. currentmodule:: rraman
+
+.. autofunction:: diff2absRamanCS

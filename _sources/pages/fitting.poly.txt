@@ -1,0 +1,6 @@
+fitting.poly
+============
+
+.. currentmodule:: fitting
+
+.. autofunction:: poly

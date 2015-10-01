@@ -1,0 +1,6 @@
+crosscorr.shift_data
+====================
+
+.. currentmodule:: crosscorr
+
+.. autofunction:: shift_data

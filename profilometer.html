@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>profilometer - Tools for optical profilometers and film thickness measurements &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="profilometer.load_sdf" href="pages/profilometer.load_sdf.html" />
+    <link rel="prev" title="fitting.getR23mer" href="pages/fitting.getR23mer.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/profilometer.load_sdf.html" title="profilometer.load_sdf"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pages/fitting.getR23mer.html" title="fitting.getR23mer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">profilometer</span></code> - Tools for optical profilometers and film thickness measurements</a><ul>
+<li><a class="reference internal" href="#load-save-functions">Load / Save Functions</a></li>
+<li><a class="reference internal" href="#data-manipulation-functions">Data Manipulation Functions</a></li>
+<li><a class="reference internal" href="#measurement-functions">Measurement Functions</a></li>
+<li><a class="reference internal" href="#plotting-functions">Plotting Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pages/fitting.getR23mer.html"
+                        title="previous chapter">fitting.getR23mer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/profilometer.load_sdf.html"
+                        title="next chapter">profilometer.load_sdf</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/profilometer.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-profilometer">
+<span id="profilometer-tools-for-optical-profilometers-and-film-thickness-measurements"></span><h1><a class="reference internal" href="#module-profilometer" title="profilometer"><code class="xref py py-mod docutils literal"><span class="pre">profilometer</span></code></a> - Tools for optical profilometers and film thickness measurements<a class="headerlink" href="#module-profilometer" title="Permalink to this headline">¶</a></h1>
+<p>Load, display and convert SDF files from ADE profilometers. Supports extraction of film height using histogram analysis.</p>
+<div class="section" id="load-save-functions">
+<h2>Load / Save Functions<a class="headerlink" href="#load-save-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/profilometer.load_sdf.html#profilometer.load_sdf" title="profilometer.load_sdf"><code class="xref py py-obj docutils literal"><span class="pre">load_sdf</span></code></a>(filename)</td>
+<td>Loads an SDF file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/profilometer.save_xyz.html#profilometer.save_xyz" title="profilometer.save_xyz"><code class="xref py py-obj docutils literal"><span class="pre">save_xyz</span></code></a>(filename,&nbsp;x,&nbsp;y,&nbsp;z)</td>
+<td>Save height profile as simple XYZ ascii file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/profilometer.convert.html#profilometer.convert" title="profilometer.convert"><code class="xref py py-obj docutils literal"><span class="pre">convert</span></code></a>(filename)</td>
+<td>Convert files from sdf to xyz format.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-manipulation-functions">
+<h2>Data Manipulation Functions<a class="headerlink" href="#data-manipulation-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/profilometer.tilt_correction.html#profilometer.tilt_correction" title="profilometer.tilt_correction"><code class="xref py py-obj docutils literal"><span class="pre">tilt_correction</span></code></a>(z[,&nbsp;type])</td>
+<td>Correct tilt by subtracting a plane from the 2d height profile.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="measurement-functions">
+<h2>Measurement Functions<a class="headerlink" href="#measurement-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/profilometer.get_film_thickness.html#profilometer.get_film_thickness" title="profilometer.get_film_thickness"><code class="xref py py-obj docutils literal"><span class="pre">get_film_thickness</span></code></a>(z[,&nbsp;plotHist])</td>
+<td>Extract film thickness from height profile using histogram analysis and two Gaussians.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="plotting-functions">
+<h2>Plotting Functions<a class="headerlink" href="#plotting-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/profilometer.plot_profile.html#profilometer.plot_profile" title="profilometer.plot_profile"><code class="xref py py-obj docutils literal"><span class="pre">plot_profile</span></code></a>(x,&nbsp;y,&nbsp;z[,&nbsp;filename])</td>
+<td>Create a 3d surface plot.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/profilometer.load_sdf.html" title="profilometer.load_sdf"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pages/fitting.getR23mer.html" title="fitting.getR23mer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

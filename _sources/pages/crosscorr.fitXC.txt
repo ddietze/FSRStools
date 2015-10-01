@@ -1,0 +1,6 @@
+crosscorr.fitXC
+===============
+
+.. currentmodule:: crosscorr
+
+.. autofunction:: fitXC

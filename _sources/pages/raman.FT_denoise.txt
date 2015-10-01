@@ -1,0 +1,6 @@
+raman.FT_denoise
+================
+
+.. currentmodule:: raman
+
+.. autofunction:: FT_denoise

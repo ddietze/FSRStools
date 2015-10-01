@@ -1,0 +1,6 @@
+raman.mol_lines
+===============
+
+.. currentmodule:: raman
+
+.. autofunction:: mol_lines

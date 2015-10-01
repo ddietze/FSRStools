@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>uvvis - Analysis of UV/VIS and fluorescence data &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="uvvis.load" href="pages/uvvis.load.html" />
+    <link rel="prev" title="rraman.t20D" href="pages/rraman.t20D.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/uvvis.load.html" title="uvvis.load"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pages/rraman.t20D.html" title="rraman.t20D"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">uvvis</span></code> - Analysis of UV/VIS and fluorescence data</a><ul>
+<li><a class="reference internal" href="#load-spectra">Load Spectra</a></li>
+<li><a class="reference internal" href="#smoothing">Smoothing</a></li>
+<li><a class="reference internal" href="#data-selection">Data Selection</a></li>
+<li><a class="reference internal" href="#fitting-analysis">Fitting / Analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pages/rraman.t20D.html"
+                        title="previous chapter">rraman.t20D</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/uvvis.load.html"
+                        title="next chapter">uvvis.load</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/uvvis.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-uvvis">
+<span id="uvvis-analysis-of-uv-vis-and-fluorescence-data"></span><h1><a class="reference internal" href="#module-uvvis" title="uvvis"><code class="xref py py-mod docutils literal"><span class="pre">uvvis</span></code></a> - Analysis of UV/VIS and fluorescence data<a class="headerlink" href="#module-uvvis" title="Permalink to this headline">¶</a></h1>
+<p>Load and process UV/VIS spectra and related formats. Supports PerkinElmers old Lambda format.
+Provides also some short cuts to useful functions from the <code class="xref py py-mod docutils literal"><span class="pre">FSRStools.raman</span></code> module.</p>
+<div class="section" id="load-spectra">
+<h2>Load Spectra<a class="headerlink" href="#load-spectra" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.load.html#uvvis.load" title="uvvis.load"><code class="xref py py-obj docutils literal"><span class="pre">load</span></code></a>(filename[,&nbsp;lmin,&nbsp;lmax,&nbsp;smooth,&nbsp;delim])</td>
+<td>Loads a spectrum / set of spectra from ASCII file(s).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/uvvis.load_sp.html#uvvis.load_sp" title="uvvis.load_sp"><code class="xref py py-obj docutils literal"><span class="pre">load_sp</span></code></a>(filename[,&nbsp;lmin,&nbsp;lmax,&nbsp;smooth])</td>
+<td>Basic support for PerkinElmer&#8217;s Lambda-series UV/VIS file format (<cite>*.sp</cite>).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="smoothing">
+<h2>Smoothing<a class="headerlink" href="#smoothing" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.binning.html#uvvis.binning" title="uvvis.binning"><code class="xref py py-obj docutils literal"><span class="pre">binning</span></code></a>(x,&nbsp;y,&nbsp;d)</td>
+<td>Return a binned version of x and y, where the new y values are calculated as the average over the bin width at the center of the bin.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/uvvis.denoise.html#uvvis.denoise" title="uvvis.denoise"><code class="xref py py-obj docutils literal"><span class="pre">denoise</span></code></a>(y)</td>
+<td>Optimized smoothing of data based on Appl.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.binsmooth.html#uvvis.binsmooth" title="uvvis.binsmooth"><code class="xref py py-obj docutils literal"><span class="pre">binsmooth</span></code></a>(x,&nbsp;y,&nbsp;d)</td>
+<td>Returned smoothed version of x, y based on binning and cubic interpolation.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="data-selection">
+<h2>Data Selection<a class="headerlink" href="#data-selection" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.at.html#uvvis.at" title="uvvis.at"><code class="xref py py-obj docutils literal"><span class="pre">at</span></code></a>(x,&nbsp;y,&nbsp;x0)</td>
+<td>Return the value of y with x-coordinate closest to x0.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/uvvis.cut.html#uvvis.cut" title="uvvis.cut"><code class="xref py py-obj docutils literal"><span class="pre">cut</span></code></a>(x,&nbsp;y,&nbsp;x0,&nbsp;x1)</td>
+<td>Cut a slice from x and y using the values in x.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.get_OD.html#uvvis.get_OD" title="uvvis.get_OD"><code class="xref py py-obj docutils literal"><span class="pre">get_OD</span></code></a>(wl,&nbsp;spectrum,&nbsp;wl0)</td>
+<td>Returns the interpolated value of a spectrum at a wavelength wl0 using the wavelength axis wl.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/uvvis.getOD.html#uvvis.getOD" title="uvvis.getOD"><code class="xref py py-obj docutils literal"><span class="pre">getOD</span></code></a>(wl,&nbsp;spectrum,&nbsp;wl0)</td>
+<td>Same as <a class="reference internal" href="pages/uvvis.get_OD.html#uvvis.get_OD" title="uvvis.get_OD"><code class="xref py py-func docutils literal"><span class="pre">get_OD()</span></code></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fitting-analysis">
+<h2>Fitting / Analysis<a class="headerlink" href="#fitting-analysis" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a limited set of fitting functions. For more elaborated tasks take a view at the <code class="xref py py-mod docutils literal"><span class="pre">FSRStools.fitting</span></code> module.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/uvvis.fit_OO_spectrum.html#uvvis.fit_OO_spectrum" title="uvvis.fit_OO_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">fit_OO_spectrum</span></code></a>(wl,&nbsp;spectrum[,&nbsp;show,&nbsp;delta])</td>
+<td>Fit a single peaked spectrum with a gaussian and a constant offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/uvvis.get_concentration.html#uvvis.get_concentration" title="uvvis.get_concentration"><code class="xref py py-obj docutils literal"><span class="pre">get_concentration</span></code></a>(spectrum,&nbsp;epspeak[,&nbsp;cuvL,&nbsp;...])</td>
+<td>Extract concentration of solute from UV/VIS spectrum and peak absorptivity of solute.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/uvvis.load.html" title="uvvis.load"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pages/rraman.t20D.html" title="rraman.t20D"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

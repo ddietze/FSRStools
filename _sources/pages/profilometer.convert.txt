@@ -1,0 +1,6 @@
+profilometer.convert
+====================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: convert

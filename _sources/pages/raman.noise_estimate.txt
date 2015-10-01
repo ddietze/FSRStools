@@ -1,0 +1,6 @@
+raman.noise_estimate
+====================
+
+.. currentmodule:: raman
+
+.. autofunction:: noise_estimate

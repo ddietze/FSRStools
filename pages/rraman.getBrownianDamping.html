@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rraman.getBrownianDamping &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
+    <link rel="next" title="rraman.applyInhomogeneousBroadening" href="rraman.applyInhomogeneousBroadening.html" />
+    <link rel="prev" title="rraman.getKuboDamping" href="rraman.getKuboDamping.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rraman.applyInhomogeneousBroadening.html" title="rraman.applyInhomogeneousBroadening"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rraman.getKuboDamping.html"
+                        title="previous chapter">rraman.getKuboDamping</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rraman.applyInhomogeneousBroadening.html"
+                        title="next chapter">rraman.applyInhomogeneousBroadening</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/rraman.getBrownianDamping.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rraman-getbrowniandamping">
+<h1>rraman.getBrownianDamping<a class="headerlink" href="#rraman-getbrowniandamping" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="rraman.getBrownianDamping">
+<code class="descclassname">rraman.</code><code class="descname">getBrownianDamping</code><span class="sig-paren">(</span><em>t</em>, <em>kappa</em>, <em>T</em>, <em>egamma</em>, <em>cutoff=1e-06</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getBrownianDamping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the damping term using Mukamel&#8217;s Brownian oscillator model. This function also incorporates the homogeneous linewidth Gamma.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>t</strong> (<em>array</em>) &#8211; Time axis (fs).</li>
+<li><strong>kappa</strong> (<em>float</em>) &#8211; <p>Lineshape parameter:</p>
+<ul>
+<li>kappa &gt;&gt; 1 = Lorentzian,</li>
+<li>kappa &lt;&lt; 1 = Gaussian.</li>
+</ul>
+</li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature in K.</li>
+<li><strong>egamma</strong> (<em>float</em>) &#8211; Electronic homogeneous linewidth (<strong>FWHM</strong>, cm-1).</li>
+<li><strong>cutoff</strong> (<em>float</em>) &#8211; Cutoff for sum over Brownian oscillators. Typically between 1e-6 (default) and 1e-8. Check for convergence by re-running with different values.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Damping term in the time domain, <img class="math" src="../_images/math/a79333d11e698916340ba664523f9a7ee20b0ee8.png" alt="e^{-g(t)}"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Myers, <em>J. Raman. Spectrosc.</em> <strong>28</strong>, 389 (1997)</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rraman.applyInhomogeneousBroadening.html" title="rraman.applyInhomogeneousBroadening"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

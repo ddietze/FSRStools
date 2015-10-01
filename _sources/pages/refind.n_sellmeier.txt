@@ -1,0 +1,6 @@
+refind.n_sellmeier
+==================
+
+.. currentmodule:: refind
+
+.. autofunction:: n_sellmeier

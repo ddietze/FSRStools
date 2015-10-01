@@ -1,0 +1,6 @@
+yeh_tm.insert_needle
+====================
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: insert_needle

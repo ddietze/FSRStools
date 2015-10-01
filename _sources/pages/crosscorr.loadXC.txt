@@ -1,0 +1,6 @@
+crosscorr.loadXC
+================
+
+.. currentmodule:: crosscorr
+
+.. autofunction:: loadXC

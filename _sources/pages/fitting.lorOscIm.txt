@@ -1,0 +1,6 @@
+fitting.lorOscIm
+================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorOscIm

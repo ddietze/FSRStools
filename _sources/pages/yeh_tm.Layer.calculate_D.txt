@@ -1,0 +1,6 @@
+yeh_tm.Layer.calculate_D
+========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: Layer.calculate_D

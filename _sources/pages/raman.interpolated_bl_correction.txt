@@ -1,0 +1,6 @@
+raman.interpolated_bl_correction
+================================
+
+.. currentmodule:: raman
+
+.. autofunction:: interpolated_bl_correction

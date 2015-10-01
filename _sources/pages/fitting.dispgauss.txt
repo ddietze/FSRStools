@@ -1,0 +1,6 @@
+fitting.dispgauss
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: dispgauss

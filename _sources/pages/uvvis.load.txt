@@ -1,0 +1,6 @@
+uvvis.load
+==========
+
+.. currentmodule:: uvvis
+
+.. autofunction:: load

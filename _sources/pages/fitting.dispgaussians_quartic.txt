@@ -1,0 +1,6 @@
+fitting.dispgaussians_quartic
+=============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: dispgaussians_quartic

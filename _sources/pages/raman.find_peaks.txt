@@ -1,0 +1,6 @@
+raman.find_peaks
+================
+
+.. currentmodule:: raman
+
+.. autofunction:: find_peaks

@@ -1,0 +1,6 @@
+fitting.parabola2
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: parabola2

@@ -1,0 +1,6 @@
+fitting.lorentzians_cubic
+=========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorentzians_cubic

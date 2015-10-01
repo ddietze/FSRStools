@@ -1,0 +1,6 @@
+raman.bandintegral
+==================
+
+.. currentmodule:: raman
+
+.. autofunction:: bandintegral

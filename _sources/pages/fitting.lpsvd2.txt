@@ -1,0 +1,6 @@
+fitting.lpsvd2
+==============
+
+.. currentmodule:: fitting
+
+.. autofunction:: lpsvd2

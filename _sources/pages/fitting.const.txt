@@ -1,0 +1,6 @@
+fitting.const
+=============
+
+.. currentmodule:: fitting
+
+.. autofunction:: const

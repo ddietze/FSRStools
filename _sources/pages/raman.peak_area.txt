@@ -1,0 +1,6 @@
+raman.peak_area
+===============
+
+.. currentmodule:: raman
+
+.. autofunction:: peak_area

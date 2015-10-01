@@ -1,0 +1,6 @@
+uvvis.cut
+=========
+
+.. currentmodule:: uvvis
+
+.. autofunction:: cut

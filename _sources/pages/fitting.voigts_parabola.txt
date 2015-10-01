@@ -1,0 +1,6 @@
+fitting.voigts_parabola
+=======================
+
+.. currentmodule:: fitting
+
+.. autofunction:: voigts_parabola

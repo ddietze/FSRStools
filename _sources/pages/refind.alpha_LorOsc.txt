@@ -1,0 +1,6 @@
+refind.alpha_LorOsc
+===================
+
+.. currentmodule:: refind
+
+.. autofunction:: alpha_LorOsc

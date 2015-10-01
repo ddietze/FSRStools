@@ -1,0 +1,6 @@
+rraman.t10D
+===========
+
+.. currentmodule:: rraman
+
+.. autofunction:: t10D

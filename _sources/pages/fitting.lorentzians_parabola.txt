@@ -1,0 +1,6 @@
+fitting.lorentzians_parabola
+============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorentzians_parabola

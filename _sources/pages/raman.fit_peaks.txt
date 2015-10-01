@@ -1,0 +1,6 @@
+raman.fit_peaks
+===============
+
+.. currentmodule:: raman
+
+.. autofunction:: fit_peaks

@@ -1,0 +1,6 @@
+raman.solvent_subtract
+======================
+
+.. currentmodule:: raman
+
+.. autofunction:: solvent_subtract

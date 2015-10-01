@@ -1,0 +1,6 @@
+yeh_tm.System.get_intensity_coefficients
+========================================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.get_intensity_coefficients

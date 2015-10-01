@@ -1,0 +1,6 @@
+fitting.displorentzians_parabola
+================================
+
+.. currentmodule:: fitting
+
+.. autofunction:: displorentzians_parabola

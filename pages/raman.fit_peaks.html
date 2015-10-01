@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>raman.fit_peaks &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
+    <link rel="next" title="raman.peak_remove" href="raman.peak_remove.html" />
+    <link rel="prev" title="raman.get_peak_estimate" href="raman.get_peak_estimate.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="raman.peak_remove.html" title="raman.peak_remove"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="raman.get_peak_estimate.html" title="raman.get_peak_estimate"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../raman.html" accesskey="U"><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="raman.get_peak_estimate.html"
+                        title="previous chapter">raman.get_peak_estimate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="raman.peak_remove.html"
+                        title="next chapter">raman.peak_remove</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/raman.fit_peaks.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="raman-fit-peaks">
+<h1>raman.fit_peaks<a class="headerlink" href="#raman-fit-peaks" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="raman.fit_peaks">
+<code class="descclassname">raman.</code><code class="descname">fit_peaks</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>popt0</em>, <em>fit_func</em>, <em>bounds=None</em>, <em>estimate_bl=False</em>, <em>use_popt0=True</em>, <em>inc_blorder=1</em>, <em>max_blorder=-1</em>, <em>global_opt=True</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.fit_peaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to fit Raman peaks with (automatic) baseline fitting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; Data. If y is a list or 2d array of spectra, fit every spectrum.</li>
+<li><strong>popt0</strong> (<em>array</em>) &#8211; Initial parameters for fitting, for example obtained from <a class="reference internal" href="raman.get_peak_estimate.html#raman.get_peak_estimate" title="raman.get_peak_estimate"><code class="xref py py-func docutils literal"><span class="pre">get_peak_estimate()</span></code></a>.</li>
+<li><strong>fit_func</strong> (<em>function</em>) &#8211; Fitting function to be used to fit the data. If <cite>estimate_bl</cite> is True, this function should only fit the peaks, not the baseline.</li>
+<li><strong>bounds</strong> (<em>array</em>) &#8211; Array of tuples giving the minimum and maximum allowed value for each parameter in popt0. If not None, use <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.differential_evolution()</span></code> to fit the peaks. (default = None).</li>
+<li><strong>estimate_bl</strong> (<em>bool</em>) &#8211; If True, attempt an automatic baseline fitting using n-th order polynomials. This baseline is added to any basline contained in fit_func.</li>
+<li><strong>use_popt0</strong> (<em>bool</em>) &#8211; If fitting multiple spectra, control whether the initial parameters are always the ones provided in <cite>popt0</cite> (True, default) or the ones from the last spectrum (False).</li>
+<li><strong>inc_blorder</strong> (<em>int</em>) &#8211; When fitting the baseline, the order of the polynomial is increased by <cite>inc_blorder</cite> until no further improvement can be achieved (default = 1).</li>
+<li><strong>max_blorder</strong> (<em>int</em>) &#8211; Maximum permitted order of the baseline polynomial. Set to -1 for no restriction (default).</li>
+<li><strong>global_opt</strong> (<em>bool</em>) &#8211; If True, attempt a simultaneous fit of baseline AND peaks once a decent fit for each has been found.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The fitted spectrum, same shape as y, and the final peak fit parameters (popt0).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="raman.peak_remove.html" title="raman.peak_remove"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="raman.get_peak_estimate.html" title="raman.get_peak_estimate"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../raman.html" ><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

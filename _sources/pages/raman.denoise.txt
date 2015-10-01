@@ -1,0 +1,6 @@
+raman.denoise
+=============
+
+.. currentmodule:: raman
+
+.. autofunction:: denoise

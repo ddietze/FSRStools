@@ -1,0 +1,6 @@
+fitting.waist
+=============
+
+.. currentmodule:: fitting
+
+.. autofunction:: waist

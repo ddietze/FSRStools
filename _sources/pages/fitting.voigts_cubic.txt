@@ -1,0 +1,6 @@
+fitting.voigts_cubic
+====================
+
+.. currentmodule:: fitting
+
+.. autofunction:: voigts_cubic

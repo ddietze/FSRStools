@@ -1,0 +1,6 @@
+refind.n_metal_model
+====================
+
+.. currentmodule:: refind
+
+.. autofunction:: n_metal_model

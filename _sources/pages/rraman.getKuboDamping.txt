@@ -1,0 +1,6 @@
+rraman.getKuboDamping
+=====================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getKuboDamping

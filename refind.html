@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>refind - Refractive index related functions &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="refind.dN" href="pages/refind.dN.html" />
+    <link rel="prev" title="raman.peak_area" href="pages/raman.peak_area.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/refind.dN.html" title="refind.dN"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pages/raman.peak_area.html" title="raman.peak_area"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">refind</span></code> - Refractive index related functions</a><ul>
+<li><a class="reference internal" href="#conversion-manipulation-functions">Conversion / Manipulation Functions</a></li>
+<li><a class="reference internal" href="#refractive-indices-experimental">Refractive Indices - Experimental</a></li>
+<li><a class="reference internal" href="#refractive-indices-model">Refractive Indices - Model</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pages/raman.peak_area.html"
+                        title="previous chapter">raman.peak_area</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/refind.dN.html"
+                        title="next chapter">refind.dN</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/refind.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-refind">
+<span id="refind-refractive-index-related-functions"></span><h1><a class="reference internal" href="#module-refind" title="refind"><code class="xref py py-mod docutils literal"><span class="pre">refind</span></code></a> - Refractive index related functions<a class="headerlink" href="#module-refind" title="Permalink to this headline">¶</a></h1>
+<p>A collection of functions related to the optical refractive index.
+Apart from providing tabulated indices for commonly used optical materials including dielectrics, common solvents and metals,
+this module defines functions for more general use. These include Kramers-Kronig transformations, the Lorentz oscillator model,
+general support for Sellmeier equations, inhomogeneous broadening and first, second and third order derivatives with respect to
+wavelength. Furthermore, functions for conversion from refractive index to group index and permittivity and vice versa are provided.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All functions for tabulated refractive indices expect wavelength to be in um.</p>
+</div>
+<div class="section" id="conversion-manipulation-functions">
+<h2>Conversion / Manipulation Functions<a class="headerlink" href="#conversion-manipulation-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.dN.html#refind.dN" title="refind.dN"><code class="xref py py-obj docutils literal"><span class="pre">dN</span></code></a>(N,&nbsp;wl,&nbsp;*args)</td>
+<td>First order derivative of the refractive index as function of wavelength using first-order finite difference.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.d2N.html#refind.d2N" title="refind.d2N"><code class="xref py py-obj docutils literal"><span class="pre">d2N</span></code></a>(N,&nbsp;wl,&nbsp;*args)</td>
+<td>Second order derivative of the refractive index as function of wavelength using first-order finite difference.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.d3N.html#refind.d3N" title="refind.d3N"><code class="xref py py-obj docutils literal"><span class="pre">d3N</span></code></a>(N,&nbsp;wl,&nbsp;*args)</td>
+<td>Third order derivative of the refractive index as function of wavelength using first-order finite difference.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.n_group.html#refind.n_group" title="refind.n_group"><code class="xref py py-obj docutils literal"><span class="pre">n_group</span></code></a>(N,&nbsp;wl,&nbsp;*args)</td>
+<td>Group velocity refractive index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_to_eps.html#refind.n_to_eps" title="refind.n_to_eps"><code class="xref py py-obj docutils literal"><span class="pre">n_to_eps</span></code></a>(n)</td>
+<td>Convert (complex) refractive index to (complex) permittivity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.eps_to_n.html#refind.eps_to_n" title="refind.eps_to_n"><code class="xref py py-obj docutils literal"><span class="pre">eps_to_n</span></code></a>(eps)</td>
+<td>Convert (complex) permittivity to (complex) refractive index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.kramers_kronig.html#refind.kramers_kronig" title="refind.kramers_kronig"><code class="xref py py-obj docutils literal"><span class="pre">kramers_kronig</span></code></a>(w,&nbsp;k)</td>
+<td>Calculate the Kramers-Kronig transformation of absorption spectrum k as function of angular frequency w.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.applyInhomogeneousBroadening.html#refind.applyInhomogeneousBroadening" title="refind.applyInhomogeneousBroadening"><code class="xref py py-obj docutils literal"><span class="pre">applyInhomogeneousBroadening</span></code></a>(x,&nbsp;y,&nbsp;dx)</td>
+<td>Convolute a refractive index / permittivity profile with a Gaussian to introduce inhomogeneous broadening.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="refractive-indices-experimental">
+<h2>Refractive Indices - Experimental<a class="headerlink" href="#refractive-indices-experimental" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_air.html#refind.n_air" title="refind.n_air"><code class="xref py py-obj docutils literal"><span class="pre">n_air</span></code></a>(wl)</td>
+<td>Refractive index of standard air (dry, 15degC, 101325 Pa with 450ppm CO2).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.n_coatings.html#refind.n_coatings" title="refind.n_coatings"><code class="xref py py-obj docutils literal"><span class="pre">n_coatings</span></code></a>(wl[,&nbsp;type])</td>
+<td>Refractive index of common materials used for optical coatings.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_glass.html#refind.n_glass" title="refind.n_glass"><code class="xref py py-obj docutils literal"><span class="pre">n_glass</span></code></a>(wl[,&nbsp;type])</td>
+<td>Refractive index of some common glasses using their respective Sellmeier coefficients.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.n_liquid.html#refind.n_liquid" title="refind.n_liquid"><code class="xref py py-obj docutils literal"><span class="pre">n_liquid</span></code></a>(wl[,&nbsp;type])</td>
+<td>Refractive index of common solvents.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_metal.html#refind.n_metal" title="refind.n_metal"><code class="xref py py-obj docutils literal"><span class="pre">n_metal</span></code></a>(wl[,&nbsp;type])</td>
+<td>Returns refractive index of some metals (Au, Ag, Cu, Al, Cr).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.n_polymer.html#refind.n_polymer" title="refind.n_polymer"><code class="xref py py-obj docutils literal"><span class="pre">n_polymer</span></code></a>(wl[,&nbsp;type])</td>
+<td>Refractive index of some polymers.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="refractive-indices-model">
+<h2>Refractive Indices - Model<a class="headerlink" href="#refractive-indices-model" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_LorOsc.html#refind.n_LorOsc" title="refind.n_LorOsc"><code class="xref py py-obj docutils literal"><span class="pre">n_LorOsc</span></code></a>(wl,&nbsp;ebg,&nbsp;*p)</td>
+<td>Refractive index from Lorentz oscillator model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.alpha_LorOsc.html#refind.alpha_LorOsc" title="refind.alpha_LorOsc"><code class="xref py py-obj docutils literal"><span class="pre">alpha_LorOsc</span></code></a>(wl,&nbsp;ebg,&nbsp;*p)</td>
+<td>Absorption coefficient from Lorentz oscillator model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.n_metal_model.html#refind.n_metal_model" title="refind.n_metal_model"><code class="xref py py-obj docutils literal"><span class="pre">n_metal_model</span></code></a>(wl,&nbsp;epsinf,&nbsp;lp,&nbsp;gp,&nbsp;*poles)</td>
+<td>Use the model presented in Etchegoin et al., <em>J Chem Phys</em> <strong>125</strong>, 164705 (2006) to describe the refractive index of nobel metals using a combination of Drude and Lorentz models.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/refind.n_sellmeier.html#refind.n_sellmeier" title="refind.n_sellmeier"><code class="xref py py-obj docutils literal"><span class="pre">n_sellmeier</span></code></a>(wl,&nbsp;*p)</td>
+<td>General Sellmeier-type of refractive index.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/refind.dN.html" title="refind.dN"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pages/raman.peak_area.html" title="raman.peak_area"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

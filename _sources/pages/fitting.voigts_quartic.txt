@@ -1,0 +1,6 @@
+fitting.voigts_quartic
+======================
+
+.. currentmodule:: fitting
+
+.. autofunction:: voigts_quartic

@@ -1,0 +1,6 @@
+fitting.displor
+===============
+
+.. currentmodule:: fitting
+
+.. autofunction:: displor

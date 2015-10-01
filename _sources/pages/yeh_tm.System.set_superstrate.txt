@@ -1,0 +1,6 @@
+yeh_tm.System.set_superstrate
+=============================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.set_superstrate

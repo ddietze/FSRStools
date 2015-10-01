@@ -1,0 +1,6 @@
+raman.loadTA
+============
+
+.. currentmodule:: raman
+
+.. autofunction:: loadTA

@@ -1,0 +1,6 @@
+refind.applyInhomogeneousBroadening
+===================================
+
+.. currentmodule:: refind
+
+.. autofunction:: applyInhomogeneousBroadening

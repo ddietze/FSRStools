@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>yeh_tm.System &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
+    <link rel="next" title="yeh_tm.System.add_layer" href="yeh_tm.System.add_layer.html" />
+    <link rel="prev" title="yeh_tm.Layer.update" href="yeh_tm.Layer.update.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.System.add_layer.html" title="yeh_tm.System.add_layer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.Layer.update.html" title="yeh_tm.Layer.update"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="yeh_tm.Layer.update.html"
+                        title="previous chapter">yeh_tm.Layer.update</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="yeh_tm.System.add_layer.html"
+                        title="next chapter">yeh_tm.System.add_layer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/yeh_tm.System.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="yeh-tm-system">
+<h1>yeh_tm.System<a class="headerlink" href="#yeh-tm-system" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="yeh_tm.System">
+<em class="property">class </em><code class="descclassname">yeh_tm.</code><code class="descname">System</code><span class="sig-paren">(</span><em>theta=0.0</em>, <em>phi=0.0</em>, <em>substrate=None</em>, <em>superstrate=None</em>, <em>layers=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an instance of the System class, which manages the optical system.</p>
+<p>An optical system consists of the first (semi-infinite) layer (substrate), the intermediate layers and the last (semi-infinite) layer (superstrate). The <em>superstrate</em> is assumed to be <strong>isotropic</strong> and only the xx component of the dielectric tensor is used for the calculation of the in-plane (x, y) propagation constants.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>theta</strong> (<em>float</em>) &#8211; Angle of incidence versus the surface normal / z-axis (deg, default = 0). The plane of incidence is the x-z-plane.</li>
+<li><strong>phi</strong> (<em>float</em>) &#8211; Angle of rotation of the system around the z-axis (deg, default = 0).</li>
+<li><strong>substrate</strong> (<em>layer</em>) &#8211; Layer definition of the substrate. If None, use vacuum.</li>
+<li><strong>superstrate</strong> (<em>layer</em>) &#8211; Layer definition of the superstrate. If None, use vacuum.</li>
+<li><strong>layers</strong> (<em>list</em>) &#8211; A list of layer definitions for the intermediate layers sorted from substrate to superstrate.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">The frequency w which is used for the calculations is actually the wavenumber in vacuum, i.e. <img class="math" src="../_images/math/fe55de2a59cba928249648565b46232044b0feb8.png" alt="w = \frac{2\pi}{\lambda}"/>.</p>
+</div>
+<dl class="method">
+<dt id="yeh_tm.System.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>theta=0.0</em>, <em>phi=0.0</em>, <em>substrate=None</em>, <em>superstrate=None</em>, <em>layers=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#yeh_tm.System.__init__" title="yeh_tm.System.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([theta,&nbsp;phi,&nbsp;substrate,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.add_layer.html#yeh_tm.System.add_layer" title="yeh_tm.System.add_layer"><code class="xref py py-obj docutils literal"><span class="pre">add_layer</span></code></a>(L)</td>
+<td>Add a layer L to the system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.calculate_T.html#yeh_tm.System.calculate_T" title="yeh_tm.System.calculate_T"><code class="xref py py-obj docutils literal"><span class="pre">calculate_T</span></code></a>(w)</td>
+<td>Calculate the system transfer matrix <img class="math" src="../_images/math/543378e6711a8292a39598fcd4539054b10298a8.png" alt="T_{0,S}"/> for a given frequency.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_electric_field</span></code>(w,&nbsp;dz[,&nbsp;pol,&nbsp;x,&nbsp;y])</td>
+<td>Calculate the electric field profile for a given frequency.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.get_field_coefficients.html#yeh_tm.System.get_field_coefficients" title="yeh_tm.System.get_field_coefficients"><code class="xref py py-obj docutils literal"><span class="pre">get_field_coefficients</span></code></a>(w)</td>
+<td>Shortcut to calculate all reflection / transmission coefficients as function of frequency w.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.get_field_coefficients_AOI.html#yeh_tm.System.get_field_coefficients_AOI" title="yeh_tm.System.get_field_coefficients_AOI"><code class="xref py py-obj docutils literal"><span class="pre">get_field_coefficients_AOI</span></code></a>(w,&nbsp;AOI)</td>
+<td>Shortcut to calculate all reflection / transmission coefficients as function of angle of incidence.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.get_intensity_coefficients.html#yeh_tm.System.get_intensity_coefficients" title="yeh_tm.System.get_intensity_coefficients"><code class="xref py py-obj docutils literal"><span class="pre">get_intensity_coefficients</span></code></a>(w)</td>
+<td>Shortcut to calculate all intensity reflectance / transmittance terms as function of frequency w.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.get_intensity_coefficients_AOI.html#yeh_tm.System.get_intensity_coefficients_AOI" title="yeh_tm.System.get_intensity_coefficients_AOI"><code class="xref py py-obj docutils literal"><span class="pre">get_intensity_coefficients_AOI</span></code></a>(w,&nbsp;AOI)</td>
+<td>Shortcut to calculate all intensity reflectance / transmittance terms as function of angle of incidence.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_layer</span></code>(pos)</td>
+<td>Returns the layer specified by position.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_layers</span></code>()</td>
+<td>Returns the list of layers.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_num_layers</span></code>()</td>
+<td>Returns the number of layers in the stack.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_substrate</span></code>()</td>
+<td>Returns the substrate layer class.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_superstrate</span></code>()</td>
+<td>Returns the superstrate layer class.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">insert_layer</span></code>(L,&nbsp;pos)</td>
+<td>Insert a layer at a given position.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">remove_layer</span></code>(pos)</td>
+<td>Removes the layer at a given position.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.rxx.html#yeh_tm.System.rxx" title="yeh_tm.System.rxx"><code class="xref py py-obj docutils literal"><span class="pre">rxx</span></code></a>()</td>
+<td>Returns the x,x component of the field reflection coefficient (incident x, reflected x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.rxy.html#yeh_tm.System.rxy" title="yeh_tm.System.rxy"><code class="xref py py-obj docutils literal"><span class="pre">rxy</span></code></a>()</td>
+<td>Returns the x,y component of the field reflection coefficient (incident x, reflected y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.ryx.html#yeh_tm.System.ryx" title="yeh_tm.System.ryx"><code class="xref py py-obj docutils literal"><span class="pre">ryx</span></code></a>()</td>
+<td>Returns the y,x component of the field reflection coefficient (incident y, reflected x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.ryy.html#yeh_tm.System.ryy" title="yeh_tm.System.ryy"><code class="xref py py-obj docutils literal"><span class="pre">ryy</span></code></a>()</td>
+<td>Returns the y,y component of the field reflection coefficient (incident y, reflected y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.set_phi.html#yeh_tm.System.set_phi" title="yeh_tm.System.set_phi"><code class="xref py py-obj docutils literal"><span class="pre">set_phi</span></code></a>(phi)</td>
+<td>Set rotation of sample around the z-axis (in deg).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.set_substrate.html#yeh_tm.System.set_substrate" title="yeh_tm.System.set_substrate"><code class="xref py py-obj docutils literal"><span class="pre">set_substrate</span></code></a>(S)</td>
+<td>Set the substrate to S.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.set_superstrate.html#yeh_tm.System.set_superstrate" title="yeh_tm.System.set_superstrate"><code class="xref py py-obj docutils literal"><span class="pre">set_superstrate</span></code></a>(S)</td>
+<td>Set the superstrate to S.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.set_theta.html#yeh_tm.System.set_theta" title="yeh_tm.System.set_theta"><code class="xref py py-obj docutils literal"><span class="pre">set_theta</span></code></a>(theta)</td>
+<td>Set angle of incidence to theta (in deg).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.txx.html#yeh_tm.System.txx" title="yeh_tm.System.txx"><code class="xref py py-obj docutils literal"><span class="pre">txx</span></code></a>()</td>
+<td>Returns the x,x component of the field transmission coefficient (incident x, transmitted x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.txy.html#yeh_tm.System.txy" title="yeh_tm.System.txy"><code class="xref py py-obj docutils literal"><span class="pre">txy</span></code></a>()</td>
+<td>Returns the x,y component of the field transmission coefficient (incident x, transmitted y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.tyx.html#yeh_tm.System.tyx" title="yeh_tm.System.tyx"><code class="xref py py-obj docutils literal"><span class="pre">tyx</span></code></a>()</td>
+<td>Returns the y,x component of the field transmission coefficient (incident y, transmitted x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.tyy.html#yeh_tm.System.tyy" title="yeh_tm.System.tyy"><code class="xref py py-obj docutils literal"><span class="pre">tyy</span></code></a>()</td>
+<td>Returns the y,y component of the field transmission coefficient (incident y, transmitted x).</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">c</span></code></td>
+<td>speed of light in vacuum</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.System.add_layer.html" title="yeh_tm.System.add_layer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.Layer.update.html" title="yeh_tm.Layer.update"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

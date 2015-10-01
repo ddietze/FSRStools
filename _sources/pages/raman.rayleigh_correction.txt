@@ -1,0 +1,6 @@
+raman.rayleigh_correction
+=========================
+
+.. currentmodule:: raman
+
+.. autofunction:: rayleigh_correction

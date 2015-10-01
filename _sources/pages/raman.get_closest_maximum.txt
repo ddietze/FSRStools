@@ -1,0 +1,6 @@
+raman.get_closest_maximum
+=========================
+
+.. currentmodule:: raman
+
+.. autofunction:: get_closest_maximum

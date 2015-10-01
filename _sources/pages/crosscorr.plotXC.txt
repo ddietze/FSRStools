@@ -1,0 +1,6 @@
+crosscorr.plotXC
+================
+
+.. currentmodule:: crosscorr
+
+.. autofunction:: plotXC

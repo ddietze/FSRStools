@@ -1,0 +1,6 @@
+fitting.line
+============
+
+.. currentmodule:: fitting
+
+.. autofunction:: line

@@ -1,0 +1,6 @@
+rraman.getAxes
+==============
+
+.. currentmodule:: rraman
+
+.. autofunction:: getAxes

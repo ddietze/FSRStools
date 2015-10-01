@@ -1,0 +1,6 @@
+yeh_tm.System.set_theta
+=======================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.set_theta

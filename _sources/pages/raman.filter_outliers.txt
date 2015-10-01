@@ -1,0 +1,6 @@
+raman.filter_outliers
+=====================
+
+.. currentmodule:: raman
+
+.. autofunction:: filter_outliers

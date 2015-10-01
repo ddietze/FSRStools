@@ -1,0 +1,6 @@
+rraman.molarExtinction2AbsCS
+============================
+
+.. currentmodule:: rraman
+
+.. autofunction:: molarExtinction2AbsCS

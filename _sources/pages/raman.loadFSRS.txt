@@ -1,0 +1,6 @@
+raman.loadFSRS
+==============
+
+.. currentmodule:: raman
+
+.. autofunction:: loadFSRS

@@ -1,0 +1,6 @@
+fitting.gauss
+=============
+
+.. currentmodule:: fitting
+
+.. autofunction:: gauss

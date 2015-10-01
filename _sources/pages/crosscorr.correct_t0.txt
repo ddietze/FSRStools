@@ -1,0 +1,6 @@
+crosscorr.correct_t0
+====================
+
+.. currentmodule:: crosscorr
+
+.. autofunction:: correct_t0

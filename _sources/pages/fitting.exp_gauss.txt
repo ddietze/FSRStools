@@ -1,0 +1,6 @@
+fitting.exp_gauss
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: exp_gauss

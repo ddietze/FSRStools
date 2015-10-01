@@ -1,0 +1,103 @@
+:py:mod:`raman` - Analysis of spontaneous and time-resolved Raman spectra
+=========================================================================
+
+.. automodule:: raman
+
+.. currentmodule:: raman
+
+Data Import Functions
+---------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   loadRaman
+   loadFSRS
+   loadTA
+   
+Data Selection / Normalization
+------------------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   norm
+   cut
+   at   
+   
+Calibration Functions
+---------------------
+
+.. autosummary::
+   :toctree: pages
+
+   Raman2WL
+   WL2Raman
+   get_closest_maximum
+   interpolate
+   mol_lines
+   calibrate
+   
+Filtering / SNR Improvement Functions
+-------------------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   filter_outliers
+   savitzky_golay
+   noise_estimate
+   denoise
+   FT_denoise
+   
+Baseline Correction Functions
+-----------------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   rayleigh_correction
+   interpolated_bl_correction
+   baseline_correction
+   FT_baseline_correction
+   
+Solvent / Ground State Subtraction Functions
+--------------------------------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   solvent_subtract
+   solvent_subtract_chi2
+   
+Time Zero Functions
+-------------------
+
+.. autosummary::
+   :toctree: pages
+    
+   shift_data
+   correct_t0
+   
+TA Analysis Functions
+---------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   bandintegral
+
+Peak Fitting / Manipulation Functions
+-------------------------------------
+
+.. autosummary::
+   :toctree: pages
+   
+   find_peaks
+   pick_peaks
+   pick_peaks_x_y
+   get_peak_estimate
+   fit_peaks
+   peak_remove
+   peak_area
+   

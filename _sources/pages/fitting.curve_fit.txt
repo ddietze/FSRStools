@@ -1,0 +1,6 @@
+fitting.curve_fit
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: curve_fit

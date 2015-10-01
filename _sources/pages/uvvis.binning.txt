@@ -1,0 +1,6 @@
+uvvis.binning
+=============
+
+.. currentmodule:: uvvis
+
+.. autofunction:: binning

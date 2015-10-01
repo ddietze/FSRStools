@@ -1,0 +1,6 @@
+fitting.gaussians_line
+======================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians_line

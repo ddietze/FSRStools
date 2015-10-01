@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>crosscorr - Analysis of Kerr-gate cross-correlation data &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="crosscorr.loadXC" href="pages/crosscorr.loadXC.html" />
+    <link rel="prev" title="Welcome to FSRStools’ documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/crosscorr.loadXC.html" title="crosscorr.loadXC"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to FSRStools’ documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">crosscorr</span></code> - Analysis of Kerr-gate cross-correlation data</a><ul>
+<li><a class="reference internal" href="#load-data">Load Data</a></li>
+<li><a class="reference internal" href="#analyze-data">Analyze Data</a></li>
+<li><a class="reference internal" href="#plotting">Plotting</a></li>
+<li><a class="reference internal" href="#time-zero-functions">Time Zero Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to FSRStools&#8217; documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/crosscorr.loadXC.html"
+                        title="next chapter">crosscorr.loadXC</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/crosscorr.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-crosscorr">
+<span id="crosscorr-analysis-of-kerr-gate-cross-correlation-data"></span><h1><a class="reference internal" href="#module-crosscorr" title="crosscorr"><code class="xref py py-mod docutils literal"><span class="pre">crosscorr</span></code></a> - Analysis of Kerr-gate cross-correlation data<a class="headerlink" href="#module-crosscorr" title="Permalink to this headline">¶</a></h1>
+<p>A collection of functions to process and analyze Kerr-gate cross-correlation data.
+Data are analyzed by fitting each spectral slice of the cross-correlation with a
+Gaussian pulse shape to extract chirp, temporal offset and FWHM.</p>
+<div class="section" id="load-data">
+<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/crosscorr.loadXC.html#crosscorr.loadXC" title="crosscorr.loadXC"><code class="xref py py-obj docutils literal"><span class="pre">loadXC</span></code></a>(filename)</td>
+<td>Load cross-correlation data, e.g.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="analyze-data">
+<h2>Analyze Data<a class="headerlink" href="#analyze-data" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/crosscorr.fitXC.html#crosscorr.fitXC" title="crosscorr.fitXC"><code class="xref py py-obj docutils literal"><span class="pre">fitXC</span></code></a>(t,&nbsp;d)</td>
+<td>Analyze cross-correlation data eby fitting each spectral slice with a Gaussian to extract amplitude, center, and fwhm.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/crosscorr.plotXC.html#crosscorr.plotXC" title="crosscorr.plotXC"><code class="xref py py-obj docutils literal"><span class="pre">plotXC</span></code></a>(t,&nbsp;d[,&nbsp;filename,&nbsp;center,&nbsp;fwhm])</td>
+<td>Convenience function to make a 2d plot of the cross correlation data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/crosscorr.plotXCfit.html#crosscorr.plotXCfit" title="crosscorr.plotXCfit"><code class="xref py py-obj docutils literal"><span class="pre">plotXCfit</span></code></a>(a,&nbsp;c,&nbsp;f[,&nbsp;cFilename,&nbsp;aFilename])</td>
+<td>Convenience function to plot amplitude, center and fwhm of the cross correlation as function of index (i.e.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="time-zero-functions">
+<h2>Time Zero Functions<a class="headerlink" href="#time-zero-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/crosscorr.shift_data.html#crosscorr.shift_data" title="crosscorr.shift_data"><code class="xref py py-obj docutils literal"><span class="pre">shift_data</span></code></a>(x,&nbsp;y,&nbsp;dx)</td>
+<td>Smoothly translate data by an arbitrary amount along the x-axis using Fourier transformation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/crosscorr.correct_t0.html#crosscorr.correct_t0" title="crosscorr.correct_t0"><code class="xref py py-obj docutils literal"><span class="pre">correct_t0</span></code></a>(t,&nbsp;d,&nbsp;c)</td>
+<td>Shift all frequency columns in d along time axis t to set t0 (given in c) to 0.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/crosscorr.loadXC.html" title="crosscorr.loadXC"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to FSRStools’ documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

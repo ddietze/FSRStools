@@ -1,0 +1,6 @@
+profilometer.get_film_thickness
+===============================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: get_film_thickness

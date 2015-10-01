@@ -1,0 +1,6 @@
+fitting.heaviside
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: heaviside

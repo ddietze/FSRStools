@@ -1,0 +1,6 @@
+raman.get_peak_estimate
+=======================
+
+.. currentmodule:: raman
+
+.. autofunction:: get_peak_estimate

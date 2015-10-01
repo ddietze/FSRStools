@@ -1,0 +1,6 @@
+fitting.power_const
+===================
+
+.. currentmodule:: fitting
+
+.. autofunction:: power_const

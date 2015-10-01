@@ -1,0 +1,6 @@
+fitting.gaussians_cubic
+=======================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians_cubic

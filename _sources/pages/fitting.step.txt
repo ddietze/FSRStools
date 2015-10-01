@@ -1,0 +1,6 @@
+fitting.step
+============
+
+.. currentmodule:: fitting
+
+.. autofunction:: step

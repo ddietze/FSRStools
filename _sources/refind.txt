@@ -1,0 +1,45 @@
+:py:mod:`refind` - Refractive index related functions
+=====================================================
+
+.. automodule:: refind
+
+.. currentmodule:: refind
+
+Conversion / Manipulation Functions
+-----------------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   dN
+   d2N
+   d3N
+   n_group
+   n_to_eps
+   eps_to_n
+   kramers_kronig
+   applyInhomogeneousBroadening
+
+Refractive Indices - Experimental
+---------------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   n_air
+   n_coatings
+   n_glass
+   n_liquid
+   n_metal
+   n_polymer
+
+Refractive Indices - Model
+--------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   n_LorOsc
+   alpha_LorOsc
+   n_metal_model
+   n_sellmeier

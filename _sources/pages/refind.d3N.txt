@@ -1,0 +1,6 @@
+refind.d3N
+==========
+
+.. currentmodule:: refind
+
+.. autofunction:: d3N

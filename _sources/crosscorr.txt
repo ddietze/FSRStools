@@ -1,0 +1,40 @@
+:py:mod:`crosscorr` - Analysis of Kerr-gate cross-correlation data
+==================================================================
+
+.. automodule:: crosscorr
+
+.. currentmodule:: crosscorr
+
+Load Data
+---------
+
+.. autosummary::
+   :toctree: pages
+
+   loadXC
+
+Analyze Data
+------------
+
+.. autosummary::
+   :toctree: pages
+
+   fitXC
+
+Plotting
+--------
+
+.. autosummary::
+   :toctree: pages
+
+   plotXC
+   plotXCfit
+
+Time Zero Functions
+-------------------
+
+.. autosummary::
+   :toctree: pages
+
+   shift_data
+   correct_t0

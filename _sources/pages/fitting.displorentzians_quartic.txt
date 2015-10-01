@@ -1,0 +1,6 @@
+fitting.displorentzians_quartic
+===============================
+
+.. currentmodule:: fitting
+
+.. autofunction:: displorentzians_quartic

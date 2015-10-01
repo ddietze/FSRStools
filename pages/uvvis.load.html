@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>uvvis.load &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="uvvis - Analysis of UV/VIS and fluorescence data" href="../uvvis.html" />
+    <link rel="next" title="uvvis.load_sp" href="uvvis.load_sp.html" />
+    <link rel="prev" title="uvvis.get_concentration" href="uvvis.get_concentration.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uvvis.load_sp.html" title="uvvis.load_sp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uvvis.get_concentration.html" title="uvvis.get_concentration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../uvvis.html" accesskey="U"><code class="docutils literal"><span class="pre">uvvis</span></code> - Analysis of UV/VIS and fluorescence data</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uvvis.get_concentration.html"
+                        title="previous chapter">uvvis.get_concentration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="uvvis.load_sp.html"
+                        title="next chapter">uvvis.load_sp</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/uvvis.load.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="uvvis-load">
+<h1>uvvis.load<a class="headerlink" href="#uvvis-load" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="uvvis.load">
+<code class="descclassname">uvvis.</code><code class="descname">load</code><span class="sig-paren">(</span><em>filename</em>, <em>lmin=-1</em>, <em>lmax=-1</em>, <em>smooth=True</em>, <em>delim=None</em><span class="sig-paren">)</span><a class="headerlink" href="#uvvis.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a spectrum / set of spectra from ASCII file(s). Expects the first column to be wavelength. Text lines are ignored, i.e., this function can be used to load Ocean Optics text files, for instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<em>str</em>) &#8211; Filename(s) of the file(s) to load. Supports wildcards via glob. If several files match the pattern, the returned data is the average over these files.</li>
+<li><strong>lmin</strong> (<em>float</em>) &#8211; Set minimum wavelength of returned data (same units as stored wavelength). Return all when -1 (default).</li>
+<li><strong>lmax</strong> (<em>float</em>) &#8211; Set maximum wavelength of returned data (same units as stored wavelength). Return all when -1 (default).</li>
+<li><strong>smooth</strong> (<em>bool</em>) &#8211; If True, apply <a class="reference internal" href="uvvis.denoise.html#uvvis.denoise" title="uvvis.denoise"><code class="xref py py-func docutils literal"><span class="pre">denoise()</span></code></a> to data before returning (default).</li>
+<li><strong>delim</strong> (<em>str</em>) &#8211; Delimiter argument to be passed to <code class="xref py py-func docutils literal"><span class="pre">numpy.loadtxt()</span></code>. Set to None to use any whitespace (default).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Wavelength axis and spectrum.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uvvis.load_sp.html" title="uvvis.load_sp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uvvis.get_concentration.html" title="uvvis.get_concentration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../uvvis.html" ><code class="docutils literal"><span class="pre">uvvis</span></code> - Analysis of UV/VIS and fluorescence data</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

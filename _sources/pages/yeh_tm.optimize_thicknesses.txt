@@ -1,0 +1,6 @@
+yeh_tm.optimize_thicknesses
+===========================
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: optimize_thicknesses

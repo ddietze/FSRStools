@@ -1,0 +1,6 @@
+fitting.smoothstep
+==================
+
+.. currentmodule:: fitting
+
+.. autofunction:: smoothstep

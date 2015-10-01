@@ -1,0 +1,6 @@
+fitting.lorentzians_const
+=========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorentzians_const

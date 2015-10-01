@@ -1,0 +1,6 @@
+fitting.lorOscRe
+================
+
+.. currentmodule:: fitting
+
+.. autofunction:: lorOscRe

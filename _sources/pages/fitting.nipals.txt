@@ -1,0 +1,6 @@
+fitting.nipals
+==============
+
+.. currentmodule:: fitting
+
+.. autofunction:: nipals

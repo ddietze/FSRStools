@@ -1,0 +1,6 @@
+yeh_tm.evacuum
+==============
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: evacuum

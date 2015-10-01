@@ -1,0 +1,6 @@
+fitting.rayleigh
+================
+
+.. currentmodule:: fitting
+
+.. autofunction:: rayleigh

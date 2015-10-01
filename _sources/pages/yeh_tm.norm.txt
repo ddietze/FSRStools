@@ -1,0 +1,6 @@
+yeh_tm.norm
+===========
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: norm

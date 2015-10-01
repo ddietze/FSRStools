@@ -1,0 +1,6 @@
+profilometer.plot_profile
+=========================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: plot_profile

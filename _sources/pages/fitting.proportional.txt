@@ -1,0 +1,6 @@
+fitting.proportional
+====================
+
+.. currentmodule:: fitting
+
+.. autofunction:: proportional

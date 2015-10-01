@@ -1,0 +1,6 @@
+raman.pick_peaks_x_y
+====================
+
+.. currentmodule:: raman
+
+.. autofunction:: pick_peaks_x_y

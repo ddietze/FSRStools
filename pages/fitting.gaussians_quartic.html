@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting.gaussians_quartic &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="fitting - A collection of general fitting routines" href="../fitting.html" />
+    <link rel="next" title="fitting.dispgauss" href="fitting.dispgauss.html" />
+    <link rel="prev" title="fitting.gaussians_cubic" href="fitting.gaussians_cubic.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.dispgauss.html" title="fitting.dispgauss"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fitting.gaussians_cubic.html" title="fitting.gaussians_cubic"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" accesskey="U"><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fitting.gaussians_cubic.html"
+                        title="previous chapter">fitting.gaussians_cubic</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fitting.dispgauss.html"
+                        title="next chapter">fitting.dispgauss</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/fitting.gaussians_quartic.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fitting-gaussians-quartic">
+<h1>fitting.gaussians_quartic<a class="headerlink" href="#fitting-gaussians-quartic" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="fitting.gaussians_quartic">
+<code class="descclassname">fitting.</code><code class="descname">gaussians_quartic</code><span class="sig-paren">(</span><em>x</em>, <em>a</em>, <em>b</em>, <em>c</em>, <em>d</em>, <em>e</em>, <em>*p</em><span class="sig-paren">)</span><a class="headerlink" href="#fitting.gaussians_quartic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum over a variable number of Gaussians on a quartic background.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-values.</li>
+<li><strong>a</strong> (<em>float</em>) &#8211; Offset.</li>
+<li><strong>b</strong> (<em>float</em>) &#8211; Linear term.</li>
+<li><strong>c</strong> (<em>float</em>) &#8211; Quadratic term.</li>
+<li><strong>d</strong> (<em>float</em>) &#8211; Cubic term.</li>
+<li><strong>e</strong> (<em>float</em>) &#8211; Quartic term.</li>
+<li><strong>p</strong> (<em>variable</em>) &#8211; <p>Coefficients for Gaussians. For each Gaussian provide</p>
+<ul>
+<li>A amplitude,</li>
+<li>x0 center,</li>
+<li>dx FWHM.</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sum over Gaussians <img class="math" src="../_images/math/b4c48331ccb091736c8f03c16f5eb1828e684f4d.png" alt="f(x) = \sum_i G_i(x) + a + b x + c x^2 + d x^3 + e x^4"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="fitting.gaussians.html#fitting.gaussians" title="fitting.gaussians"><code class="xref py py-func docutils literal"><span class="pre">gaussians()</span></code></a> for details.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.dispgauss.html" title="fitting.dispgauss"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fitting.gaussians_cubic.html" title="fitting.gaussians_cubic"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" ><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

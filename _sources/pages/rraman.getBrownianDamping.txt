@@ -1,0 +1,6 @@
+rraman.getBrownianDamping
+=========================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getBrownianDamping

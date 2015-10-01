@@ -1,0 +1,6 @@
+fitting.gaussians
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians

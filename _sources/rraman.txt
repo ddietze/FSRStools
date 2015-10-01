@@ -1,0 +1,61 @@
+:py:mod:`rraman` - Analysis of resonance Raman and absorption profiles
+======================================================================
+
+.. automodule:: rraman
+
+.. currentmodule:: rraman
+
+Resonance Raman Calculations
+----------------------------
+
+.. autosummary::
+   :toctree: pages
+
+   getOverlaps
+   getZeroZeroEnergy
+   getCrossSections
+
+Damping Functions
+-----------------
+
+.. autosummary::
+   :toctree: pages
+
+   getHomogeneousDamping
+   getKuboDamping
+   getBrownianDamping
+   applyInhomogeneousBroadening
+
+
+Utility Functions
+-----------------
+
+.. autosummary::
+   :toctree: pages
+
+   radperfs2wn
+   wn2radperfs
+   getAxes
+   molarExtinction2AbsCS
+   diff2absRamanCS
+   prefA
+   prefR
+
+
+Time-Dependent Overlap Integrals
+--------------------------------
+
+These functions are called automatically from :py:func:`getOverlaps`.
+
+.. autosummary::
+   :toctree: pages
+
+   t00A
+   t10A
+   t20A
+   t00B
+   t10B
+   t20B
+   t00D
+   t10D
+   t20D

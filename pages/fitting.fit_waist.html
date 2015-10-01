@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting.fit_waist &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="fitting - A collection of general fitting routines" href="../fitting.html" />
+    <link rel="next" title="fitting.lpsvd" href="fitting.lpsvd.html" />
+    <link rel="prev" title="fitting.rayleigh" href="fitting.rayleigh.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.lpsvd.html" title="fitting.lpsvd"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fitting.rayleigh.html" title="fitting.rayleigh"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" accesskey="U"><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fitting.rayleigh.html"
+                        title="previous chapter">fitting.rayleigh</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fitting.lpsvd.html"
+                        title="next chapter">fitting.lpsvd</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/fitting.fit_waist.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fitting-fit-waist">
+<h1>fitting.fit_waist<a class="headerlink" href="#fitting-fit-waist" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="fitting.fit_waist">
+<code class="descclassname">fitting.</code><code class="descname">fit_waist</code><span class="sig-paren">(</span><em>y</em>, <em>dz</em><span class="sig-paren">)</span><a class="headerlink" href="#fitting.fit_waist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function for extracting the beam waist from a knife-edge intensity profile using <a class="reference internal" href="fitting.waist.html#fitting.waist" title="fitting.waist"><code class="xref py py-func docutils literal"><span class="pre">waist()</span></code></a> and regularly spaced points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>y</strong> (<em>array</em>) &#8211; Transmitted power.</li>
+<li><strong>dz</strong> (<em>float</em>) &#8211; Change in z-position of knife edge between subsequent power readings.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>Fit results</p>
+<ul class="simple">
+<li>A amplitude, total power,</li>
+<li>y0 offset, background light level,</li>
+<li>z0 center of beam,</li>
+<li>w0 beam waist defined as <img class="math" src="../_images/math/14e18e578048ce830e312592cd78cba7100f759e.png" alt="1 / e^2"/> - <strong>radius</strong> of intensity.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.lpsvd.html" title="fitting.lpsvd"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fitting.rayleigh.html" title="fitting.rayleigh"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" ><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

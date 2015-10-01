@@ -1,0 +1,6 @@
+fitting.saturation
+==================
+
+.. currentmodule:: fitting
+
+.. autofunction:: saturation

@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="yeh_tm.Layer" href="pages/yeh_tm.Layer.html" />
+    <link rel="prev" title="uvvis.get_concentration" href="pages/uvvis.get_concentration.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/yeh_tm.Layer.html" title="yeh_tm.Layer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pages/uvvis.get_concentration.html" title="uvvis.get_concentration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#class-layer">Class <code class="docutils literal"><span class="pre">Layer</span></code></a></li>
+<li><a class="reference internal" href="#class-system">Class <code class="docutils literal"><span class="pre">System</span></code></a></li>
+<li><a class="reference internal" href="#needle-algorithm">Needle Algorithm</a></li>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pages/uvvis.get_concentration.html"
+                        title="previous chapter">uvvis.get_concentration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/yeh_tm.Layer.html"
+                        title="next chapter">yeh_tm.Layer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/yeh_tm.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-yeh_tm">
+<span id="yeh-tm-yeh-s-4x4-transfer-matrix-formalism"></span><h1><a class="reference internal" href="#module-yeh_tm" title="yeh_tm"><code class="xref py py-mod docutils literal"><span class="pre">yeh_tm</span></code></a> - Yeh&#8217;s 4x4 Transfer Matrix Formalism<a class="headerlink" href="#module-yeh_tm" title="Permalink to this headline">¶</a></h1>
+<p>Python implementation of Yeh&#8217;s 4x4 transfer matrix formalism for arbitrary birefringent layers and arbitrary angles of incidence. The code follows Yeh&#8217;s two seminal papers: Yeh, <em>J. Opt. Soc. Am.</em> <strong>69</strong>, 742 (1979) and Yeh, <em>Surf. Sci.</em> <strong>96</strong>, 41 (1980).</p>
+<p>Layers are represented by the <a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-class docutils literal"><span class="pre">Layer</span></code></a> class that holds all parameters describing the optical properties of a single layer. The optical system is assembled using the <a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-class docutils literal"><span class="pre">System</span></code></a> class.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Reflection spectrum of an 8-layer high-reflector designed for 800nm:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">pl</span>
+<span class="kn">import</span> <span class="nn">FSRStools.yeh_tm</span> <span class="kn">as</span> <span class="nn">tm</span>
+<span class="kn">import</span> <span class="nn">FSRStools.refind</span> <span class="kn">as</span> <span class="nn">rf</span>
+
+<span class="c"># create wavelength and frequency axes in nm and 1/nm</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">1300</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">l</span>
+
+<span class="c"># use the refrative index data from the FSRStools.refind module</span>
+<span class="n">e1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">rf</span><span class="o">.</span><span class="n">n_to_eps</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">n_glass</span><span class="p">(</span><span class="mf">2e-3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;SiO2&quot;</span><span class="p">))</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">rf</span><span class="o">.</span><span class="n">n_to_eps</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">n_coatings</span><span class="p">(</span><span class="mf">2e-3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;MgF2_o&quot;</span><span class="p">))</span>
+<span class="n">e3</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">rf</span><span class="o">.</span><span class="n">n_to_eps</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">n_coatings</span><span class="p">(</span><span class="mf">2e-3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">x</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;ZnSe&quot;</span><span class="p">))</span>
+
+<span class="c"># calculate optimal thickness of coating layers for 800nm</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="mi">800</span> <span class="o">/</span> <span class="n">rf</span><span class="o">.</span><span class="n">n_coatings</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;MgF2_o&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.0</span>
+<span class="n">d3</span> <span class="o">=</span> <span class="mi">800</span> <span class="o">/</span> <span class="n">rf</span><span class="o">.</span><span class="n">n_coatings</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;ZnSe&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.0</span>
+
+<span class="c"># setup the optical system with vacuum as superstrate and substrate</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">tm</span><span class="o">.</span><span class="n">System</span><span class="p">()</span>
+
+<span class="c"># create a thick glass slide as support</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">tm</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">epsilon1</span> <span class="o">=</span> <span class="n">e1</span><span class="p">,</span> <span class="n">thick</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span> <span class="c"># substrate</span>
+
+<span class="c"># calculate and plot the reflectance of the bare glass</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get_intensity_coefficients</span><span class="p">(</span><span class="n">w</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># rxx, rxy, ryx, ryy, txx, txy, tyx, tyy</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+
+<span class="c"># add the HR coating: (HL)^n H glass</span>
+<span class="n">s</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">tm</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">d3</span><span class="p">,</span> <span class="n">epsilon1</span> <span class="o">=</span> <span class="n">e3</span><span class="p">))</span> <span class="c"># coating 1</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">tm</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">d2</span><span class="p">,</span> <span class="n">epsilon1</span> <span class="o">=</span> <span class="n">e2</span><span class="p">))</span> <span class="c"># coating 2</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">tm</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="n">thickness</span> <span class="o">=</span> <span class="n">d3</span><span class="p">,</span> <span class="n">epsilon1</span> <span class="o">=</span> <span class="n">e3</span><span class="p">))</span> <span class="c"># coating 1</span>
+
+<span class="c"># calculate and plot the reflectance of the HR coated glass</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get_intensity_coefficients</span><span class="p">(</span><span class="n">w</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+
+<span class="c"># calculate and plot the reflectance of the HR coated glass for 45deg angle of incidence (p-pol)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">set_theta</span><span class="p">(</span><span class="mf">45.0</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">get_intensity_coefficients</span><span class="p">(</span><span class="n">w</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="class-layer">
+<h2>Class <a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-class docutils literal"><span class="pre">Layer</span></code></a><a class="headerlink" href="#class-layer" title="Permalink to this headline">¶</a></h2>
+<p>Each layer is represented by an instance of the <a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-class docutils literal"><span class="pre">Layer</span></code></a> class. This class holds all the physical parameters like thickness, dielectric tensor and orientation.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-obj docutils literal"><span class="pre">Layer</span></code></a>([thickness,&nbsp;epsilon1,&nbsp;epsilon2,&nbsp;...])</td>
+<td>Construct a layer class instance, which controls the physical properties of a single layer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_epsilon.html#yeh_tm.Layer.calculate_epsilon" title="yeh_tm.Layer.calculate_epsilon"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_epsilon</span></code></a>(w)</td>
+<td>Calculate the dielectric tensor for given frequency w.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_g.html#yeh_tm.Layer.calculate_g" title="yeh_tm.Layer.calculate_g"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_g</span></code></a>(w,&nbsp;a,&nbsp;b)</td>
+<td>Calculate propagation constants g along z-axis for current layer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_p_q.html#yeh_tm.Layer.calculate_p_q" title="yeh_tm.Layer.calculate_p_q"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_p_q</span></code></a>(w,&nbsp;a,&nbsp;b)</td>
+<td>Calculate the electric and magnetic polarization vectors p and q for the four solutions of <cite>self.g</cite>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_D.html#yeh_tm.Layer.calculate_D" title="yeh_tm.Layer.calculate_D"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_D</span></code></a>()</td>
+<td>Calculate the dynamic matrix and its inverse using the previously calculated values for p and q.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_P.html#yeh_tm.Layer.calculate_P" title="yeh_tm.Layer.calculate_P"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_P</span></code></a>()</td>
+<td>Calculate the propagation matrix using the previously calculated values for g.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_T.html#yeh_tm.Layer.calculate_T" title="yeh_tm.Layer.calculate_T"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_T</span></code></a>([calculateDP])</td>
+<td>Calculate the layer transfer matrix.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.update.html#yeh_tm.Layer.update" title="yeh_tm.Layer.update"><code class="xref py py-obj docutils literal"><span class="pre">Layer.update</span></code></a>(w,&nbsp;a,&nbsp;b)</td>
+<td>Shortcut to recalculate all layer properties.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-system">
+<h2>Class <a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-class docutils literal"><span class="pre">System</span></code></a><a class="headerlink" href="#class-system" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-class docutils literal"><span class="pre">System</span></code></a> class represents the optical system whose reflection and transmission coefficients are to be calculated. It manages the layer stacking and the external physical properties like wavelength and angle of incidence.</p>
+<p>An optical system consists of the first (semi-infinite) layer (substrate), the intermediate layers and the last (semi-infinite) layer (superstrate). The <em>superstrate</em> is assumed to be <strong>isotropic</strong> and only the xx component of the dielectric tensor is used for the calculation of the in-plane (x, y) propagation constants.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-obj docutils literal"><span class="pre">System</span></code></a>([theta,&nbsp;phi,&nbsp;substrate,&nbsp;superstrate,&nbsp;...])</td>
+<td>Construct an instance of the System class, which manages the optical system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.add_layer.html#yeh_tm.System.add_layer" title="yeh_tm.System.add_layer"><code class="xref py py-obj docutils literal"><span class="pre">System.add_layer</span></code></a>(L)</td>
+<td>Add a layer L to the system.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.calculate_T.html#yeh_tm.System.calculate_T" title="yeh_tm.System.calculate_T"><code class="xref py py-obj docutils literal"><span class="pre">System.calculate_T</span></code></a>(w)</td>
+<td>Calculate the system transfer matrix <img class="math" src="_images/math/543378e6711a8292a39598fcd4539054b10298a8.png" alt="T_{0,S}"/> for a given frequency.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.get_field_coefficients.html#yeh_tm.System.get_field_coefficients" title="yeh_tm.System.get_field_coefficients"><code class="xref py py-obj docutils literal"><span class="pre">System.get_field_coefficients</span></code></a>(w)</td>
+<td>Shortcut to calculate all reflection / transmission coefficients as function of frequency w.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.get_intensity_coefficients.html#yeh_tm.System.get_intensity_coefficients" title="yeh_tm.System.get_intensity_coefficients"><code class="xref py py-obj docutils literal"><span class="pre">System.get_intensity_coefficients</span></code></a>(w)</td>
+<td>Shortcut to calculate all intensity reflectance / transmittance terms as function of frequency w.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.get_field_coefficients_AOI.html#yeh_tm.System.get_field_coefficients_AOI" title="yeh_tm.System.get_field_coefficients_AOI"><code class="xref py py-obj docutils literal"><span class="pre">System.get_field_coefficients_AOI</span></code></a>(w,&nbsp;AOI)</td>
+<td>Shortcut to calculate all reflection / transmission coefficients as function of angle of incidence.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.get_intensity_coefficients_AOI.html#yeh_tm.System.get_intensity_coefficients_AOI" title="yeh_tm.System.get_intensity_coefficients_AOI"><code class="xref py py-obj docutils literal"><span class="pre">System.get_intensity_coefficients_AOI</span></code></a>(w,&nbsp;AOI)</td>
+<td>Shortcut to calculate all intensity reflectance / transmittance terms as function of angle of incidence.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.set_substrate.html#yeh_tm.System.set_substrate" title="yeh_tm.System.set_substrate"><code class="xref py py-obj docutils literal"><span class="pre">System.set_substrate</span></code></a>(S)</td>
+<td>Set the substrate to S.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.set_superstrate.html#yeh_tm.System.set_superstrate" title="yeh_tm.System.set_superstrate"><code class="xref py py-obj docutils literal"><span class="pre">System.set_superstrate</span></code></a>(S)</td>
+<td>Set the superstrate to S.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.set_theta.html#yeh_tm.System.set_theta" title="yeh_tm.System.set_theta"><code class="xref py py-obj docutils literal"><span class="pre">System.set_theta</span></code></a>(theta)</td>
+<td>Set angle of incidence to theta (in deg).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.set_phi.html#yeh_tm.System.set_phi" title="yeh_tm.System.set_phi"><code class="xref py py-obj docutils literal"><span class="pre">System.set_phi</span></code></a>(phi)</td>
+<td>Set rotation of sample around the z-axis (in deg).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.rxx.html#yeh_tm.System.rxx" title="yeh_tm.System.rxx"><code class="xref py py-obj docutils literal"><span class="pre">System.rxx</span></code></a>()</td>
+<td>Returns the x,x component of the field reflection coefficient (incident x, reflected x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.rxy.html#yeh_tm.System.rxy" title="yeh_tm.System.rxy"><code class="xref py py-obj docutils literal"><span class="pre">System.rxy</span></code></a>()</td>
+<td>Returns the x,y component of the field reflection coefficient (incident x, reflected y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.ryx.html#yeh_tm.System.ryx" title="yeh_tm.System.ryx"><code class="xref py py-obj docutils literal"><span class="pre">System.ryx</span></code></a>()</td>
+<td>Returns the y,x component of the field reflection coefficient (incident y, reflected x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.ryy.html#yeh_tm.System.ryy" title="yeh_tm.System.ryy"><code class="xref py py-obj docutils literal"><span class="pre">System.ryy</span></code></a>()</td>
+<td>Returns the y,y component of the field reflection coefficient (incident y, reflected y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.txx.html#yeh_tm.System.txx" title="yeh_tm.System.txx"><code class="xref py py-obj docutils literal"><span class="pre">System.txx</span></code></a>()</td>
+<td>Returns the x,x component of the field transmission coefficient (incident x, transmitted x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.txy.html#yeh_tm.System.txy" title="yeh_tm.System.txy"><code class="xref py py-obj docutils literal"><span class="pre">System.txy</span></code></a>()</td>
+<td>Returns the x,y component of the field transmission coefficient (incident x, transmitted y).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.System.tyx.html#yeh_tm.System.tyx" title="yeh_tm.System.tyx"><code class="xref py py-obj docutils literal"><span class="pre">System.tyx</span></code></a>()</td>
+<td>Returns the y,x component of the field transmission coefficient (incident y, transmitted x).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.System.tyy.html#yeh_tm.System.tyy" title="yeh_tm.System.tyy"><code class="xref py py-obj docutils literal"><span class="pre">System.tyy</span></code></a>()</td>
+<td>Returns the y,y component of the field transmission coefficient (incident y, transmitted x).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="needle-algorithm">
+<h2>Needle Algorithm<a class="headerlink" href="#needle-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The following functions provide support for the so-called needle algorithm for automated design of dielectric / metallic multilayer components.
+The algorithm is a simplified version based on Sullivan and Dobrowolski, <em>Appl. Opt.</em> <strong>35</strong>, 5484 (1996).
+Given a set of target optical properties and an initial system class with at least one optical layer, the needle algorithm tries to optimize the
+design by varying the thickness of each layer followed by insertion of a very thin layer with different refractive index.
+Currently, the design can only be optimized for one of the following properties: Rxx, Rxy, Ryx, Ryy, Txx, Txy, Tyx, Tyy.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.needle.html#yeh_tm.needle" title="yeh_tm.needle"><code class="xref py py-obj docutils literal"><span class="pre">needle</span></code></a>(S,&nbsp;w,&nbsp;Q,&nbsp;M1,&nbsp;M2[,&nbsp;d,&nbsp;dQ,&nbsp;Qid,&nbsp;...])</td>
+<td>Simplified implementation of the needle algorithm for thin film design.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.get_merit.html#yeh_tm.get_merit" title="yeh_tm.get_merit"><code class="xref py py-obj docutils literal"><span class="pre">get_merit</span></code></a>(S,&nbsp;w,&nbsp;Q[,&nbsp;dQ,&nbsp;Qid])</td>
+<td>Calculate the merit function of the current layer stack.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.optimize_thicknesses.html#yeh_tm.optimize_thicknesses" title="yeh_tm.optimize_thicknesses"><code class="xref py py-obj docutils literal"><span class="pre">optimize_thicknesses</span></code></a>(S,&nbsp;w,&nbsp;Q[,&nbsp;dQ,&nbsp;Qid,&nbsp;...])</td>
+<td>Optimize the thicknesses of each layer to minimize the merit function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.insert_needle.html#yeh_tm.insert_needle" title="yeh_tm.insert_needle"><code class="xref py py-obj docutils literal"><span class="pre">insert_needle</span></code></a>(S,&nbsp;pos,&nbsp;M1,&nbsp;M2[,&nbsp;d])</td>
+<td>Insert a needle, i.e., a very thin layer with different refractive index into the center of the layer at a given position and return the resulting System class instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.remove_needle.html#yeh_tm.remove_needle" title="yeh_tm.remove_needle"><code class="xref py py-obj docutils literal"><span class="pre">remove_needle</span></code></a>(S,&nbsp;pos)</td>
+<td>Remove a layer from the layer stack in the given System from the given position.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.remove_all_needles.html#yeh_tm.remove_all_needles" title="yeh_tm.remove_all_needles"><code class="xref py py-obj docutils literal"><span class="pre">remove_all_needles</span></code></a>(S[,&nbsp;dmin])</td>
+<td>Iteratively removes all layers from the System class whose thickness is below dmin.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.optimized_insert_needle.html#yeh_tm.optimized_insert_needle" title="yeh_tm.optimized_insert_needle"><code class="xref py py-obj docutils literal"><span class="pre">optimized_insert_needle</span></code></a>(S,&nbsp;w,&nbsp;Q,&nbsp;M1,&nbsp;M2[,&nbsp;...])</td>
+<td>Insert a needle in the Layer stack at the optimum position by comparing the merit functions of all combinations.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are called internally by the <a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-class docutils literal"><span class="pre">Layer</span></code></a> and <a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-class docutils literal"><span class="pre">System</span></code></a> class methods.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.null_space.html#yeh_tm.null_space" title="yeh_tm.null_space"><code class="xref py py-obj docutils literal"><span class="pre">null_space</span></code></a>(A[,&nbsp;eps])</td>
+<td>Compute the null space of matrix A which is the solution set x to the homogeneous equation Ax = 0.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.eroot.html#yeh_tm.eroot" title="yeh_tm.eroot"><code class="xref py py-obj docutils literal"><span class="pre">eroot</span></code></a>(a)</td>
+<td>Returns the evanescent root of a number, where the imaginary part has the physically correct sign.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.norm.html#yeh_tm.norm" title="yeh_tm.norm"><code class="xref py py-obj docutils literal"><span class="pre">norm</span></code></a>(a)</td>
+<td>Normalize a vector to its length.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.evacuum.html#yeh_tm.evacuum" title="yeh_tm.evacuum"><code class="xref py py-obj docutils literal"><span class="pre">evacuum</span></code></a>(x)</td>
+<td>Returns the dielectric function of vacuum (1).</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/yeh_tm.Layer.html" title="yeh_tm.Layer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pages/uvvis.get_concentration.html" title="uvvis.get_concentration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

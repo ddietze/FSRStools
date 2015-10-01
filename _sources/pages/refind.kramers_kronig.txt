@@ -1,0 +1,6 @@
+refind.kramers_kronig
+=====================
+
+.. currentmodule:: refind
+
+.. autofunction:: kramers_kronig

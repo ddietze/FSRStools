@@ -1,0 +1,6 @@
+yeh_tm.Layer.calculate_p_q
+==========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: Layer.calculate_p_q

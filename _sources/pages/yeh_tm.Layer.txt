@@ -1,0 +1,36 @@
+yeh_tm.Layer
+============
+
+.. currentmodule:: yeh_tm
+
+.. autoclass:: Layer
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Layer.__init__
+      ~Layer.calculate_D
+      ~Layer.calculate_P
+      ~Layer.calculate_T
+      ~Layer.calculate_epsilon
+      ~Layer.calculate_g
+      ~Layer.calculate_p_q
+      ~Layer.update
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Layer.c
+      ~Layer.mu
+   
+   

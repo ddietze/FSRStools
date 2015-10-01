@@ -1,0 +1,6 @@
+yeh_tm.remove_needle
+====================
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: remove_needle

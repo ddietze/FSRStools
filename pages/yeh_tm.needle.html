@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>yeh_tm.needle &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
+    <link rel="next" title="yeh_tm.get_merit" href="yeh_tm.get_merit.html" />
+    <link rel="prev" title="yeh_tm.System.tyy" href="yeh_tm.System.tyy.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.get_merit.html" title="yeh_tm.get_merit"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.System.tyy.html" title="yeh_tm.System.tyy"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="yeh_tm.System.tyy.html"
+                        title="previous chapter">yeh_tm.System.tyy</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="yeh_tm.get_merit.html"
+                        title="next chapter">yeh_tm.get_merit</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/yeh_tm.needle.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="yeh-tm-needle">
+<h1>yeh_tm.needle<a class="headerlink" href="#yeh-tm-needle" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="yeh_tm.needle">
+<code class="descclassname">yeh_tm.</code><code class="descname">needle</code><span class="sig-paren">(</span><em>S</em>, <em>w</em>, <em>Q</em>, <em>M1</em>, <em>M2</em>, <em>d=0.01</em>, <em>dQ=0.01</em>, <em>Qid=4</em>, <em>keep_first_fixed=True</em>, <em>max_num_layers=100</em>, <em>max_num_iterations=100</em>, <em>min_layer_thickness=0.001</em>, <em>min_merit=0.0001</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.needle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simplified implementation of the needle algorithm for thin film design. See Appl. Opt. 35, 5484 (1996) for details.
+This is the only function to be called directly by the user. Given an initial layer stack and some target values, the algorithm tries to replicate the target by insertion of additional layers and thickness optimization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>S</strong> (<a class="reference internal" href="yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><em>System</em></a>) &#8211; Initial optical system containing the layer stack.</li>
+<li><strong>w</strong> (<em>array</em>) &#8211; List of frequencies where a target is specified.</li>
+<li><strong>Q</strong> (<em>array</em>) &#8211; List of target values at the given frequencies (same shape as w).</li>
+<li><strong>M1</strong> (<em>func</em>) &#8211; Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.</li>
+<li><strong>M2</strong> (<em>func</em>) &#8211; Dielectric function 2.</li>
+<li><strong>d</strong> (<em>float</em>) &#8211; Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).</li>
+<li><strong>dQ</strong> (<em>float</em>) &#8211; Allowed design tolerance of the target (in absolute units).</li>
+<li><strong>Qid</strong> (<em>int</em>) &#8211; Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).</li>
+<li><strong>keep_first_fixed</strong> (<em>bool</em>) &#8211; Set to True if first layer should not be modified.</li>
+<li><strong>max_num_layers</strong> (<em>int</em>) &#8211; Maximum number of layers permitted (default 100).</li>
+<li><strong>max_num_iterations</strong> (<em>int</em>) &#8211; Maximum number of iterations (default 100).</li>
+<li><strong>min_layer_thickness</strong> (<em>float</em>) &#8211; Minimum thickness of a layer. If, after thickness optimization, a layer turns out thinner, it is discarded and the resulting stack simplified (default 1e-3, i.e. 1nm assuming units are um).</li>
+<li><strong>min_merit</strong> (<em>float</em>) &#8211; Threshold value for merit function to be reached for convergence (default 1e-4).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">System class instance with optimized design.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.get_merit.html" title="yeh_tm.get_merit"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="yeh_tm.System.tyy.html" title="yeh_tm.System.tyy"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

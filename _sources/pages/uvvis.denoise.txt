@@ -1,0 +1,6 @@
+uvvis.denoise
+=============
+
+.. currentmodule:: uvvis
+
+.. autofunction:: denoise

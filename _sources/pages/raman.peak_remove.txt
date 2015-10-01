@@ -1,0 +1,6 @@
+raman.peak_remove
+=================
+
+.. currentmodule:: raman
+
+.. autofunction:: peak_remove

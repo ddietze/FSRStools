@@ -1,0 +1,6 @@
+raman.cut
+=========
+
+.. currentmodule:: raman
+
+.. autofunction:: cut

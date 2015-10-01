@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting.lpsvd2 &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
+    <link rel="up" title="fitting - A collection of general fitting routines" href="../fitting.html" />
+    <link rel="next" title="fitting.nipals" href="fitting.nipals.html" />
+    <link rel="prev" title="fitting.lpsvd" href="fitting.lpsvd.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.nipals.html" title="fitting.nipals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fitting.lpsvd.html" title="fitting.lpsvd"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" accesskey="U"><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fitting.lpsvd.html"
+                        title="previous chapter">fitting.lpsvd</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fitting.nipals.html"
+                        title="next chapter">fitting.nipals</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/pages/fitting.lpsvd2.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fitting-lpsvd2">
+<h1>fitting.lpsvd2<a class="headerlink" href="#fitting-lpsvd2" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="fitting.lpsvd2">
+<code class="descclassname">fitting.</code><code class="descname">lpsvd2</code><span class="sig-paren">(</span><em>x</em>, <em>Y</em>, <em>eta=0.75</em>, <em>M=None</em>, <em>removeBias=False</em>, <em>refine=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fitting.lpsvd2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variation of LPSVD fitting function based on Barkhujisen et al, <em>Journal of Magnetic Resonance</em> <strong>61</strong>, 465 (1985), which seems to be more robust for noisy data.</p>
+<p>Use this function to extract the parameters of arbitrarily many exponentially decaying sinusoids from (noisy) time domain data (x,y) without prior knowledge of these parameters nor the exact number of oscillation frequencies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-values / time axis.</li>
+<li><strong>Y</strong> (<em>array</em>) &#8211; Input data (same shape as x).</li>
+<li><strong>eta</strong> (<em>float</em>) &#8211; Ratio of number of points in sample to number of points used for LP (&lt; 1).</li>
+<li><strong>M</strong> (<em>int</em>) &#8211; Model order = number of relevant singular values. If None, estimate automatically (default).</li>
+<li><strong>removeBias</strong> (<em>bool</em>) &#8211; If True, subtract the mean value of noise-related singular values before stripping.</li>
+<li><strong>refine</strong> (<em>bool</em>) &#8211; If True, run a standard least squares fitting after LPSVD to further refine the the LPSVD parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>A set of coefficients for each sinusoid. The number of sinusoids is <cite>len(res) / 4</cite>. For each sinusoid the function returns</p>
+<ul class="simple">
+<li>a amplitude,</li>
+<li>b exponential decay rate,</li>
+<li>f frequency (rad),</li>
+<li>phi phase (rad).</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The resulting array can be directly used as input to <a class="reference internal" href="fitting.sinusoids.html#fitting.sinusoids" title="fitting.sinusoids"><code class="xref py py-func docutils literal"><span class="pre">sinusoids()</span></code></a> and <a class="reference internal" href="fitting.sinusoidsFT.html#fitting.sinusoidsFT" title="fitting.sinusoidsFT"><code class="xref py py-func docutils literal"><span class="pre">sinusoidsFT()</span></code></a>.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="fitting.lpsvd.html#fitting.lpsvd" title="fitting.lpsvd"><code class="xref py py-func docutils literal"><span class="pre">lpsvd()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fitting.nipals.html" title="fitting.nipals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fitting.lpsvd.html" title="fitting.lpsvd"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../fitting.html" ><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

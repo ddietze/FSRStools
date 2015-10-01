@@ -1,0 +1,6 @@
+yeh_tm.optimized_insert_needle
+==============================
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: optimized_insert_needle

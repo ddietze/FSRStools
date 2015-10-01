@@ -1,0 +1,6 @@
+fitting.gaussians_parabola
+==========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians_parabola

@@ -1,0 +1,6 @@
+yeh_tm.Layer.calculate_T
+========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: Layer.calculate_T

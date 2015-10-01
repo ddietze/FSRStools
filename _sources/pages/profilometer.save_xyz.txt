@@ -1,0 +1,6 @@
+profilometer.save_xyz
+=====================
+
+.. currentmodule:: profilometer
+
+.. autofunction:: save_xyz

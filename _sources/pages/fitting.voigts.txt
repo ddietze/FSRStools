@@ -1,0 +1,6 @@
+fitting.voigts
+==============
+
+.. currentmodule:: fitting
+
+.. autofunction:: voigts

@@ -1,0 +1,6 @@
+fitting.exponentials
+====================
+
+.. currentmodule:: fitting
+
+.. autofunction:: exponentials

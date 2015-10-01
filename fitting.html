@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting - A collection of general fitting routines &mdash; FSRStools 1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
+    <link rel="next" title="fitting.curve_fit" href="pages/fitting.curve_fit.html" />
+    <link rel="prev" title="crosscorr.correct_t0" href="pages/crosscorr.correct_t0.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/fitting.curve_fit.html" title="fitting.curve_fit"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pages/crosscorr.correct_t0.html" title="crosscorr.correct_t0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">fitting</span></code> - A collection of general fitting routines</a><ul>
+<li><a class="reference internal" href="#utility-functions">Utility Functions</a></li>
+<li><a class="reference internal" href="#polynomials">Polynomials</a></li>
+<li><a class="reference internal" href="#powers">Powers</a></li>
+<li><a class="reference internal" href="#exponentials-and-related-decay-functions">Exponentials and Related Decay Functions</a></li>
+<li><a class="reference internal" href="#trigonometric-functions">Trigonometric Functions</a></li>
+<li><a class="reference internal" href="#lorentzians">Lorentzians</a></li>
+<li><a class="reference internal" href="#dispersive-lorentzians">Dispersive Lorentzians</a></li>
+<li><a class="reference internal" href="#gaussians">Gaussians</a></li>
+<li><a class="reference internal" href="#dispersive-gaussians">Dispersive Gaussians</a></li>
+<li><a class="reference internal" href="#pseudo-voigt-profiles">Pseudo-Voigt Profiles</a></li>
+<li><a class="reference internal" href="#saturation-curves">Saturation Curves</a></li>
+<li><a class="reference internal" href="#step-functions">Step Functions</a></li>
+<li><a class="reference internal" href="#lorentz-oscillator-model">Lorentz Oscillator Model</a></li>
+<li><a class="reference internal" href="#beam-waist-fitting">Beam Waist Fitting</a></li>
+<li><a class="reference internal" href="#linear-prediction-and-singular-value-decomposition">Linear Prediction and Singular Value Decomposition</a></li>
+<li><a class="reference internal" href="#principal-component-analysis">Principal Component Analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pages/crosscorr.correct_t0.html"
+                        title="previous chapter">crosscorr.correct_t0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pages/fitting.curve_fit.html"
+                        title="next chapter">fitting.curve_fit</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fitting.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fitting">
+<span id="fitting-a-collection-of-general-fitting-routines"></span><h1><a class="reference internal" href="#module-fitting" title="fitting"><code class="xref py py-mod docutils literal"><span class="pre">fitting</span></code></a> - A collection of general fitting routines<a class="headerlink" href="#module-fitting" title="Permalink to this headline">¶</a></h1>
+<p>A comprehensive bundle of mathematical functions and routines for fitting experimental data. 
+Provides methods for</p>
+<blockquote>
+<div><ul class="simple">
+<li>polynomials, Lorentzians, Gaussians, Voigts, exponentials, etc.</li>
+<li>Lorentz oscillator model,</li>
+<li>fitting beam waists using the knife edge method,</li>
+<li>LPSVD fitting of periodic noisy data,</li>
+<li>short-time Fourier transform,</li>
+<li>principal component analysis (using NIPALS),</li>
+</ul>
+</div></blockquote>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.curve_fit.html#fitting.curve_fit" title="fitting.curve_fit"><code class="xref py py-obj docutils literal"><span class="pre">curve_fit</span></code></a>(*args)</td>
+<td>A convenience wrapper for <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></code>, so you do not have to import scipy in addition.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.weighted_mean.html#fitting.weighted_mean" title="fitting.weighted_mean"><code class="xref py py-obj docutils literal"><span class="pre">weighted_mean</span></code></a>(x,&nbsp;s)</td>
+<td>Calculate the weighted average over a given data set and its uncertainties.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.stft.html#fitting.stft" title="fitting.stft"><code class="xref py py-obj docutils literal"><span class="pre">stft</span></code></a>(data,&nbsp;fs,&nbsp;w[,&nbsp;overlap_fac])</td>
+<td>Short time (or moving window) Fourier transform using a Hanning window.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="polynomials">
+<h2>Polynomials<a class="headerlink" href="#polynomials" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.const.html#fitting.const" title="fitting.const"><code class="xref py py-obj docutils literal"><span class="pre">const</span></code></a>(x,&nbsp;a)</td>
+<td>Returns a constant.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.proportional.html#fitting.proportional" title="fitting.proportional"><code class="xref py py-obj docutils literal"><span class="pre">proportional</span></code></a>(x,&nbsp;b)</td>
+<td>Proportionality, i.e., a line through the origin.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.line.html#fitting.line" title="fitting.line"><code class="xref py py-obj docutils literal"><span class="pre">line</span></code></a>(x,&nbsp;a,&nbsp;b)</td>
+<td>A line.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.parabola.html#fitting.parabola" title="fitting.parabola"><code class="xref py py-obj docutils literal"><span class="pre">parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c)</td>
+<td>A parabola.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.parabola2.html#fitting.parabola2" title="fitting.parabola2"><code class="xref py py-obj docutils literal"><span class="pre">parabola2</span></code></a>(x,&nbsp;y0,&nbsp;x0,&nbsp;a)</td>
+<td>Another version of the parabola using the vertex (x0, y0).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.cubic.html#fitting.cubic" title="fitting.cubic"><code class="xref py py-obj docutils literal"><span class="pre">cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d)</td>
+<td>Third order polynomial.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.quartic.html#fitting.quartic" title="fitting.quartic"><code class="xref py py-obj docutils literal"><span class="pre">quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e)</td>
+<td>Fourth order polynomial.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.poly.html#fitting.poly" title="fitting.poly"><code class="xref py py-obj docutils literal"><span class="pre">poly</span></code></a>(x,&nbsp;*coeffs)</td>
+<td>A general polynomial.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lagrange.html#fitting.lagrange" title="fitting.lagrange"><code class="xref py py-obj docutils literal"><span class="pre">lagrange</span></code></a>(x,&nbsp;x0,&nbsp;y0)</td>
+<td>Construct the polynomial over x with the least degree that passes through all points (x0, y0) using Lagrange polynomials.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="powers">
+<h2>Powers<a class="headerlink" href="#powers" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.power.html#fitting.power" title="fitting.power"><code class="xref py py-obj docutils literal"><span class="pre">power</span></code></a>(x,&nbsp;A,&nbsp;a)</td>
+<td>Power law without offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.power_const.html#fitting.power_const" title="fitting.power_const"><code class="xref py py-obj docutils literal"><span class="pre">power_const</span></code></a>(x,&nbsp;y0,&nbsp;A,&nbsp;a)</td>
+<td>Power law with constant offset.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="exponentials-and-related-decay-functions">
+<h2>Exponentials and Related Decay Functions<a class="headerlink" href="#exponentials-and-related-decay-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.exponentials.html#fitting.exponentials" title="fitting.exponentials"><code class="xref py py-obj docutils literal"><span class="pre">exponentials</span></code></a>(x,&nbsp;y0,&nbsp;*p)</td>
+<td>Sum over a variable number of <em>decaying</em> exponentials with constant offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.exp_gauss.html#fitting.exp_gauss" title="fitting.exp_gauss"><code class="xref py py-obj docutils literal"><span class="pre">exp_gauss</span></code></a>(x,&nbsp;y0,&nbsp;s,&nbsp;x0,&nbsp;*p)</td>
+<td>Sum over variable number of exponentials convoluted with a single Gaussian.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="trigonometric-functions">
+<h2>Trigonometric Functions<a class="headerlink" href="#trigonometric-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.cosine.html#fitting.cosine" title="fitting.cosine"><code class="xref py py-obj docutils literal"><span class="pre">cosine</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c[,&nbsp;d])</td>
+<td>A cosine with constant offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.cosine2.html#fitting.cosine2" title="fitting.cosine2"><code class="xref py py-obj docutils literal"><span class="pre">cosine2</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c[,&nbsp;d])</td>
+<td>A cosine squared.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.sinusoids.html#fitting.sinusoids" title="fitting.sinusoids"><code class="xref py py-obj docutils literal"><span class="pre">sinusoids</span></code></a>(x,&nbsp;*p)</td>
+<td>A sum over a variable number of decaying sinusoids.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.sinusoidsFT.html#fitting.sinusoidsFT" title="fitting.sinusoidsFT"><code class="xref py py-obj docutils literal"><span class="pre">sinusoidsFT</span></code></a>(f,&nbsp;*p)</td>
+<td>Returns reconstructed frequency domain representation from analytic Fourier transform of one sided decaying sinusoid for a variable number of sinusoids.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lorentzians">
+<h2>Lorentzians<a class="headerlink" href="#lorentzians" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lor.html#fitting.lor" title="fitting.lor"><code class="xref py py-obj docutils literal"><span class="pre">lor</span></code></a>(x,&nbsp;A,&nbsp;x0,&nbsp;dx)</td>
+<td>Single Lorentzian without baseline / offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.lorentzians.html#fitting.lorentzians" title="fitting.lorentzians"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians</span></code></a>(x,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians without baseline.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lorentzians_const.html#fitting.lorentzians_const" title="fitting.lorentzians_const"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians_const</span></code></a>(x,&nbsp;a,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians on a constant background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.lorentzians_line.html#fitting.lorentzians_line" title="fitting.lorentzians_line"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians_line</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lorentzians_parabola.html#fitting.lorentzians_parabola" title="fitting.lorentzians_parabola"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians_parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians on a quadratic background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.lorentzians_cubic.html#fitting.lorentzians_cubic" title="fitting.lorentzians_cubic"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians_cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians on a cubic background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lorentzians_quartic.html#fitting.lorentzians_quartic" title="fitting.lorentzians_quartic"><code class="xref py py-obj docutils literal"><span class="pre">lorentzians_quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e,&nbsp;*p)</td>
+<td>Sum over variable number of Lorentzians on a quartic background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dispersive-lorentzians">
+<h2>Dispersive Lorentzians<a class="headerlink" href="#dispersive-lorentzians" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.displor.html#fitting.displor" title="fitting.displor"><code class="xref py py-obj docutils literal"><span class="pre">displor</span></code></a>(x,&nbsp;A,&nbsp;B,&nbsp;x0,&nbsp;dx)</td>
+<td>A <em>dispersive</em> Lorentzian without baseline / offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.displorentzians.html#fitting.displorentzians" title="fitting.displorentzians"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians</span></code></a>(x,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians without baseline.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.displorentzians_const.html#fitting.displorentzians_const" title="fitting.displorentzians_const"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians_const</span></code></a>(x,&nbsp;a,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians on a constant background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.displorentzians_line.html#fitting.displorentzians_line" title="fitting.displorentzians_line"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians_line</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.displorentzians_parabola.html#fitting.displorentzians_parabola" title="fitting.displorentzians_parabola"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians_parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians on a quadratic background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.displorentzians_cubic.html#fitting.displorentzians_cubic" title="fitting.displorentzians_cubic"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians_cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians on a cubic background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.displorentzians_quartic.html#fitting.displorentzians_quartic" title="fitting.displorentzians_quartic"><code class="xref py py-obj docutils literal"><span class="pre">displorentzians_quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e,&nbsp;*p)</td>
+<td>A sum over a variable number of dispersive Lorentzians on a quartic background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gaussians">
+<h2>Gaussians<a class="headerlink" href="#gaussians" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.gauss.html#fitting.gauss" title="fitting.gauss"><code class="xref py py-obj docutils literal"><span class="pre">gauss</span></code></a>(x,&nbsp;A,&nbsp;x0,&nbsp;dx)</td>
+<td>A single Gaussian without baseline / offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.gaussians.html#fitting.gaussians" title="fitting.gaussians"><code class="xref py py-obj docutils literal"><span class="pre">gaussians</span></code></a>(x,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians without baseline.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.gaussians_const.html#fitting.gaussians_const" title="fitting.gaussians_const"><code class="xref py py-obj docutils literal"><span class="pre">gaussians_const</span></code></a>(x,&nbsp;a,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians on a constant background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.gaussians_line.html#fitting.gaussians_line" title="fitting.gaussians_line"><code class="xref py py-obj docutils literal"><span class="pre">gaussians_line</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.gaussians_parabola.html#fitting.gaussians_parabola" title="fitting.gaussians_parabola"><code class="xref py py-obj docutils literal"><span class="pre">gaussians_parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians on a quadratic background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.gaussians_cubic.html#fitting.gaussians_cubic" title="fitting.gaussians_cubic"><code class="xref py py-obj docutils literal"><span class="pre">gaussians_cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians on a cubic background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.gaussians_quartic.html#fitting.gaussians_quartic" title="fitting.gaussians_quartic"><code class="xref py py-obj docutils literal"><span class="pre">gaussians_quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e,&nbsp;*p)</td>
+<td>Sum over a variable number of Gaussians on a quartic background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dispersive-gaussians">
+<h2>Dispersive Gaussians<a class="headerlink" href="#dispersive-gaussians" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.dispgauss.html#fitting.dispgauss" title="fitting.dispgauss"><code class="xref py py-obj docutils literal"><span class="pre">dispgauss</span></code></a>(x,&nbsp;A,&nbsp;B,&nbsp;x0,&nbsp;dx)</td>
+<td>A single <em>dispersive</em> Gaussian without baseline / offset.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.dispgaussians.html#fitting.dispgaussians" title="fitting.dispgaussians"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians</span></code></a>(x,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians without baseline.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.dispgaussians_const.html#fitting.dispgaussians_const" title="fitting.dispgaussians_const"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians_const</span></code></a>(x,&nbsp;a,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians on a constant background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.dispgaussians_line.html#fitting.dispgaussians_line" title="fitting.dispgaussians_line"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians_line</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.dispgaussians_parabola.html#fitting.dispgaussians_parabola" title="fitting.dispgaussians_parabola"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians_parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians on a quadratic background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.dispgaussians_cubic.html#fitting.dispgaussians_cubic" title="fitting.dispgaussians_cubic"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians_cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians on a cubic background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.dispgaussians_quartic.html#fitting.dispgaussians_quartic" title="fitting.dispgaussians_quartic"><code class="xref py py-obj docutils literal"><span class="pre">dispgaussians_quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e,&nbsp;*p)</td>
+<td>Sum over a variable number of dispersive Gaussians on a quartic background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pseudo-voigt-profiles">
+<h2>Pseudo-Voigt Profiles<a class="headerlink" href="#pseudo-voigt-profiles" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.voigt.html#fitting.voigt" title="fitting.voigt"><code class="xref py py-obj docutils literal"><span class="pre">voigt</span></code></a>(x,&nbsp;A,&nbsp;x0,&nbsp;dx,&nbsp;a)</td>
+<td>Approximation to a Voigt profile based on a weighted sum of a Gaussian and a Lorentzian with the same parameters.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.voigts.html#fitting.voigts" title="fitting.voigts"><code class="xref py py-obj docutils literal"><span class="pre">voigts</span></code></a>(x,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles without baseline / offset.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.voigts_const.html#fitting.voigts_const" title="fitting.voigts_const"><code class="xref py py-obj docutils literal"><span class="pre">voigts_const</span></code></a>(x,&nbsp;a,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles on a constant background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.voigts_line.html#fitting.voigts_line" title="fitting.voigts_line"><code class="xref py py-obj docutils literal"><span class="pre">voigts_line</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.voigts_parabola.html#fitting.voigts_parabola" title="fitting.voigts_parabola"><code class="xref py py-obj docutils literal"><span class="pre">voigts_parabola</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles on a quadratic background.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.voigts_cubic.html#fitting.voigts_cubic" title="fitting.voigts_cubic"><code class="xref py py-obj docutils literal"><span class="pre">voigts_cubic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles on a cubic background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.voigts_quartic.html#fitting.voigts_quartic" title="fitting.voigts_quartic"><code class="xref py py-obj docutils literal"><span class="pre">voigts_quartic</span></code></a>(x,&nbsp;a,&nbsp;b,&nbsp;c,&nbsp;d,&nbsp;e,&nbsp;*p)</td>
+<td>Sum over variable number of approximate Voigt profiles on a quartic background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="saturation-curves">
+<h2>Saturation Curves<a class="headerlink" href="#saturation-curves" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.saturation.html#fitting.saturation" title="fitting.saturation"><code class="xref py py-obj docutils literal"><span class="pre">saturation</span></code></a>(x,&nbsp;A,&nbsp;x2)</td>
+<td>Saturation curve from 0 to A.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="step-functions">
+<h2>Step Functions<a class="headerlink" href="#step-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.heaviside.html#fitting.heaviside" title="fitting.heaviside"><code class="xref py py-obj docutils literal"><span class="pre">heaviside</span></code></a>(x,&nbsp;x0)</td>
+<td>Heaviside step function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.step.html#fitting.step" title="fitting.step"><code class="xref py py-obj docutils literal"><span class="pre">step</span></code></a>(x,&nbsp;x0,&nbsp;y0,&nbsp;y1,&nbsp;a)</td>
+<td>Sharp step function on a linear background.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.smoothstep.html#fitting.smoothstep" title="fitting.smoothstep"><code class="xref py py-obj docutils literal"><span class="pre">smoothstep</span></code></a>(x,&nbsp;x0,&nbsp;y0,&nbsp;y1,&nbsp;a,&nbsp;k)</td>
+<td>Smooth step function on a linear background.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lorentz-oscillator-model">
+<h2>Lorentz Oscillator Model<a class="headerlink" href="#lorentz-oscillator-model" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lorOscRe.html#fitting.lorOscRe" title="fitting.lorOscRe"><code class="xref py py-obj docutils literal"><span class="pre">lorOscRe</span></code></a>(w,&nbsp;A,&nbsp;w0,&nbsp;dw)</td>
+<td>Real part of a Lorentz oscillator model for the dielectric function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.lorOscIm.html#fitting.lorOscIm" title="fitting.lorOscIm"><code class="xref py py-obj docutils literal"><span class="pre">lorOscIm</span></code></a>(w,&nbsp;A,&nbsp;w0,&nbsp;dw)</td>
+<td>Imaginary part of a Lorentz oscillator model for the dielectric function.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="beam-waist-fitting">
+<h2>Beam Waist Fitting<a class="headerlink" href="#beam-waist-fitting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.waist.html#fitting.waist" title="fitting.waist"><code class="xref py py-obj docutils literal"><span class="pre">waist</span></code></a>(z,&nbsp;A,&nbsp;y0,&nbsp;z0,&nbsp;w0)</td>
+<td>Use this function to fit the integrated intensity profile obtained by translating a knife edge through the waist of a laser beam.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.rayleigh.html#fitting.rayleigh" title="fitting.rayleigh"><code class="xref py py-obj docutils literal"><span class="pre">rayleigh</span></code></a>(x,&nbsp;x0,&nbsp;xR,&nbsp;w0)</td>
+<td>Waist size of a Gaussian laser beam as function of position along axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.fit_waist.html#fitting.fit_waist" title="fitting.fit_waist"><code class="xref py py-obj docutils literal"><span class="pre">fit_waist</span></code></a>(y,&nbsp;dz)</td>
+<td>Convenience function for extracting the beam waist from a knife-edge intensity profile using <a class="reference internal" href="pages/fitting.waist.html#fitting.waist" title="fitting.waist"><code class="xref py py-func docutils literal"><span class="pre">waist()</span></code></a> and regularly spaced points.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linear-prediction-and-singular-value-decomposition">
+<h2>Linear Prediction and Singular Value Decomposition<a class="headerlink" href="#linear-prediction-and-singular-value-decomposition" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.lpsvd.html#fitting.lpsvd" title="fitting.lpsvd"><code class="xref py py-obj docutils literal"><span class="pre">lpsvd</span></code></a>(x,&nbsp;Y[,&nbsp;eta,&nbsp;refine])</td>
+<td>LPSVD fitting function based on Kumaresan and Tufts, <em>IEEE Transactions on Acoustics, Speech and Signal Processing</em> <strong>ASSP-30</strong>, 833 (1982) and the Matlab code by Greg Reynolds, 2006 (from mathworks.com).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.lpsvd2.html#fitting.lpsvd2" title="fitting.lpsvd2"><code class="xref py py-obj docutils literal"><span class="pre">lpsvd2</span></code></a>(x,&nbsp;Y[,&nbsp;eta,&nbsp;M,&nbsp;removeBias,&nbsp;refine])</td>
+<td>Variation of LPSVD fitting function based on Barkhujisen et al, <em>Journal of Magnetic Resonance</em> <strong>61</strong>, 465 (1985), which seems to be more robust for noisy data.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="principal-component-analysis">
+<h2>Principal Component Analysis<a class="headerlink" href="#principal-component-analysis" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.nipals.html#fitting.nipals" title="fitting.nipals"><code class="xref py py-obj docutils literal"><span class="pre">nipals</span></code></a>(A[,&nbsp;n])</td>
+<td>Principal component analysis based on the NIPALS algorithm for deconvolution of spectra containing the signature of multiple species.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/fitting.getRdimer.html#fitting.getRdimer" title="fitting.getRdimer"><code class="xref py py-obj docutils literal"><span class="pre">getRdimer</span></code></a>(Kp,&nbsp;c,&nbsp;T[,&nbsp;outR])</td>
+<td>Calculate the transform matrix R using an estimate for the monomer &lt;-&gt; dimer equilibrium constant Kp.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/fitting.getR23mer.html#fitting.getR23mer" title="fitting.getR23mer"><code class="xref py py-obj docutils literal"><span class="pre">getR23mer</span></code></a>(K,&nbsp;c,&nbsp;T[,&nbsp;outR])</td>
+<td>Calculate the transform matrix R using an estimate for the monomer &lt;-&gt; dimer and monomer &lt;-&gt; trimer equilibrium constants K2 and K3.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pages/fitting.curve_fit.html" title="fitting.curve_fit"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pages/crosscorr.correct_t0.html" title="crosscorr.correct_t0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Daniel Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

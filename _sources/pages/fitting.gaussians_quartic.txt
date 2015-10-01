@@ -1,0 +1,6 @@
+fitting.gaussians_quartic
+=========================
+
+.. currentmodule:: fitting
+
+.. autofunction:: gaussians_quartic

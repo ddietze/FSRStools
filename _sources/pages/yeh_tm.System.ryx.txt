@@ -1,0 +1,6 @@
+yeh_tm.System.ryx
+=================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.ryx

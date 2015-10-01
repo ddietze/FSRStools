@@ -1,0 +1,6 @@
+fitting.getRdimer
+=================
+
+.. currentmodule:: fitting
+
+.. autofunction:: getRdimer
