@@ -15,6 +15,11 @@ Package overview:
 - **uvvis**: Useful functions for analysis of UV-VIS spectra.
 - **yeh_tm**: Yeh's 4x4 transfer matrix formalism including electric field calculations and the Needle algorithm.
 
+Documentation
+=============
+
+A detailed documentation of all modules and functions with example codes can be found on my github pages: <http://ddietze.github.io/FSRStools>.
+
 Installation
 ============
 
