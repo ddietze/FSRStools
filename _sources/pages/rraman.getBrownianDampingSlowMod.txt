@@ -1,0 +1,6 @@
+rraman.getBrownianDampingSlowMod
+================================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getBrownianDampingSlowMod

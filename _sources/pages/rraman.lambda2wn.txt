@@ -1,0 +1,6 @@
+rraman.lambda2wn
+================
+
+.. currentmodule:: rraman
+
+.. autofunction:: lambda2wn

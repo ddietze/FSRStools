@@ -27,7 +27,7 @@
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
     <link rel="next" title="rraman.getKuboDamping" href="rraman.getKuboDamping.html" />
-    <link rel="prev" title="rraman.getCrossSections" href="rraman.getCrossSections.html" /> 
+    <link rel="prev" title="rraman.getRamanSpectrum" href="rraman.getRamanSpectrum.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -43,7 +43,7 @@
           <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="rraman.getCrossSections.html" title="rraman.getCrossSections"
+          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
@@ -55,8 +55,8 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="rraman.getCrossSections.html"
-                        title="previous chapter">rraman.getCrossSections</a></p>
+  <p class="topless"><a href="rraman.getRamanSpectrum.html"
+                        title="previous chapter">rraman.getRamanSpectrum</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rraman.getKuboDamping.html"
                         title="next chapter">rraman.getKuboDamping</a></p>
@@ -92,8 +92,12 @@
 <h1>rraman.getHomogeneousDamping<a class="headerlink" href="#rraman-gethomogeneousdamping" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="rraman.getHomogeneousDamping">
-<code class="descclassname">rraman.</code><code class="descname">getHomogeneousDamping</code><span class="sig-paren">(</span><em>t</em>, <em>Gamma</em>, <em>alpha=0</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getHomogeneousDamping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the damping term arising from the homogeneous linewidth of the electronic transition.</p>
+<code class="descclassname">rraman.</code><code class="descname">getHomogeneousDamping</code><span class="sig-paren">(</span><em>t</em>, <em>Gamma</em>, <em>alpha=0</em>, <em>lmbda=0</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getHomogeneousDamping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the damping term arising from the homogeneous linewidth of the electronic transition. Offers phenomenological support for Stokes shift.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Added phenomenological Stokes shift to input parameters on 10-12-2015.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -107,10 +111,11 @@
 <li>0 = Lorentzian</li>
 </ul>
 </li>
+<li><strong>lmbda</strong> (<em>float</em>) &#8211; Phenomenological Stokes shift (cm-1) which is added as imaginary part to g(t). Compared to the Brownian oscillator models, lmbda <strong>is</strong> the observed Stokes shift. (default = 0)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Damping term in the time domain, <img class="math" src="../_images/math/a79333d11e698916340ba664523f9a7ee20b0ee8.png" alt="e^{-g(t)}"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Damping term in the time domain, <img class="math" src="../_images/math/5c89c155fd1ef5cdcaf520335f4b4a90ffcc61d0.png" alt="e^{-g(t) - i \lambda t / 2 \hbar}"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -138,7 +143,7 @@
           <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
              >next</a> |</li>
         <li class="right" >
-          <a href="rraman.getCrossSections.html" title="rraman.getCrossSections"
+          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 

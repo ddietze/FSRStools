@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>rraman.getAxes &mdash; FSRStools 1.1 documentation</title>
+    <title>rraman.getRamanSpectrum &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
-    <link rel="next" title="rraman.molarExtinction2AbsCS" href="rraman.molarExtinction2AbsCS.html" />
-    <link rel="prev" title="rraman.getWnIndex" href="rraman.getWnIndex.html" /> 
+    <link rel="next" title="rraman.getHomogeneousDamping" href="rraman.getHomogeneousDamping.html" />
+    <link rel="prev" title="rraman.getCrossSections" href="rraman.getCrossSections.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,10 +40,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.getHomogeneousDamping.html" title="rraman.getHomogeneousDamping"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.getCrossSections.html" title="rraman.getCrossSections"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="rraman.getWnIndex.html"
-                        title="previous chapter">rraman.getWnIndex</a></p>
+  <p class="topless"><a href="rraman.getCrossSections.html"
+                        title="previous chapter">rraman.getCrossSections</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rraman.molarExtinction2AbsCS.html"
-                        title="next chapter">rraman.molarExtinction2AbsCS</a></p>
+  <p class="topless"><a href="rraman.getHomogeneousDamping.html"
+                        title="next chapter">rraman.getHomogeneousDamping</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/rraman.getAxes.txt"
+      <li><a href="../_sources/pages/rraman.getRamanSpectrum.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,23 +88,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="rraman-getaxes">
-<h1>rraman.getAxes<a class="headerlink" href="#rraman-getaxes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rraman-getramanspectrum">
+<h1>rraman.getRamanSpectrum<a class="headerlink" href="#rraman-getramanspectrum" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="rraman.getAxes">
-<code class="descclassname">rraman.</code><code class="descname">getAxes</code><span class="sig-paren">(</span><em>tmax</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getAxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create time and frequency axes for the resonance Raman calculations.</p>
+<dt id="rraman.getRamanSpectrum">
+<code class="descclassname">rraman.</code><code class="descname">getRamanSpectrum</code><span class="sig-paren">(</span><em>wn</em>, <em>iEL</em>, <em>RMg</em>, <em>nquanta</em>, <em>sigmaR</em>, <em>dw=10.0</em>, <em>alpha=0</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getRamanSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function to calculate the Raman spectrum. The spectrum is scattered power per infinitesimal frequency normalized to incident power times molecular density (cm-3) times path length (cm). See Myers, <em>Chem. Phys.</em> <strong>180</strong>, 215 (1994), Eq. 7 for details.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tmax</strong> (<em>float</em>) &#8211; Endpoint for time domain calculation (fs). This value should be high enough to capture the full dephasing.</li>
-<li><strong>dt</strong> (<em>float</em>) &#8211; Increment of time axis (fs). This value should be small enough to capture the highest vibronic feature in the excited state.</li>
+<li><strong>wn</strong> (<em>array</em>) &#8211; Wavenumber axis (Stokes shift, not electronic).</li>
+<li><strong>iEL</strong> (<em>int</em>) &#8211; Index into sigmaR corresponding to the pump energy of the laser.</li>
+<li><strong>RMg</strong> (<em>array</em>) &#8211; Ground state Raman frequencies</li>
+<li><strong>nquanta</strong> (<em>array</em>) &#8211; M x N array containing the quanta of the N possible Raman modes for the M Raman lines to calculate. Use <code class="xref py py-func docutils literal"><span class="pre">numpy.identity()</span></code> to just calculate the fundamentals. Possible values are 0, 1, 2.</li>
+<li><strong>sigmaR</strong> (<em>array</em>) &#8211; Array of M Raman cross sections that have been calculated by <a class="reference internal" href="rraman.getCrossSections.html#rraman.getCrossSections" title="rraman.getCrossSections"><code class="xref py py-func docutils literal"><span class="pre">getCrossSections()</span></code></a> (in A**2 / molec).</li>
+<li><strong>dw</strong> (<em>float</em>) &#8211; Phenomenological FWHM linewidth of the Raman lines in cm-1 (default = 10 cm-1).</li>
+<li><strong>alpha</strong> (<em>float</em>) &#8211; <p>Line shape parameter to be used for the Raman spectrum:</p>
+<ul>
+<li>1 = Gaussian</li>
+<li>0 = Lorentzian (default)</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Time axis (fs) and frequency axis (cm-1).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Calculated Raman spectrum (same shape as wn).</p>
 </td>
 </tr>
 </tbody>
@@ -129,10 +139,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.getHomogeneousDamping.html" title="rraman.getHomogeneousDamping"
              >next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.getCrossSections.html" title="rraman.getCrossSections"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 

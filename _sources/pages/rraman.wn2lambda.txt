@@ -1,0 +1,6 @@
+rraman.wn2lambda
+================
+
+.. currentmodule:: rraman
+
+.. autofunction:: wn2lambda

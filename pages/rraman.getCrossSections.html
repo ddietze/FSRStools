@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
-    <link rel="next" title="rraman.getHomogeneousDamping" href="rraman.getHomogeneousDamping.html" />
+    <link rel="next" title="rraman.getRamanSpectrum" href="rraman.getRamanSpectrum.html" />
     <link rel="prev" title="rraman.getZeroZeroEnergy" href="rraman.getZeroZeroEnergy.html" /> 
   </head>
   <body role="document">
@@ -40,7 +40,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.getHomogeneousDamping.html" title="rraman.getHomogeneousDamping"
+          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="rraman.getZeroZeroEnergy.html" title="rraman.getZeroZeroEnergy"
@@ -58,8 +58,8 @@
   <p class="topless"><a href="rraman.getZeroZeroEnergy.html"
                         title="previous chapter">rraman.getZeroZeroEnergy</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rraman.getHomogeneousDamping.html"
-                        title="next chapter">rraman.getHomogeneousDamping</a></p>
+  <p class="topless"><a href="rraman.getRamanSpectrum.html"
+                        title="next chapter">rraman.getRamanSpectrum</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -92,19 +92,25 @@
 <h1>rraman.getCrossSections<a class="headerlink" href="#rraman-getcrosssections" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="rraman.getCrossSections">
-<code class="descclassname">rraman.</code><code class="descname">getCrossSections</code><span class="sig-paren">(</span><em>wn</em>, <em>dt</em>, <em>tdpart</em>, <em>ovlps</em>, <em>sshift</em>, <em>M</em>, <em>IOR</em>, <em>sig=0</em>, <em>ialpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getCrossSections" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the absorption and Raman cross-sections.</p>
+<code class="descclassname">rraman.</code><code class="descname">getCrossSections</code><span class="sig-paren">(</span><em>t</em>, <em>wn</em>, <em>E0</em>, <em>ovlps</em>, <em>sshift</em>, <em>M</em>, <em>IOR</em>, <em>damp=1</em>, <em>sig=0</em>, <em>ialpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getCrossSections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the absorption and Raman cross-sections and the fluorescence efficiency. The latter is a unitless quantity which may be used
+to calculate the fluorescence rate (=rate of spontaneous emission) by integrating over the frequency axis (see Myers, <em>Chem. Phys.</em> <strong>180</strong>, 215 (1994) Eq. 6 and discussion).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Changed shape of input parameters and shape of return values on 10-07-2015.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>wn</strong> (<em>array</em>) &#8211; Wavenumber axis in (cm-1).</li>
-<li><strong>dt</strong> (<em>float</em>) &#8211; Time increment for integration / tdpart.</li>
+<li><strong>t</strong> (<em>array</em>) &#8211; Time axis in (fs). This axis is used for the calculation of the zero-zero energy term in the time domain.</li>
+<li><strong>wn</strong> (<em>array</em>) &#8211; Wavenumber axis in (cm-1). Same shape as t.</li>
 <li><strong>tdpart</strong> (<em>array</em>) &#8211; Zero-zero energy and damping terms in the time domain, same shape as wn.</li>
-<li><strong>ovlps</strong> (<em>array</em>) &#8211; M + 1 Absorption and Raman overlap integrals.</li>
+<li><strong>ovlps</strong> (<em>array</em>) &#8211; M + 2 Absorption, fluorescence and Raman overlap integrals.</li>
 <li><strong>sshift</strong> (<em>float</em>) &#8211; Vibrational freqencies of M Raman modes to calculate (cm-1).</li>
 <li><strong>IOR</strong> (<em>float</em>) &#8211; Index of refraction of surrounding medium / solvent.</li>
+<li><strong>damp</strong> (<em>array</em>) &#8211; Damping function in the time domain. Same shape as t. Set to 1 if no damping is used (default).</li>
 <li><strong>sig</strong> (<em>float</em>) &#8211; Linewidth for inhomogeneous damping (standard deviation of Gaussian), set to zero if not used (default).</li>
 <li><strong>ialpha</strong> (<em>float</em>) &#8211; <p>Lineshape parameter for inhomogeneous damping:</p>
 <ul>
@@ -115,7 +121,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Absorption and M Raman cross sections (arrays with same shape as wn): sigmaA, sigmaR[M].</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Absorption, sigmaA, M Raman cross sections, sigmaR[M], and fluorescence efficiency spectrum, kF (arrays have same shape as wn).</p>
 </td>
 </tr>
 </tbody>
@@ -140,7 +146,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.getHomogeneousDamping.html" title="rraman.getHomogeneousDamping"
+          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
              >next</a> |</li>
         <li class="right" >
           <a href="rraman.getZeroZeroEnergy.html" title="rraman.getZeroZeroEnergy"

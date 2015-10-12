@@ -1,0 +1,6 @@
+rraman.getWnIndex
+=================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getWnIndex

@@ -1,0 +1,6 @@
+rraman.prefF
+============
+
+.. currentmodule:: rraman
+
+.. autofunction:: prefF

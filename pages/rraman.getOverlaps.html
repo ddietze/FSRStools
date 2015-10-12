@@ -94,6 +94,10 @@
 <dt id="rraman.getOverlaps">
 <code class="descclassname">rraman.</code><code class="descname">getOverlaps</code><span class="sig-paren">(</span><em>t</em>, <em>D</em>, <em>RMg</em>, <em>RMe</em>, <em>nquanta</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getOverlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the time dependent overlap integrals / Franck-Condon factors <img class="math" src="../_images/math/a80a8e0bdd9fc918887316bed6a51eaf78c9cbb5.png" alt="&lt;i|i(t)&gt;_k"/> and <img class="math" src="../_images/math/2b1dfc75da62d5c86dceccf09e5cde95c04f93b9.png" alt="&lt;f|i(t)&gt;_k"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Format of return value changed on 10-07-2015.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -107,7 +111,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">M + 1 - dimensional array containing the Rayleigh and M Raman overlaps.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">M + 2 - dimensional array containing the Rayleigh, fluorescence and M Raman overlaps.</p>
 </td>
 </tr>
 </tbody>

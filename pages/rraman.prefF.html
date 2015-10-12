@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>rraman.getAxes &mdash; FSRStools 1.1 documentation</title>
+    <title>rraman.prefF &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
-    <link rel="next" title="rraman.molarExtinction2AbsCS" href="rraman.molarExtinction2AbsCS.html" />
-    <link rel="prev" title="rraman.getWnIndex" href="rraman.getWnIndex.html" /> 
+    <link rel="next" title="rraman.t00A" href="rraman.t00A.html" />
+    <link rel="prev" title="rraman.prefR" href="rraman.prefR.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,10 +40,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.t00A.html" title="rraman.t00A"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.prefR.html" title="rraman.prefR"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="rraman.getWnIndex.html"
-                        title="previous chapter">rraman.getWnIndex</a></p>
+  <p class="topless"><a href="rraman.prefR.html"
+                        title="previous chapter">rraman.prefR</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rraman.molarExtinction2AbsCS.html"
-                        title="next chapter">rraman.molarExtinction2AbsCS</a></p>
+  <p class="topless"><a href="rraman.t00A.html"
+                        title="next chapter">rraman.t00A</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/rraman.getAxes.txt"
+      <li><a href="../_sources/pages/rraman.prefF.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,27 +88,33 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="rraman-getaxes">
-<h1>rraman.getAxes<a class="headerlink" href="#rraman-getaxes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rraman-preff">
+<h1>rraman.prefF<a class="headerlink" href="#rraman-preff" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="rraman.getAxes">
-<code class="descclassname">rraman.</code><code class="descname">getAxes</code><span class="sig-paren">(</span><em>tmax</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getAxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create time and frequency axes for the resonance Raman calculations.</p>
+<dt id="rraman.prefF">
+<code class="descclassname">rraman.</code><code class="descname">prefF</code><span class="sig-paren">(</span><em>eEF</em>, <em>M</em>, <em>IOR</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.prefF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the prefactor for the fluorescence efficiency calculation (unitless). See <a class="reference internal" href="rraman.getCrossSections.html#rraman.getCrossSections" title="rraman.getCrossSections"><code class="xref py py-func docutils literal"><span class="pre">getCrossSections()</span></code></a> for more details.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tmax</strong> (<em>float</em>) &#8211; Endpoint for time domain calculation (fs). This value should be high enough to capture the full dephasing.</li>
-<li><strong>dt</strong> (<em>float</em>) &#8211; Increment of time axis (fs). This value should be small enough to capture the highest vibronic feature in the excited state.</li>
+<li><strong>eEF</strong> (<em>array</em>) &#8211; Fluorescence energy in (cm-1). May also be a single float value.</li>
+<li><strong>M</strong> (<em>float</em>) &#8211; Electronic transition dipole length in (A).</li>
+<li><strong>IOR</strong> (<em>float</em>) &#8211; Index of refraction of surrounding solvent / medium.</li>
+<li><strong>dt</strong> (<em>float</em>) &#8211; Time increment used for integration (fs).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Time axis (fs) and frequency axis (cm-1).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Prefactor for fluorescence efficiency calculation.</p>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Myers, <em>Chem. Phys.</em> <strong>180</strong>, 215 (1994), Eqs. (6) and (26).</p>
+</div>
 </dd></dl>
 
 </div>
@@ -129,10 +135,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.t00A.html" title="rraman.t00A"
              >next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.prefR.html" title="rraman.prefR"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 

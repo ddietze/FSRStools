@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="index.html" />
     <link rel="next" title="rraman.getOverlaps" href="pages/rraman.getOverlaps.html" />
-    <link rel="prev" title="refind.n_polymer" href="pages/refind.n_polymer.html" /> 
+    <link rel="prev" title="refind.n_sellmeier" href="pages/refind.n_sellmeier.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -42,7 +42,7 @@
           <a href="pages/rraman.getOverlaps.html" title="rraman.getOverlaps"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pages/refind.n_polymer.html" title="refind.n_polymer"
+          <a href="pages/refind.n_sellmeier.html" title="refind.n_sellmeier"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
       </ul>
@@ -64,8 +64,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pages/refind.n_polymer.html"
-                        title="previous chapter">refind.n_polymer</a></p>
+  <p class="topless"><a href="pages/refind.n_sellmeier.html"
+                        title="previous chapter">refind.n_sellmeier</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pages/rraman.getOverlaps.html"
                         title="next chapter">rraman.getOverlaps</a></p>
@@ -100,8 +100,19 @@
   <div class="section" id="module-rraman">
 <span id="rraman-analysis-of-resonance-raman-and-absorption-profiles"></span><h1><a class="reference internal" href="#module-rraman" title="rraman"><code class="xref py py-mod docutils literal"><span class="pre">rraman</span></code></a> - Analysis of resonance Raman and absorption profiles<a class="headerlink" href="#module-rraman" title="Permalink to this headline">¶</a></h1>
 <p>Resonance Raman excitation profile calculation based on the time-domain picture of resonance Raman. See Myers and Mathies in <em>Biological Applications of Raman Spectroscopy</em>, Vol. 2, pp. 1-58 (John Wiley and Sons, New York, 1987) for details (referred to as Myers in the following). The code is mainly based on Myers&#8217; Fortran 77 code (see Appendix of PhD Thesis of K. M. Spillane, 2011, UC Berkeley for source code).</p>
+<p><strong>Changelog:</strong></p>
+<p><em>10-7-2015:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Added / modified functions for calculating fluorescence spectra.</li>
+<li>Added a convenience function to calculate Raman spectra from a set of excitation profiles.</li>
+<li>Added some more damping functions and phenomenological support for Stokes shift in simple homogeneous damping function.</li>
+</ul>
+</div></blockquote>
+<p><strong>Example Code</strong></p>
 <p>Here is a short example calculating Myers&#8217; <em>Gedankenmolecule</em> from Myers and Mathies:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">FSRStools.rraman</span> <span class="kn">as</span> <span class="nn">rr</span>
 
 <span class="c"># parameters:</span>
 <span class="c"># -----------</span>
@@ -142,17 +153,17 @@
 <span class="c"># calculation part</span>
 <span class="c"># ----------------</span>
 <span class="c"># create axes</span>
-<span class="n">t</span><span class="p">,</span> <span class="n">wn</span> <span class="o">=</span> <span class="n">getAxes</span><span class="p">(</span><span class="n">tmax</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+<span class="n">t</span><span class="p">,</span> <span class="n">wn</span> <span class="o">=</span> <span class="n">rr</span><span class="o">.</span><span class="n">getAxes</span><span class="p">(</span><span class="n">tmax</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
 <span class="c"># zero-zero energy and damping</span>
 <span class="c"># add here all time domain stuff</span>
-<span class="n">TDpart</span> <span class="o">=</span> <span class="n">getZeroZeroEnergy</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">E0</span><span class="p">)</span> <span class="o">*</span> <span class="n">rr</span><span class="o">.</span><span class="n">getHomogeneousDamping</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">halpha</span><span class="p">)</span>
+<span class="n">TDpart</span> <span class="o">=</span> <span class="n">rr</span><span class="o">.</span><span class="n">getHomogeneousDamping</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">halpha</span><span class="p">)</span>
 
 <span class="c"># time dependent overlap integrals</span>
-<span class="n">OVLPS</span> <span class="o">=</span> <span class="n">getOverlaps</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">RMg</span><span class="p">,</span> <span class="n">RMe</span><span class="p">,</span> <span class="n">nquanta</span><span class="p">)</span>
+<span class="n">OVLPS</span> <span class="o">=</span> <span class="n">rr</span><span class="o">.</span><span class="n">getOverlaps</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">RMg</span><span class="p">,</span> <span class="n">RMe</span><span class="p">,</span> <span class="n">nquanta</span><span class="p">)</span>
 
 <span class="c"># calculate cross-sections</span>
-<span class="n">sigmaA</span><span class="p">,</span> <span class="n">sigmaR</span> <span class="o">=</span> <span class="n">getCrossSections</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">TDpart</span><span class="p">,</span> <span class="n">OVLPS</span><span class="p">,</span> <span class="n">sshift</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">IOR</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">ialpha</span><span class="p">)</span>
+<span class="n">sigmaA</span><span class="p">,</span> <span class="n">sigmaR</span><span class="p">,</span> <span class="n">kF</span> <span class="o">=</span> <span class="n">rr</span><span class="o">.</span><span class="n">getCrossSections</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">wn</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">OVLPS</span><span class="p">,</span> <span class="n">sshift</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">IOR</span><span class="p">,</span> <span class="n">TDpart</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">ialpha</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="section" id="resonance-raman-calculations">
@@ -169,8 +180,11 @@
 <tr class="row-even"><td><a class="reference internal" href="pages/rraman.getZeroZeroEnergy.html#rraman.getZeroZeroEnergy" title="rraman.getZeroZeroEnergy"><code class="xref py py-obj docutils literal"><span class="pre">getZeroZeroEnergy</span></code></a>(t,&nbsp;E0)</td>
 <td>Calculate the oscillation term in the time domain due to the electronic zero-zero energy E0.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getCrossSections.html#rraman.getCrossSections" title="rraman.getCrossSections"><code class="xref py py-obj docutils literal"><span class="pre">getCrossSections</span></code></a>(wn,&nbsp;dt,&nbsp;tdpart,&nbsp;ovlps,&nbsp;...)</td>
-<td>Calculate the absorption and Raman cross-sections.</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getCrossSections.html#rraman.getCrossSections" title="rraman.getCrossSections"><code class="xref py py-obj docutils literal"><span class="pre">getCrossSections</span></code></a>(t,&nbsp;wn,&nbsp;E0,&nbsp;ovlps,&nbsp;sshift,&nbsp;...)</td>
+<td>Calculate the absorption and Raman cross-sections and the fluorescence efficiency.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.getRamanSpectrum.html#rraman.getRamanSpectrum" title="rraman.getRamanSpectrum"><code class="xref py py-obj docutils literal"><span class="pre">getRamanSpectrum</span></code></a>(wn,&nbsp;iEL,&nbsp;RMg,&nbsp;nquanta,&nbsp;sigmaR)</td>
+<td>Convenience function to calculate the Raman spectrum.</td>
 </tr>
 </tbody>
 </table>
@@ -183,14 +197,20 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getHomogeneousDamping.html#rraman.getHomogeneousDamping" title="rraman.getHomogeneousDamping"><code class="xref py py-obj docutils literal"><span class="pre">getHomogeneousDamping</span></code></a>(t,&nbsp;Gamma[,&nbsp;alpha])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getHomogeneousDamping.html#rraman.getHomogeneousDamping" title="rraman.getHomogeneousDamping"><code class="xref py py-obj docutils literal"><span class="pre">getHomogeneousDamping</span></code></a>(t,&nbsp;Gamma[,&nbsp;alpha,&nbsp;lmbda])</td>
 <td>Calculates the damping term arising from the homogeneous linewidth of the electronic transition.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/rraman.getKuboDamping.html#rraman.getKuboDamping" title="rraman.getKuboDamping"><code class="xref py py-obj docutils literal"><span class="pre">getKuboDamping</span></code></a>(t,&nbsp;Delta,&nbsp;Lambda)</td>
 <td>Calculates the damping term using Kubo&#8217;s <em>stochastic model</em>.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getBrownianDamping.html#rraman.getBrownianDamping" title="rraman.getBrownianDamping"><code class="xref py py-obj docutils literal"><span class="pre">getBrownianDamping</span></code></a>(t,&nbsp;kappa,&nbsp;T,&nbsp;egamma[,&nbsp;cutoff])</td>
-<td>Calculate the damping term using Mukamel&#8217;s Brownian oscillator model.</td>
+<td>Calculate the damping term using Mukamel&#8217;s Brownian oscillator model based on Myers Fortran code.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.getBrownianDamping2.html#rraman.getBrownianDamping2" title="rraman.getBrownianDamping2"><code class="xref py py-obj docutils literal"><span class="pre">getBrownianDamping2</span></code></a>(t,&nbsp;lmbda,&nbsp;Lambda[,&nbsp;T,&nbsp;...])</td>
+<td>Calculate pure electronic dephasing due to interaction with solvent using frictionally overdamped Brownian oscillator model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getBrownianDampingSlowMod.html#rraman.getBrownianDampingSlowMod" title="rraman.getBrownianDampingSlowMod"><code class="xref py py-obj docutils literal"><span class="pre">getBrownianDampingSlowMod</span></code></a>(t,&nbsp;lmbda[,&nbsp;T])</td>
+<td>Calculate pure electronic dephasing due to interaction with solvent using frictionally overdamped Brownian oscillator model in the high-temperature and slow-modulation limit.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/rraman.applyInhomogeneousBroadening.html#rraman.applyInhomogeneousBroadening" title="rraman.applyInhomogeneousBroadening"><code class="xref py py-obj docutils literal"><span class="pre">applyInhomogeneousBroadening</span></code></a>(wn,&nbsp;y,&nbsp;sig[,&nbsp;alpha])</td>
 <td>Convolute a spectrum with a Gaussian/Lorentzian to account for inhomogeneous broadening.</td>
@@ -212,20 +232,32 @@
 <tr class="row-even"><td><a class="reference internal" href="pages/rraman.wn2radperfs.html#rraman.wn2radperfs" title="rraman.wn2radperfs"><code class="xref py py-obj docutils literal"><span class="pre">wn2radperfs</span></code></a>(e)</td>
 <td>Wavenumber (cm-1) to angular frequency (rad / fs).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getAxes.html#rraman.getAxes" title="rraman.getAxes"><code class="xref py py-obj docutils literal"><span class="pre">getAxes</span></code></a>(tmax,&nbsp;dt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.lambda2wn.html#rraman.lambda2wn" title="rraman.lambda2wn"><code class="xref py py-obj docutils literal"><span class="pre">lambda2wn</span></code></a>(w)</td>
+<td>Convert wavelength (nm) to wavenumber (cm-1).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.wn2lambda.html#rraman.wn2lambda" title="rraman.wn2lambda"><code class="xref py py-obj docutils literal"><span class="pre">wn2lambda</span></code></a>(w)</td>
+<td>Convert wavenumber (cm-1) to wavelength (nm).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.getWnIndex.html#rraman.getWnIndex" title="rraman.getWnIndex"><code class="xref py py-obj docutils literal"><span class="pre">getWnIndex</span></code></a>(wn,&nbsp;wn0)</td>
+<td>Get the index into an array of wavenumbers wn with wavenumber closest to wn0.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.getAxes.html#rraman.getAxes" title="rraman.getAxes"><code class="xref py py-obj docutils literal"><span class="pre">getAxes</span></code></a>(tmax,&nbsp;dt)</td>
 <td>Create time and frequency axes for the resonance Raman calculations.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/rraman.molarExtinction2AbsCS.html#rraman.molarExtinction2AbsCS" title="rraman.molarExtinction2AbsCS"><code class="xref py py-obj docutils literal"><span class="pre">molarExtinction2AbsCS</span></code></a>(eSpctr,&nbsp;IOR)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.molarExtinction2AbsCS.html#rraman.molarExtinction2AbsCS" title="rraman.molarExtinction2AbsCS"><code class="xref py py-obj docutils literal"><span class="pre">molarExtinction2AbsCS</span></code></a>(eSpctr,&nbsp;IOR)</td>
 <td>Convert molar extinction (cm-1 / M) to molecular absorption cross section (A**2 / molec).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.diff2absRamanCS.html#rraman.diff2absRamanCS" title="rraman.diff2absRamanCS"><code class="xref py py-obj docutils literal"><span class="pre">diff2absRamanCS</span></code></a>(diffRaCS,&nbsp;rho)</td>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.diff2absRamanCS.html#rraman.diff2absRamanCS" title="rraman.diff2absRamanCS"><code class="xref py py-obj docutils literal"><span class="pre">diff2absRamanCS</span></code></a>(diffRaCS,&nbsp;rho)</td>
 <td>Convert the differential Raman cross section (A**2/molec sr) to absolute Raman cross section in (A**2 / molec) for a given depolarization ratio rho.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/rraman.prefA.html#rraman.prefA" title="rraman.prefA"><code class="xref py py-obj docutils literal"><span class="pre">prefA</span></code></a>(eEL,&nbsp;M,&nbsp;IOR,&nbsp;dt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.prefA.html#rraman.prefA" title="rraman.prefA"><code class="xref py py-obj docutils literal"><span class="pre">prefA</span></code></a>(eEL,&nbsp;M,&nbsp;IOR,&nbsp;dt)</td>
 <td>Return the prefactor for the absorption cross section calculation in (A**2 / molec).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.prefR.html#rraman.prefR" title="rraman.prefR"><code class="xref py py-obj docutils literal"><span class="pre">prefR</span></code></a>(eEL,&nbsp;M,&nbsp;eR,&nbsp;dt)</td>
+<tr class="row-even"><td><a class="reference internal" href="pages/rraman.prefR.html#rraman.prefR" title="rraman.prefR"><code class="xref py py-obj docutils literal"><span class="pre">prefR</span></code></a>(eEL,&nbsp;M,&nbsp;eR,&nbsp;dt)</td>
 <td>Return the prefactor for the Raman excitation profile calculation (A**2 / molec).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/rraman.prefF.html#rraman.prefF" title="rraman.prefF"><code class="xref py py-obj docutils literal"><span class="pre">prefF</span></code></a>(eEF,&nbsp;M,&nbsp;IOR,&nbsp;dt)</td>
+<td>Return the prefactor for the fluorescence efficiency calculation (unitless).</td>
 </tr>
 </tbody>
 </table>
@@ -290,7 +322,7 @@
           <a href="pages/rraman.getOverlaps.html" title="rraman.getOverlaps"
              >next</a> |</li>
         <li class="right" >
-          <a href="pages/refind.n_polymer.html" title="refind.n_polymer"
+          <a href="pages/refind.n_sellmeier.html" title="refind.n_sellmeier"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">FSRStools 1.1 documentation</a> &raquo;</li> 
       </ul>

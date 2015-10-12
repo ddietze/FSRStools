@@ -1,0 +1,6 @@
+rraman.getRamanSpectrum
+=======================
+
+.. currentmodule:: rraman
+
+.. autofunction:: getRamanSpectrum

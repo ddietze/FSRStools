@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>rraman.getAxes &mdash; FSRStools 1.1 documentation</title>
+    <title>rraman.getBrownianDamping2 &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
-    <link rel="next" title="rraman.molarExtinction2AbsCS" href="rraman.molarExtinction2AbsCS.html" />
-    <link rel="prev" title="rraman.getWnIndex" href="rraman.getWnIndex.html" /> 
+    <link rel="next" title="rraman.getBrownianDampingSlowMod" href="rraman.getBrownianDampingSlowMod.html" />
+    <link rel="prev" title="rraman.getBrownianDamping" href="rraman.getBrownianDamping.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,10 +40,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.getBrownianDampingSlowMod.html" title="rraman.getBrownianDampingSlowMod"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.getBrownianDamping.html" title="rraman.getBrownianDamping"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="rraman.getWnIndex.html"
-                        title="previous chapter">rraman.getWnIndex</a></p>
+  <p class="topless"><a href="rraman.getBrownianDamping.html"
+                        title="previous chapter">rraman.getBrownianDamping</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rraman.molarExtinction2AbsCS.html"
-                        title="next chapter">rraman.molarExtinction2AbsCS</a></p>
+  <p class="topless"><a href="rraman.getBrownianDampingSlowMod.html"
+                        title="next chapter">rraman.getBrownianDampingSlowMod</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/rraman.getAxes.txt"
+      <li><a href="../_sources/pages/rraman.getBrownianDamping2.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,27 +88,35 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="rraman-getaxes">
-<h1>rraman.getAxes<a class="headerlink" href="#rraman-getaxes" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rraman-getbrowniandamping2">
+<h1>rraman.getBrownianDamping2<a class="headerlink" href="#rraman-getbrowniandamping2" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="rraman.getAxes">
-<code class="descclassname">rraman.</code><code class="descname">getAxes</code><span class="sig-paren">(</span><em>tmax</em>, <em>dt</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getAxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create time and frequency axes for the resonance Raman calculations.</p>
+<dt id="rraman.getBrownianDamping2">
+<code class="descclassname">rraman.</code><code class="descname">getBrownianDamping2</code><span class="sig-paren">(</span><em>t</em>, <em>lmbda</em>, <em>Lambda</em>, <em>T=298.0</em>, <em>cutoff=1e-06</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getBrownianDamping2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate pure electronic dephasing due to interaction with solvent using frictionally overdamped Brownian oscillator model.
+The real part of g(t) leads to a Gaussian broadening of the spectra, while the imaginary part leads to a solvent induced Stokes shift.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>tmax</strong> (<em>float</em>) &#8211; Endpoint for time domain calculation (fs). This value should be high enough to capture the full dephasing.</li>
-<li><strong>dt</strong> (<em>float</em>) &#8211; Increment of time axis (fs). This value should be small enough to capture the highest vibronic feature in the excited state.</li>
+<li><strong>t</strong> (<em>array</em>) &#8211; Time axis in fs.</li>
+<li><strong>lmbda</strong> (<em>float</em>) &#8211; Solvent contribution to reorganization energy (cm-1).</li>
+<li><strong>Lambda</strong> (<em>float</em>) &#8211; Inverse of characteristic time scale for solvent fluctuations (fs-1).</li>
+<li><strong>T</strong> (<em>float</em>) &#8211; Temperature (K, default = 298 K).</li>
+<li><strong>cutoff</strong> (<em>float</em>) &#8211; Cutoff value for summation over brownian oscillators (default 1e-6).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Time axis (fs) and frequency axis (cm-1).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Damping term in the time domain, <img class="math" src="../_images/math/a79333d11e698916340ba664523f9a7ee20b0ee8.png" alt="e^{-g(t)}"/>.</p>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">This implementation is taken from Kulinowksi, <em>J Phys Chem</em> <strong>99</strong>, 9017 (1995), Eqs. (10a) to (10d).</p>
+</div>
 </dd></dl>
 
 </div>
@@ -129,10 +137,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.molarExtinction2AbsCS.html" title="rraman.molarExtinction2AbsCS"
+          <a href="rraman.getBrownianDampingSlowMod.html" title="rraman.getBrownianDampingSlowMod"
              >next</a> |</li>
         <li class="right" >
-          <a href="rraman.getWnIndex.html" title="rraman.getWnIndex"
+          <a href="rraman.getBrownianDamping.html" title="rraman.getBrownianDamping"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 

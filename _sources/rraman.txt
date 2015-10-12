@@ -14,6 +14,7 @@ Resonance Raman Calculations
    getOverlaps
    getZeroZeroEnergy
    getCrossSections
+   getRamanSpectrum
 
 Damping Functions
 -----------------
@@ -24,6 +25,8 @@ Damping Functions
    getHomogeneousDamping
    getKuboDamping
    getBrownianDamping
+   getBrownianDamping2
+   getBrownianDampingSlowMod
    applyInhomogeneousBroadening
 
 
@@ -35,12 +38,15 @@ Utility Functions
 
    radperfs2wn
    wn2radperfs
+   lambda2wn
+   wn2lambda
+   getWnIndex
    getAxes
    molarExtinction2AbsCS
    diff2absRamanCS
    prefA
    prefR
-
+   prefF
 
 Time-Dependent Overlap Integrals
 --------------------------------
