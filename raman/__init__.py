@@ -5,6 +5,13 @@
 
 A collection of functions to process and analyze Raman spectra. These functions work both for spontaneous Raman as well as femtosecond stimulated Raman data. The import functions for spontaneous Raman are optimized for Princeton Instruments' WinSpec ASCII files, while those for FSRS expect the files in the output format of pyFSRS or David Hoffman's LabView FSRS.
 
+**Changelog:**
+
+*10-13-2015:*
+
+   - Some bug fixes.
+   - Added more functionality for analyzing TA data, e.g. automated kinetics stripping.
+
 ..
    This file is part of the FSRStools python module.
 
@@ -25,11 +32,10 @@ A collection of functions to process and analyze Raman spectra. These functions 
 """
 import numpy as np
 import pylab as pl
-from scipy.optimize import curve_fit, differential_evolution
-from scipy.interpolate import interp1d
+from scipy.optimize import curve_fit, differential_evolution, minimize
+from scipy.interpolate import interp1d, RectBivariateSpline
 from scipy.integrate import simps
 import glob
-import matplotlib.ticker as ticker
 import sys
 import FSRStools.fitting as ft
 
@@ -79,9 +85,9 @@ def get_closest_maximum(x, y, x0):
     :param float x0: x-position of a point close to the maximum.
     :returns: (x', y') Position and value of (local) maximum closest to x0.
     """
-    i0 = np.argmin(np.absolute(x-x0))
+    i0 = np.argmin(np.absolute(x - x0))
     #   get closest maximum
-    if(y[i0+1]>y[i0]):
+    if(y[i0 + 1] > y[i0]):
         i1 = i0 + 1
         while(y[i1] > y[i0]):
             i0 = i1
@@ -93,13 +99,12 @@ def get_closest_maximum(x, y, x0):
             i1 = i0 - 1
 
     #   now i0 is the index of the maximum
-    a = (- y[i0+1] - 4.0 * x[i0] * y[i0] + 2.0 * x[i0] * y[i0-1] + 2.0 * x[i0] * y[i0+1] + y[i0-1]) / (2.0 * (-2.0 * y[i0] + y[i0-1] + y[i0+1]))
-
-    b = -y[i0] + y[i0-1]/2.0 + y[i0+1]/2.0
-
-    c = -(16.0 * y[i0]**2 - 8 * y[i0] * y[i0-1] - 8 * y[i0] * y[i0+1] + y[i0-1]**2 - 2.0 * y[i0-1] * y[i0+1] + y[i0+1]**2)/(8.0 * (-2.0 * y[i0] + y[i0-1] + y[i0+1]))
+    a = (- y[i0 + 1] - 4.0 * x[i0] * y[i0] + 2.0 * x[i0] * y[i0 - 1] + 2.0 * x[i0] * y[i0 + 1] + y[i0 - 1]) / (2.0 * (-2.0 * y[i0] + y[i0 - 1] + y[i0 + 1]))
+#    b = -y[i0] + y[i0 - 1] / 2.0 + y[i0 + 1] / 2.0
+    c = -(16.0 * y[i0]**2 - 8 * y[i0] * y[i0 - 1] - 8 * y[i0] * y[i0 + 1] + y[i0 - 1]**2 - 2.0 * y[i0 - 1] * y[i0 + 1] + y[i0 + 1]**2) / (8.0 * (-2.0 * y[i0] + y[i0 - 1] + y[i0 + 1]))
 
     return [a, c]
+
 
 # interpolate data y on wavenumber axis wn
 # returns new wavenumber axis and data interpolated data with equidistant sampling points
@@ -115,14 +120,15 @@ def interpolate(x, y, N=0, kind='linear'):
     if(x[-1] < x[0]):
         x = np.flipud(x)
         y = np.flipud(y)
-    x1 = np.linspace(x[0], x[-1], (len(x)-1) * (N+1) + 1)
+    x1 = np.linspace(x[0], x[-1], (len(x) - 1) * (N + 1) + 1)
     y1 = interp1d(x, y, kind)(x1)
     return [x1, y1]
+
 
 # get vibrational frequencies of common used standards for calibration
 # selection of lines is adapted for the red (blue) table
 # if sorted is true, return in order of largest peak to smallest peak
-def mol_lines(mol = "chex", window = (600, 2000), sorted = False):
+def mol_lines(mol="chex", window=(600, 2000), sorted = False):
     """Returns a list of vibrational frequencies for commonly used standards.
 
     :param str mol: Identifier of solvent. Currently supported solvents are:
@@ -137,11 +143,11 @@ def mol_lines(mol = "chex", window = (600, 2000), sorted = False):
     :returns: Array of Stokes shifts in cm-1.
     """
     # a list of solvent lines; [[wavenumber], [amplitude]]
-    spectra = {'chex' : [[384.1, 426.3, 801.3, 1028.3, 1157.6, 1266.4, 1444.4, 2664.4, 2852.9, 2923.8, 2938.3], [2, 3, 95, 15, 6, 14, 12, 8, 100, 58, 67]],
-    'benzene':[[605.6, 848.9, 991.6, 1178, 1326, 1595, 3046.8, 3061.9], [2.2, 1.0, 11.7, 2.7, 0.1, 4.5, 8.1, 18.0]],
-    'meoh':[[1037, 1453, 2835, 2945], [48, 18, 96, 71]],
-    'iso':[[820, 955, 1132, 1454, 2881, 2919, 2938, 2972], [95, 19, 10, 18, 45, 46, 44, 41]],
-    'chloroform':[[3178.8, 685.7, 366.7, 1261.8, 781.6, 263.7],[46.7, 14.3, 6.31, 3.58, 9.32, 4.44]] }
+    spectra = {'chex': [[384.1, 426.3, 801.3, 1028.3, 1157.6, 1266.4, 1444.4, 2664.4, 2852.9, 2923.8, 2938.3], [2, 3, 95, 15, 6, 14, 12, 8, 100, 58, 67]],
+               'benzene': [[605.6, 848.9, 991.6, 1178, 1326, 1595, 3046.8, 3061.9], [2.2, 1.0, 11.7, 2.7, 0.1, 4.5, 8.1, 18.0]],
+               'meoh': [[1037, 1453, 2835, 2945], [48, 18, 96, 71]],
+               'iso': [[820, 955, 1132, 1454, 2881, 2919, 2938, 2972], [95, 19, 10, 18, 45, 46, 44, 41]],
+               'chloroform': [[3178.8, 685.7, 366.7, 1261.8, 781.6, 263.7], [46.7, 14.3, 6.31, 3.58, 9.32, 4.44]]}
 
     # check first whether solvent exists
     if mol not in spectra.keys():
@@ -150,13 +156,14 @@ def mol_lines(mol = "chex", window = (600, 2000), sorted = False):
 
     # select proper wavenumber window
     lines = np.array(spectra[mol])
-    lines = np.compress((lines[0,:] >= window[0]) & (lines[0,:] <= window[1]), lines, axis=1)
+    lines = np.compress((lines[0, :] >= window[0]) & (lines[0, :] <= window[1]), lines, axis=1)
 
     # return properly sorted array
     if sorted:
         return np.array(lines[0])[np.flipud(np.argsort(lines[1]))]
     else:
         return np.array(lines[0])[np.argsort(lines[0])]
+
 
 def calibrate(y, lambda0, peaks, mol, show=False):
     """Returns a calibrated x-axis in wavenumbers using a calibration spectrum and a list of vibrational modes.
@@ -202,7 +209,7 @@ def calibrate(y, lambda0, peaks, mol, show=False):
     wn = WL2Raman(lambda0, line(x, *popt))
 
     # plot a nice figure when show == True
-    if(show == True):
+    if(show):
         pl.figure()
         xtmp = np.linspace(0, len(y), 10)
         pl.plot(xtmp, line(xtmp, *popt), color='k')
@@ -215,8 +222,7 @@ def calibrate(y, lambda0, peaks, mol, show=False):
 
 # -------------------------------------------------------------------------------------------------------------------
 # file loading functions
-
-def loadFSRS(basename, wn = None, timesteps = None, excstr = "exc*", filteroutliers = False):
+def loadFSRS(basename, wn=None, timesteps=None, excstr="exc*", filteroutliers=False):
     """Load and average all FSRS files matching the basename (e.g. using wildcards).
 
     :param mixed basename: If basename is a `str`, use :py:mod:`glob` to load all matching files using wildcards. If basename is a list, use this list directly without wildcards (only works when no time steps are given).
@@ -254,7 +260,7 @@ def loadFSRS(basename, wn = None, timesteps = None, excstr = "exc*", filteroutli
 
             # [#][column][data]
             if filteroutliers:
-                data = np.mean(tmp[filter_outliers(tmp[:,0,:])],axis=0)
+                data = np.mean(tmp[filter_outliers(tmp[:, 0, :])], axis=0)
             else:
                 data = np.mean(tmp, axis=0)
 
@@ -281,7 +287,7 @@ def loadFSRS(basename, wn = None, timesteps = None, excstr = "exc*", filteroutli
 
         # [#][column][data]
         if filteroutliers:
-            data = np.mean(tmp[filter_outliers(tmp[:,0,:])],axis=0)
+            data = np.mean(tmp[filter_outliers(tmp[:, 0, :])], axis=0)
         else:
             data = np.mean(tmp, axis=0)
 
@@ -289,13 +295,14 @@ def loadFSRS(basename, wn = None, timesteps = None, excstr = "exc*", filteroutli
             x, data[0] = interpolate(wn, data[0])
         return data
 
-#
-def loadTA(basename, wl = [], timesteps = [], excstr = "*", filteroutliers = False):
+
+def loadTA(basename, wl=None, timesteps=None, excstr="*", filteroutliers=False):
     """Convenience function for loading transient absorption data. The only difference to :py:func:`loadFSRS` is the naming convention for TA excited state data compared to FSRS data.
 
     .. seealso:: :py:func:`loadFSRS` for list of parameters.
     """
     return loadFSRS(basename, wl, timesteps, excstr, filteroutliers)
+
 
 # use glob to support wildcards and regExp
 # loads Raman spectra and returns the averaged data
@@ -318,10 +325,10 @@ def loadRaman(filename):
     data = np.mean(tmp, axis=0)
     return data
 
+
 # -------------------------------------------------------------------------------------------------------------------
 # Data filtering / noise improvements
-
-def filter_outliers(y, eps = 2.0):
+def filter_outliers(y, eps=2.0):
     """Returns a list of indices for datasets that NOT outliers. An outlier is defined as a spectrum whose sum over amplitudes squared deviates from the ensemble average by more than eps times the ensemble standard deviation.
 
     :param array y: A 2d array of spectra, where the first axis is the number of the dataset.
@@ -333,6 +340,7 @@ def filter_outliers(y, eps = 2.0):
     meanchi2 = np.mean(chi2)
     stdchi2 = np.std(chi2)
     return np.nonzero(np.absolute(chi2 - meanchi2) <= eps * stdchi2)
+
 
 # taken from http://www.scipy.org/Cookbook/SavitzkyGolay
 def savitzky_golay(y, window_size, order, deriv=0):
@@ -354,20 +362,21 @@ def savitzky_golay(y, window_size, order, deriv=0):
     if window_size < order + 2:
         raise TypeError("window_size is too small for the polynomials order")
 
-    order_range = range(order+1)
-    half_window = (window_size-1) // 2 # divide and round off
+    order_range = range(order + 1)
+    half_window = (window_size - 1) // 2  # divide and round off
 
     # precompute coefficients
-    b = np.mat([[k**i for i in order_range] for k in range(-half_window, half_window+1)])
+    b = np.mat([[k**i for i in order_range] for k in range(-half_window, half_window + 1)])
     m = np.linalg.pinv(b).A[deriv]
 
     # pad the signal at the extremes with
     # values taken from the signal itself
-    firstvals = y[0] - np.abs( y[1:half_window+1][::-1] - y[0] )
-    lastvals = y[-1] + np.abs(y[-half_window-1:-1][::-1] - y[-1])
+    firstvals = y[0] - np.abs(y[1:half_window + 1][::-1] - y[0])
+    lastvals = y[-1] + np.abs(y[-half_window - 1:-1][::-1] - y[-1])
     y = np.concatenate((firstvals, y, lastvals))
 
-    return np.convolve( m, y, mode='valid')
+    return np.convolve(m, y, mode='valid')
+
 
 def noise_estimate(y):
     """Estimate the standard deviation of Gaussian white noise contained in a spectrum. Code is based on Schulze et al., *Appl. Spectrosc.* **60**, 820 (2006).
@@ -378,10 +387,11 @@ def noise_estimate(y):
     ws = 21
     e0 = 1e8
     for i in range(int(y.size / ws)):
-        e = np.var( np.roll(y[i*ws:(i+1)*ws], -2)[0:-2] - 2.0 * np.roll(y[i*ws:(i+1)*ws], -1)[0:-2] + (y[i*ws:(i+1)*ws])[0:-2] ) / 3.0
+        e = np.var(np.roll(y[i * ws:(i + 1) * ws], -2)[0:-2] - 2.0 * np.roll(y[i * ws:(i + 1) * ws], -1)[0:-2] + (y[i * ws:(i + 1) * ws])[0:-2]) / 3.0
         if(e < e0):
             e0 = e
     return np.sqrt(e0)
+
 
 def denoise(y):
     """Fully automatic optimized smoothing algorithm. Code is based on Schulze et al. *Appl. Spectrosc.* **62**, 1160 (2008).
@@ -390,22 +400,23 @@ def denoise(y):
     :param array y: Input spectrum. If y is a `list` or a 2d array of spectra, denoise every spectrum in that list.
     :returns: Filtered spectrum with same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(denoise(sp))
         return np.array(out)
     else:
-        N = float(y.size)
-        s = noise_estimate(y)   # get stddev of input data
+        N = float(len(y))
+        s = noise_estimate(y)               # get stddev of input data
         m = np.copy(y)
         while(True):
-            m = savitzky_golay(m, 3, 0) # apply smoothing
+            m = savitzky_golay(m, 3, 0)     # apply smoothing
             if(np.sum((y - m)**2 / s**2) > N):
                 break
         return m
 
-def FT_denoise(y, cutoff = 1, filter = 'rect'):
+
+def FT_denoise(y, cutoff=1, filter='rect'):
     """Apply a Fourier low pass filter to the data to remove high frequency noise.
 
     :param array y: Input spectrum. If y is a `list` or 2d-array of spectra, filter every spectrum.
@@ -417,14 +428,14 @@ def FT_denoise(y, cutoff = 1, filter = 'rect'):
                        - 'rect' - A rectangular step function (default).
     :returns: Filtered spectrum with same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(FT_denoise(sp, cutoff, filter))
         return np.array(out)
     else:
         # get FFT - use padding to reduce edge effects
-        ypad = np.pad(y, len(y), mode='reflect', reflect_type = 'odd')
+        ypad = np.pad(y, len(y), mode='reflect', reflect_type='odd')
         FT = np.fft.rfft(ypad * np.hanning(len(ypad)))
 
         xtmp = np.arange(0, cutoff)
@@ -437,6 +448,7 @@ def FT_denoise(y, cutoff = 1, filter = 'rect'):
 
         return np.fft.irfft(FT)[len(y):-len(y)]
 
+
 # -------------------------------------------------------------------------------------------------------------------
 # baseline correction and smoothing functions
 
@@ -447,7 +459,7 @@ def rayleigh_correction(y):
     :param array y: Input spectrum. If y is a `list` or 2d-array of spectra, filter every spectrum.
     :returns: Spectrum without Rayleigh baseline, same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(rayleigh_correction(sp))
@@ -460,13 +472,14 @@ def rayleigh_correction(y):
         ytmp = y - np.gradient(np.gradient(y))
 
         # fit stripped spectrum by Voigt profile
-        popt = [ytmp[0], np.amax(ytmp) - np.amin(ytmp), (x[[0,-1]])[np.argmax(ytmp[[0,-1]])], (x[0]-x[-1])/10, 0.9]
+        popt = [ytmp[0], np.amax(ytmp) - np.amin(ytmp), (x[[0, -1]])[np.argmax(ytmp[[0, -1]])], (x[0] - x[-1]) / 10, 0.9]
         popt, _ = curve_fit(ft.voigts_const, x, ytmp, popt, maxfev=10000)
 
         # return residuum
         return y - ft.voigts_const(x, *popt)
 
-def interpolated_bl_correction(x, y, px, py = None, usedatay = True):
+
+def interpolated_bl_correction(x, y, px, py=None, usedatay=True):
     """Remove a baseline obtained by interpolating a set of fulcrums.
 
     :param array x: x-axis.
@@ -478,7 +491,7 @@ def interpolated_bl_correction(x, y, px, py = None, usedatay = True):
     :param bool usedatay: If True, use the y-data at px for py (default).
     :returns: Baseline corrected spectrum.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(interpolated_bl_correction(x, sp, px, py, usedatay))
@@ -489,8 +502,8 @@ def interpolated_bl_correction(x, y, px, py = None, usedatay = True):
             x0 = px
             y0 = interp1d(x, y, 'linear')(x0)
         elif not usedatay and py is None:
-            x0 = p0[::2]
-            y0 = p0[1::2]
+            x0 = px[::2]
+            y0 = px[1::2]
         else:
             x0 = px
             y0 = py
@@ -511,7 +524,8 @@ def interpolated_bl_correction(x, y, px, py = None, usedatay = True):
         # return the spectrum minus the interpolated baseline
         return y - interp1d(x0, y0, 'cubic')(x)
 
-def baseline_correction(y, n0 = 2, verbose = False, iterate = True):
+
+def baseline_correction(y, n0=2, verbose=False, iterate=True):
     """Automated baseline removal algorithm. Code is based on Schulze et al., *Appl. Spectrosc.* **65**, 75 (2011).
 
     Works better if baseline is more flat at the beginning and end of the spectrum. If divisor is too high, there will be some ringing of the baseline. Sometimes it is better to start with a higher value for n0 to get a good baseline removal, especially when the baseline is wavy and there are strong Raman lines.
@@ -522,25 +536,25 @@ def baseline_correction(y, n0 = 2, verbose = False, iterate = True):
     :param bool iterate: If True, automatically increase the order of the divisor until optimal baseline removal is achieved. If False, just use the value given by n0.
     :returns: Baseline corrected spectrum with same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(baseline_correction(sp, n0, verbose, iterate))
         return np.array(out)
     else:
-        if(n0 < 1 or n0 > y.size/3):
-            print("n0 is out of range (1, %d)! Set to 1." % (y.size/3))
+        if(n0 < 1 or n0 > y.size / 3):
+            print("n0 is out of range (1, %d)! Set to 1." % (y.size / 3))
             n0 = 1
 
         s0 = noise_estimate(y)                                      # get stddev of input data
         Npad = len(y)                                               # number of points for padding
-        ypad = np.pad(y, Npad, mode='reflect', reflect_type = 'odd') # create padded spectrum to reduce edge effects
+        ypad = np.pad(y, Npad, mode='reflect', reflect_type='odd')  # create padded spectrum to reduce edge effects
         N = ypad.size
         sblbest = np.sum(ypad**2)                                   # estimate for baseline chi2 best value
         blbest = np.zeros(N)                                        # store best baseline estimate
 
         wndiv = n0
-        while(wndiv < int(N/3)):                                    # window size reduction
+        while(wndiv < N // 3):                                      # window size reduction
 
             # prepare filter window size
             wn = int(N / wndiv)
@@ -584,13 +598,14 @@ def baseline_correction(y, n0 = 2, verbose = False, iterate = True):
             else:
                 break
 
-        if verbose == True:
+        if verbose:
             print("finished with divisor %d after %d iterations" % (wndiv, cbl))
 
         # return baseline corrected spectrum
         return (ypad - blbest)[Npad:-Npad]
 
-def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
+
+def FT_baseline_correction(y, cutoff=None, filter='rect'):
     """Automatic baseline correction based on a Fourier high pass filter after removal of regression line. The stopping criterion for the automatic cutoff search is that the incremental change in the sum over squares should be at least one percent.
 
     :param array y: Input spectrum. If y is a list or a 2d array of spectra, correct all spectra.
@@ -606,7 +621,7 @@ def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
                        - 'linear': linear interpolation.
     :returns: Baseline corrected spectrum with same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(FT_baseline_correction(sp, cutoff, filter))
@@ -620,10 +635,10 @@ def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
         y = y - line(wnx, *popt)
 
         # get FFT - use padding to reduce edge effects
-        ypad = np.pad(y, len(y), mode='reflect', reflect_type = 'odd')
+        ypad = np.pad(y, len(y), mode='reflect', reflect_type='odd')
         FT = np.fft.rfft(ypad * np.hanning(len(ypad)))
 
-        if(cutoff == None):
+        if(cutoff is None):
             pl.figure()
             pl.plot(np.absolute(FT))
             pl.show()
@@ -632,7 +647,7 @@ def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
             c = 10
             chi20 = 1e8
             chi2 = np.sum(y**2)
-            while(abs(chi20 - chi2)/chi20 > 1e-2 and c < len(y)):
+            while(abs(chi20 - chi2) / chi20 > 1e-2 and c < len(y)):
 
                 c += 1
                 xtmp = np.arange(0, c)
@@ -644,11 +659,11 @@ def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
                 else:
                     FT[0:c] = np.zeros(c)
 
-                y1 = np.fft.irfft(FT)[len(y):2*len(y)]
+                y1 = np.fft.irfft(FT)[len(y):2 * len(y)]
 
                 chi20 = chi2
                 chi2 = np.sum(y1**2)
-            print(c, "iterations, dchi =", abs(chi20 - chi2)/chi20)
+            print(c, "iterations, dchi =", abs(chi20 - chi2) / chi20)
             return y1
         else:
             xtmp = np.arange(0, cutoff)
@@ -659,12 +674,13 @@ def FT_baseline_correction(y, cutoff = None, filter = 'rect'):
             else:
                 FT[0:cutoff] = np.zeros(cutoff)
 
-            return np.fft.irfft(FT)[len(y):2*len(y)]
+            return np.fft.irfft(FT)[len(y):2 * len(y)]
+
 
 # -------------------------------------------------------------------------------------------------------------------
 # solvent/ground state subtraction functions
 
-def solvent_subtract_chi2(y, solvent, scaling='const', shiftx = False):
+def solvent_subtract_chi2(y, solvent, scaling='const', shiftx=False):
     """Subtract a solvent or ground state spectrum from a spectrum or list of spectra. The optimum scaling of the spectrum to subtract is found by minimizing the sum over the residual spectrum squared. This function works good if the residual spectrum has weaker peaks than the solvent / ground state spectrum.
 
     :param array y: Input spectrum. If y is a list or 2d array of spectra, apply solvent subtraction to each spectrum.
@@ -674,14 +690,14 @@ def solvent_subtract_chi2(y, solvent, scaling='const', shiftx = False):
     :returns: Solvent / ground state corrected spectrum with same shape as y.
     """
     # fitting functions
-    if(shiftx == False):
+    if not shiftx:
         f1 = lambda x, a, f0: solvent * a + f0
         f2 = lambda x, a, m, f0: solvent * (m * x + a) + f0
     else:
         f1 = lambda x, a, f0, dx: shift_data(x, solvent, dx) * a + f0
         f2 = lambda x, a, m, f0, dx: shift_data(x, solvent, dx) * (m * x + a) + f0
 
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
             out.append(solvent_subtract_chi2(sp, solvent, scaling, shiftx))
@@ -689,13 +705,13 @@ def solvent_subtract_chi2(y, solvent, scaling='const', shiftx = False):
     else:
         x = np.arange(len(y))
         if(scaling == 'const'):
-            if(shiftx == False):
+            if not shiftx:
                 popt, _ = curve_fit(f1, x, y, [1.0, 0.0])
             else:
                 popt, _ = curve_fit(f1, x, y, [1.0, 0.0, 0.0])
             out = y - f1(x, *popt)
         else:
-            if(shiftx == False):
+            if not shiftx:
                 popt, _ = curve_fit(f2, x, y, [0.0, 1.0, 0.0])
             else:
                 popt, _ = curve_fit(f2, x, y, [0.0, 1.0, 0.0, 0.0])
@@ -714,10 +730,10 @@ def solvent_subtract(y, solvent, peaks, scaling='const', type='lor'):
     :param str type: Type of fit function ('lor', default, or 'gauss').
     :returns: Solvent / ground state corrected spectrum with same shape as y.
     """
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         for sp in y:
-            out.append(solvent_subtract_lor(sp, solvent, peaks, scaling, type))
+            out.append(solvent_subtract(sp, solvent, peaks, scaling, type))
         return np.array(out)
     else:
         x = np.arange(len(y))
@@ -729,8 +745,8 @@ def solvent_subtract(y, solvent, peaks, scaling='const', type='lor'):
         positions = np.zeros(len(peaks))
 
         for i in range(len(peaks)):
-            poptspe, _ = curve_fit(func, x[peaks[i][0]:peaks[i][1]], y[peaks[i][0]:peaks[i][1]], [ y[peaks[i][0]], 0, 1, x[int((peaks[i][0]+peaks[i][1])/2)], x[peaks[i][0]]-x[peaks[i][1]]])
-            poptsol, _ = curve_fit(func, x[peaks[i][0]:peaks[i][1]], solvent[peaks[i][0]:peaks[i][1]], [ solvent[peaks[i][0]], 0, 1, x[int((peaks[i][0]+peaks[i][1])/2)], x[peaks[i][0]]-x[peaks[i][1]]])
+            poptspe, _ = curve_fit(func, x[peaks[i][0]:peaks[i][1]], y[peaks[i][0]:peaks[i][1]], [y[peaks[i][0]], 0, 1, x[int((peaks[i][0] + peaks[i][1]) / 2)], x[peaks[i][0]] - x[peaks[i][1]]])
+            poptsol, _ = curve_fit(func, x[peaks[i][0]:peaks[i][1]], solvent[peaks[i][0]:peaks[i][1]], [solvent[peaks[i][0]], 0, 1, x[int((peaks[i][0] + peaks[i][1]) / 2)], x[peaks[i][0]] - x[peaks[i][1]]])
 
             positions[i] = poptsol[3]
             areas[i] = np.absolute((poptspe[2] * poptspe[4]) / (poptsol[2] * poptsol[4]))
@@ -745,13 +761,14 @@ def solvent_subtract(y, solvent, peaks, scaling='const', type='lor'):
         print("solvent subtract fit results: ", popt)
         return out
 
+
 # -------------------------------------------------------------------------------------------------------------------
-# time zero functions - use in conjunction with cross correlation data
+# time zero functions - use in conjunction with cross correlation data/  TA
 
 # translate 1d data by amount dx
 # uses padding to reduce edge effects
 def shift_data(x, y, dx):
-    """Smoothly translate data by an arbitrary amount along the x-axis using Fourier transformation.
+    """Smoothly translate 1d data by an arbitrary amount along the x-axis using Fourier transformation.
 
     :param array x: x-axis.
     :param array y: Data, same shape as x.
@@ -760,14 +777,15 @@ def shift_data(x, y, dx):
 
     .. note:: This function uses padding to reduce edge artefacts. While the output has the same shape as the input, strictly speaking, the `dx / (x[1] - x[0])` first values on the left or right edge (depending on sign of dx) are invalid.
     """
-    sx = x[1]-x[0]
+    sx = x[1] - x[0]
     Npad = max(int(abs(2 * dx / sx)), 1) * 2
-    ypad = np.pad(y, Npad, mode='reflect', reflect_type = 'odd')
+    ypad = np.pad(y, Npad, mode='reflect', reflect_type='odd')
 
     w = np.fft.rfftfreq(len(ypad), d=sx) * 2.0 * np.pi
     ypad = np.fft.irfft(np.fft.rfft(ypad) * np.exp(-1j * w * dx))
 
-    return ypad[Npad:len(y)+Npad]
+    return ypad[Npad:len(y) + Npad]
+
 
 # shift all frequency columns along time axis to set t0 (given in c) to 0
 # data d is assumed to be in the format [time][wl]
@@ -782,9 +800,10 @@ def correct_t0(t, d, c):
     A = np.copy(d)
     # iterate over all frequency columns
     for i in range(d.shape[1]):
-        tmp = shift_data(t, d[:,i], -c[i])
-        A[:,i] = tmp
+        tmp = shift_data(t, d[:, i], -c[i])
+        A[:, i] = tmp
     return A
+
 
 # -------------------------------------------------------------------------------------------------------------------
 # normalization / data selection functions
@@ -794,7 +813,7 @@ def correct_t0(t, d, c):
 # mode = 01: shift minimum to zero before dividing by max
 # mode = area: normalize by area
 def norm(y, mode='max'):
-    """Normalize spectrum.
+    """Normalize 1d spectrum.
 
     :param array y: Spectral data.
     :param str mode: Type of normalization:
@@ -812,6 +831,7 @@ def norm(y, mode='max'):
     if mode == 'area':
         return y / np.sum(np.absolute(y))
 
+
 def cut(x, y, x0, x1):
     """Cut out a subarray from x and y according to the *closed* interval [xfrom, xto].
 
@@ -828,11 +848,12 @@ def cut(x, y, x0, x1):
     if x0 == x1:
         x1 = x0 + x[1] - x[0]
     u = np.compress((x >= x0) & (x <= x1), x)
-    if y.ndim > 1:
+    if np.array(y).ndim > 1:
         v = np.compress((x >= x0) & (x <= x1), y, axis=1)
     else:
         v = np.compress((x >= x0) & (x <= x1), y)
     return u, v
+
 
 def at(x, y, x0):
     """Return the value of y with x-coordinate closest to x0.
@@ -842,7 +863,7 @@ def at(x, y, x0):
     :param float x0: x-coordinate of desired data point. If x0 is a list or array, return an array of y values.
     :returns: Data point with x-coordinate closest to x0.
     """
-    if isinstance(x0, list) or isinstance(x0, np.array):
+    if isinstance(x0, list) or isinstance(x0, np.ndarray):
         out = []
         for xp in x0:
             out.append(at(x, y, xp))
@@ -850,8 +871,46 @@ def at(x, y, x0):
     else:
         return y[np.argmin(np.absolute(x - x0))]
 
+
 # -------------------------------------------------------------------------------------------------------------------
 # TA analysis functions
+
+def plotTA(t, wl, d, showContour=True, filename=None, xlog=False, vmin=None, vmax=None, cmap=None, xlabel="Time (fs)", ylabel="Wavelength (nm)", zlabel="$\Delta$OD"):
+    """Convenience function to generate a fancy TA contour plot using matplotlib's *contour* and *contourf* functions.
+
+    :param array t: Time axis.
+    :param array wl: Wavelength axis.
+    :param array d: 2d TA data array with shape [time][wavelength].
+    :param bool showContour: If True, plot black contour lines.
+    :param str filename: If not None, safe generated figure.
+    :param bool xlog: If True, use log scale for time axis.
+    :param float vmin: Override the automatic color scaling (default = None).
+    :param float vmax: Override the automatic color scaling (default = None).
+    :param Colormap cmap: Override Matplotlib colormap to use for the contourplot (default = None).
+    :param str xlabel: X-label text (default = "Time (fs)").
+    :param str ylabel: Y-label text (default = "Wavelength (nm)").
+    :param str zlabel: Z-label text (default = "$\Delta$OD").
+    """
+    tmp = np.flipud(np.rot90(d))
+
+    # make a fancy plot
+    pl.figure()
+    vmin = np.amin(d) if vmin is None else vmin
+    vmax = np.amax(d) if vmax is None else vmax
+    pl.contourf(t, wl, tmp, np.linspace(vmin, vmax, 128), extend='both', cmap=cmap)
+    cbar = pl.colorbar()
+    cbar.set_label(zlabel)
+    if(showContour):
+        pl.contour(t, wl, tmp, np.linspace(vmin, vmax, 10), linestyles=("-",), linewidths=(0.5,), colors=('k',))
+
+    pl.xlabel(xlabel)
+    pl.ylabel(ylabel)
+    if xlog:
+        pl.xscale("log", nonposx='clip', subsx=range(2, 10))
+
+    if filename is not None:
+        pl.savefig(filename)
+
 
 def bandintegral(x, y, x0, x1):
     """Calculate the band integral over time dependent data.
@@ -862,18 +921,148 @@ def bandintegral(x, y, x0, x1):
     :param float x1: Right boundary of the band integral.
     :returns: Band integral as function of time (= axis 1 of y).
     """
-    i0 = np.argmin(np.absolute(x-x0))
-    i1 = np.argmin(np.absolute(x-x1))
+    i0 = np.argmin(np.absolute(x - x0))
+    i1 = np.argmin(np.absolute(x - x1))
     if i0 > i1:
         i0, i1 = i1, i0
 
-    return simps(y[:,i0:i1], x[i0:i1], axis=1)
+    return simps(y[:, i0:i1], x[i0:i1], axis=1)
+
+
+def strip_kinetics(y, Nmax=5, verbose=False, tryIRF=True, NyI=5, NyS=20, smooth=True):
+    """Automatically remove slow kinetics from a (single) TA trace.
+    This function uses a minimal number of decaying / rising exponentials that may be convoluted with a Gaussian instrument response function to obtain the best fit to the slow kinetics.
+    Paremeters are determined automatically by choosing the feature set with the minimal chi2. Currently this function uses simple least squares curve fitting with bounds.
+    If y is a 2d array of TA traces, use every NyS-th row (and column) averaging over NyI rows to reconstruct a smooth TA. The result is subtracted from the original by cubic interpolation over the columns.
+
+    :param array y: The kinetics trace as function of time. May be a 2d array or list of traces with shape [time][wavelength] as, for example, returned by :py:func:`loadTA`.
+    :param int Nmax: The maximum number of exponentials to be used (default = 5).
+    :param bool verbose: If True, print a list of fitting parameters used for fitting the kinetics trace (default = False).
+    :param bool tryIRF: If True, also try exponentials convoluted with Gaussian, set to False if there is no step function in your data (default = True).
+    :param int NyI: Number of rows to integrate for kinetics estimation. Used only for 2d TA traces (default = 5).
+    :param int NyS: Number of rows/columns to skip for kinetics estimates. Must be > NyI (default = 20).
+    :param bool smooth: If True, apply denoise to the data for estimation of the kinetics. The returned residuum is not smoothed. For some data, however, denoise will not work properly, in which case it should be set to False.
+    :returns: Stripped trace or list of traces (with same shape as y), ystripped, kinetics trace or list of kinetics traces (same shape as y), ykinetic.
+
+    .. seealso:: See :py:func:`FSRStools.fitting.exponentials` and :py:func:`FSRStools.fitting.exp_gauss` for details on the fitting functions.
+
+    The following example uses ``strip_kinetics`` to obtain a 2d Fourier map relating impulsively excited Raman modes with their position in the TA. See, for example, Musser et al., *Nat. Phys.* **11**, 352 (2015) for more details.::
+
+        import numpy as np
+        import FSRStools.raman as fs
+
+        # y is a 2d TA map as loaded with loadTA(), wl is the wavelength axis, t is the time axis
+        # first, strip the slow kinetics from the TA data
+        ystr, ykin = fs.strip_kinetics(y)
+
+        # next, do an |FFT|**2 along the time axis to get the impulsive Raman spectrum
+        Y = np.absolute(np.fft.rfft2(ystr, axes=(0,)))**2
+
+        # get the modes' frequencies in cm-1
+        wn = np.fft.rfftfreq(len(t), d=t[1] - t[0]) / (2.9979e8 * 1e-13)
+
+        # now make a 2d plot using plotTA() - adjust the value of vmax to get a good contrast on the impulsive modes
+        fs.plotTA(wn, wl, Y, vmax=0.01, showContour=False, xlabel="Wavenumber (cm-1)")
+    """
+    # check some values
+    if NyI > NyS or NyI <= 0 or NyS <= 0:
+        raise ValueError("Illegal values for NyI and/or NyS. Must be 0 < NyI < NyS < y.shape[1].")
+
+    # check for 2d map
+    if np.array(y).ndim > 1:
+        y = np.array(y).T
+        ytmp = np.arange(0, y.shape[1])
+
+        # slice data and do kinetics stripping on each slice
+        xtmp = np.arange(0, y.shape[0], NyS)
+        xtmp[[0, -1]] = 0, y.shape[0] - 1
+        tmp = np.zeros((xtmp.shape[0], ytmp.shape[0]))
+        for i, xi in enumerate(xtmp):
+            tmp[i, :] = strip_kinetics(np.mean(y[max(0, xi - NyI // 2):min(y.shape[0] - 1, xi + NyI // 2)], axis=0), Nmax, verbose, tryIRF, NyI, NyS, smooth)[1]
+
+        # get kinetics trace by interpolating on 2d grid
+        ykin = RectBivariateSpline(xtmp, ytmp, tmp)(np.arange(y.shape[0]), np.arange(y.shape[1]))
+
+        # remove kinetics from data
+        # as the kinetics trace is interpolated, the dc removal is not perfect, which is why also the mean value gets subtracted
+        ystr = (y - ykin).T
+        ystr = ystr - np.mean(ystr, axis=1)
+
+        return ystr, ykin.T
+    else:
+
+        x = np.linspace(0, 1, len(y))
+        params = []
+        errs = []
+        funcs = []
+
+        # define a general fitting function
+        def fitfunc(p, x, y, func):
+            return np.sum((y - func(x, 0.0, *p))**2)    # force offset for both functions to be zero!
+
+        y0 = np.copy(y)
+        # do smoothing spectrum by spectrum, seems more stable
+        if smooth:
+            y = denoise(y)
+
+        # do the actual fitting
+        for round in [0, 1]:
+            if round == 0:                  # start with 1 to Nmax exponentials without Gaussian instrument response function
+                func = ft.exponentials
+                popt = []
+                bounds = []
+            elif round == 1:                # repeat with Gaussian impulse response function
+                if not tryIRF:
+                    break
+                func = ft.exp_gauss
+                popt = [1.0 / 20.0, x[np.argmin(np.absolute(y[:len(y) // 2] - (np.amax(y) - np.amin(y)) / 2.0))]]
+                bounds = [(1.0 / 100.0, 1.0), (0, 1)]
+
+            for i in range(Nmax):
+                funcs.append(func)
+                popt = list(popt) + [1.0, 1.0 / (i + 1)]
+                bounds = list(bounds) + [(None, None), (1.0 / 25.0, 10.0)]
+
+                res = minimize(fitfunc, popt, args=(x, y, func), bounds=bounds)
+                popt = res.x
+                params.append(popt)
+                errs.append(fitfunc(popt, x, y, func) if res.success else np.inf)
+
+
+        # select best guess
+        iopt = np.nanargmin(errs)
+        popt = params[iopt]
+        fopt = funcs[iopt]
+        yopt = fopt(x, 0.0, *popt)
+
+        if verbose:
+            print "Best fit for kinetics:", "ft.exponentials" if iopt < Nmax else "ft.exp_gauss", "(0.0", popt, ")"
+
+        return y0 - yopt, yopt
+
+
+def TAFFT(t, y, padlength=4, wnd=np.blackman):
+    """Calculate the Fourier transform of a 2d transient absorption signal after stripping of the slow kinetics over the time axis.
+
+    :param array t: Time axis (fs).
+    :param array y: 2d TA signal of shape [time][wavelength]. The shape of axis 0 has to match that of t.
+    :param int padlength: Length of zero padding applied to data before transforming in units of original signal shape (default = 4).
+    :param function wnd: Window function, f(N) with N being array length, to be applied to data before transforming (default = numpy.blackman).
+    :returns: Wavenumber axis (cm-1) and transformed data with shape [wavenumber x padlength][wavelength].
+    """
+    y = np.array(y)
+    if y.ndim != 2:
+        raise ValueError("TA data has wrong shape.")
+
+    Npad = max(1, int(padlength)) * y.shape[0]
+    Y = np.fft.rfft2(y * np.outer(wnd(y.shape[0]), np.ones(y.shape[1])), s=(Npad,), axes=(0,))
+    wn = np.fft.rfftfreq(Npad, d=t[1] - t[0]) / (2.9979e8 * 1e-13)
+    return wn, Y
+
 
 # -------------------------------------------------------------------------------------------------------------------
 # peak fitting functions
-
-
-def find_peaks(y, wnd = 9, ath = 0.01, sth = 1.0, bl = 25, show = False, sorted=False):
+def find_peaks(y, wnd=9, ath=0.01, sth=1.0, bl=25, show=False, sorted=False):
     """Automated peak finding algorithm based on zero crossings of smoothed derivative as well as on slope and amplitude thresholds.
 
     :param array y: Spectrum.
@@ -902,22 +1091,22 @@ def find_peaks(y, wnd = 9, ath = 0.01, sth = 1.0, bl = 25, show = False, sorted=
     # find peaks
     peaks = []
     gs = []
-    for i in range(1, dg.size-1):   # leave out end points
+    for i in range(1, dg.size - 1):   # leave out end points
         # apply criteria: local max, min slope and min amp
-        if(dg[i] > 0 and dg[i+1] < 0 and dg[i]-dg[i+1] > smin and max(g[i], g[i+1]) > gmin):
-            if(g[i] > g[i+1]):
+        if(dg[i] > 0 and dg[i + 1] < 0 and dg[i] - dg[i + 1] > smin and max(g[i], g[i + 1]) > gmin):
+            if(g[i] > g[i + 1]):
                 peaks.append(i)
                 gs.append(g[i])
             else:
-                peaks.append(i+1)
-                gs.append(g[i+1])
+                peaks.append(i + 1)
+                gs.append(g[i + 1])
     peaks = np.array(peaks)
 
     # sort for peak amplitude
     if sorted:
         peaks = peaks[np.flipud(np.argsort(gs))]
 
-    if show == True:
+    if show:
         pl.figure()
         pl.plot(g, color='k')
         for i in range(len(peaks)):
@@ -926,11 +1115,14 @@ def find_peaks(y, wnd = 9, ath = 0.01, sth = 1.0, bl = 25, show = False, sorted=
 
     return peaks
 
+
 # utility function to quickly extract data x and y coordinates by double clicking in the plot
 # after the function is executed, the script terminates
 # these functions are not to be called directly but act as event handler
 pick_peaks_lastclickx = 0
 pick_peaks_lastclicky = 0
+
+
 def pick_peaks_onclick_x_y(event):
     global pick_peaks_lastclickx, pick_peaks_lastclicky
     if(pick_peaks_lastclickx == event.x and pick_peaks_lastclicky == event.y):
@@ -941,6 +1133,7 @@ def pick_peaks_onclick_x_y(event):
         pick_peaks_lastclickx = event.x
         pick_peaks_lastclicky = event.y
 
+
 def pick_peaks_onclick(event):
     global pick_peaks_lastclickx, pick_peaks_lastclicky
     if(pick_peaks_lastclickx == event.x and pick_peaks_lastclicky == event.y):
@@ -950,6 +1143,7 @@ def pick_peaks_onclick(event):
     else:
         pick_peaks_lastclickx = event.x
         pick_peaks_lastclicky = event.y
+
 
 def pick_peaks(x, y=None):
     """Utility function to quickly extract x coordinates of points from data by double clicking in a plot window.
@@ -963,13 +1157,14 @@ def pick_peaks(x, y=None):
     .. seealso: :py:func:`pick_peaks_x_y` for extracting x and y coordinates.
     """
     pl.figure()
-    if(y != None):
+    if(y is not None):
         pl.plot(x, y)
     else:
         pl.plot(x)
     pl.gcf().canvas.mpl_connect('button_press_event', pick_peaks_onclick)
     pl.show()
     sys.exit()
+
 
 # if only x is given, it takes the role of y
 def pick_peaks_x_y(x, y=None):
@@ -984,13 +1179,14 @@ def pick_peaks_x_y(x, y=None):
     .. seealso: :py:func:`pick_peaks` for extracting just x coordinates.
     """
     pl.figure()
-    if(y != None):
+    if(y is not None):
         pl.plot(x, y)
     else:
         pl.plot(x)
     pl.gcf().canvas.mpl_connect('button_press_event', pick_peaks_onclick_x_y)
     pl.show()
     sys.exit()
+
 
 # get a list of parameters A, x0, dx for each peak whose x coordinate is listed in peaks
 # peaks is in same units as x
@@ -1018,34 +1214,35 @@ def get_peak_estimate(x, y, peaks):
 
     # iterate over all guesses and get indices of peaks
     for i in range(len(peaks)):
-        i0.append( np.argmin(np.absolute(x - peaks[i])) )
+        i0.append(np.argmin(np.absolute(x - peaks[i])))
         if(i != 0):
-            imin.append( np.argmin(np.absolute(x - (peaks[i] + peaks[i-1]) / 2) ) )
-        if(i != len(peaks)-1):
-            imax.append( np.argmin(np.absolute(x - (peaks[i] + peaks[i+1]) / 2) ) )
+            imin.append(np.argmin(np.absolute(x - (peaks[i] + peaks[i - 1]) / 2)))
+        if(i != len(peaks) - 1):
+            imax.append(np.argmin(np.absolute(x - (peaks[i] + peaks[i + 1]) / 2)))
 
         if(i == 0):
             imin.append(np.maximum(0, 2 * i0[-1] - imax[-1]))
-        if(i == len(peaks)-1):
+        if(i == len(peaks) - 1):
             imax.append(np.maximum(0, 2 * i0[-1] - imin[-1]))
 
     # now get the estimates
-    for i in range(len(peaks)):
+    for i, _ in enumerate(peaks):
 
-        i1 = np.argmin( dy[imin[i]:imax[i]] - (dy[imax[i]] - dy[imin[i]])/(x[imax[i]] - x[imin[i]]) * x[imin[i]:imax[i]] )+imin[i]
-        i2 = np.argmax( dy[imin[i]:imax[i]] - (dy[imax[i]] - dy[imin[i]])/(x[imax[i]] - x[imin[i]]) * x[imin[i]:imax[i]] )+imin[i]
-        delta = np.maximum(np.absolute(i0[i] - i1), np.absolute(i0[i]  - i2))
+        i1 = np.argmin(dy[imin[i]:imax[i]] - (dy[imax[i]] - dy[imin[i]]) / (x[imax[i]] - x[imin[i]]) * x[imin[i]:imax[i]]) + imin[i]
+        i2 = np.argmax(dy[imin[i]:imax[i]] - (dy[imax[i]] - dy[imin[i]]) / (x[imax[i]] - x[imin[i]]) * x[imin[i]:imax[i]]) + imin[i]
+        delta = np.maximum(np.absolute(i0[i] - i1), np.absolute(i0[i] - i2))
 
         i12 = np.maximum(0, i0[i] - 2 * delta)
-        i22 = np.minimum(len(x)-1, i0[i] + 2 * delta)
+        i22 = np.minimum(len(x) - 1, i0[i] + 2 * delta)
 
         est.append(y[i0[i]] - 0.5 * (y[i12] + y[i22]))
         est.append(x[i0[i]])
-        est.append(np.absolute( x[i2] - x[i1] ))
+        est.append(np.absolute(x[i2] - x[i1]))
 
     return np.array(est)
 
-def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_popt0 = True, inc_blorder = 1, max_blorder = -1, global_opt = True):
+
+def fit_peaks(x, y, popt0, fit_func, bounds=None, estimate_bl=False, use_popt0=True, inc_blorder=1, max_blorder=-1, global_opt=True):
     """Try to fit Raman peaks with (automatic) baseline fitting.
 
     :param array x: x-axis.
@@ -1062,7 +1259,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
     """
     popt_p0 = np.copy(popt0)
 
-    if(isinstance(y, list) or y.ndim > 1):
+    if np.array(y).ndim > 1:
         out = []
         outpopt = []
         for sp in y:
@@ -1072,7 +1269,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
             out.append(tmp)
             outpopt.append(popt)
 
-            if(use_popt0 == False):
+            if not use_popt0:
                 popt_p0 = np.copy(popt)
 
         return [np.array(out), np.array(outpopt)]
@@ -1087,7 +1284,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
         func = lambda p, x, y: (fit_func(x, *p) - y)**2
         func_glob = lambda x, *p: fit_func(x, *p[0:len(popt0)]) + ft.poly(x, *p[len(popt0):])
 
-        if(estimate_bl == True):
+        if(estimate_bl):
 
             err1 = 1e8
             while(1):
@@ -1095,7 +1292,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
                 y1 = np.copy(y)
                 y1old = np.zeros(N)
 
-                while( np.sum((y1old - y1)**2)/N > 1e-7 ):
+                while(np.sum((y1old - y1)**2) / N > 1e-7):
 
                     popt_p = np.copy(popt_p0)
                     y1old = np.copy(y1)
@@ -1118,7 +1315,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
                 # save error for next order
                 y1 = fit_func(x, *popt_p) + bl
 
-                err = np.sum((y - y1)**2)/N
+                err = np.sum((y - y1)**2) / N
 
                 if(err < err1 and ((max_blorder == -1) or blorder < max_blorder)):
                     err1 = err
@@ -1152,6 +1349,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds = None, estimate_bl = False, use_pop
 
         return [fit_func(x, *popt_p) + bl, popt_p]
 
+
 def peak_remove(y, peaks):
     """Remove (narrow) peaks like single pixel artefacts from Raman data by linear interpolation.
 
@@ -1161,8 +1359,9 @@ def peak_remove(y, peaks):
     """
     ytmp = np.copy(y)
     for p in peaks:
-        ytmp[p[0]+1:p[1]] = (ytmp[p[1]] - ytmp[p[0]]) * (np.arange(p[0]+1, p[1]) - p[0])/(p[1] - p[0]) + ytmp[p[0]]
+        ytmp[p[0] + 1:p[1]] = (ytmp[p[1]] - ytmp[p[0]]) * (np.arange(p[0] + 1, p[1]) - p[0]) / (p[1] - p[0]) + ytmp[p[0]]
     return ytmp
+
 
 def peak_area(y, peaks):
     """Returns the area under the spectrum in a given interval after removing a linear baseline.
@@ -1174,5 +1373,5 @@ def peak_area(y, peaks):
     areas = np.zeros(len(peaks))
     for i in range(len(peaks)):
         p = peaks[i]
-        areas[i] = simps(y[p[0]+1:p[1]] - ((y[p[1]] - y[p[0]]) * (np.arange(p[0]+1, p[1]) - p[0])/(p[1] - p[0]) + y[p[0]]))
+        areas[i] = simps(y[p[0] + 1:p[1]] - ((y[p[1]] - y[p[0]]) * (np.arange(p[0] + 1, p[1]) - p[0]) / (p[1] - p[0]) + y[p[0]]))
     return areas
