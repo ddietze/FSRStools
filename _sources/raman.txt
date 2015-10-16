@@ -10,21 +10,21 @@ Data Import Functions
 
 .. autosummary::
    :toctree: pages
-   
+
    loadRaman
    loadFSRS
    loadTA
-   
+
 Data Selection / Normalization
 ------------------------------
 
 .. autosummary::
    :toctree: pages
-   
+
    norm
    cut
-   at   
-   
+   at
+
 Calibration Functions
 ---------------------
 
@@ -37,7 +37,7 @@ Calibration Functions
    interpolate
    mol_lines
    calibrate
-   
+
 Filtering / SNR Improvement Functions
 -------------------------------------
 
@@ -49,50 +49,53 @@ Filtering / SNR Improvement Functions
    noise_estimate
    denoise
    FT_denoise
-   
+
 Baseline Correction Functions
 -----------------------------
 
 .. autosummary::
    :toctree: pages
-   
+
    rayleigh_correction
    interpolated_bl_correction
    baseline_correction
    FT_baseline_correction
-   
+
 Solvent / Ground State Subtraction Functions
 --------------------------------------------
 
 .. autosummary::
    :toctree: pages
-   
+
    solvent_subtract
    solvent_subtract_chi2
-   
+
 Time Zero Functions
 -------------------
 
 .. autosummary::
    :toctree: pages
-    
+
    shift_data
    correct_t0
-   
+
 TA Analysis Functions
 ---------------------
 
 .. autosummary::
    :toctree: pages
-   
+
    bandintegral
+   plotTA
+   strip_kinetics
+   TAFFT
 
 Peak Fitting / Manipulation Functions
 -------------------------------------
 
 .. autosummary::
    :toctree: pages
-   
+
    find_peaks
    pick_peaks
    pick_peaks_x_y
@@ -100,4 +103,3 @@ Peak Fitting / Manipulation Functions
    fit_peaks
    peak_remove
    peak_area
-   

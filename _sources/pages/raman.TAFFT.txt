@@ -1,0 +1,6 @@
+raman.TAFFT
+===========
+
+.. currentmodule:: raman
+
+.. autofunction:: TAFFT

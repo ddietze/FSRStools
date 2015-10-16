@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>rraman.getHomogeneousDamping &mdash; FSRStools 1.1 documentation</title>
+    <title>raman.TAFFT &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
-    <link rel="up" title="rraman - Analysis of resonance Raman and absorption profiles" href="../rraman.html" />
-    <link rel="next" title="rraman.getKuboDamping" href="rraman.getKuboDamping.html" />
-    <link rel="prev" title="rraman.getRamanSpectrum" href="rraman.getRamanSpectrum.html" /> 
+    <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
+    <link rel="next" title="raman.find_peaks" href="raman.find_peaks.html" />
+    <link rel="prev" title="raman.strip_kinetics" href="raman.strip_kinetics.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,13 +40,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
+          <a href="raman.find_peaks.html" title="raman.find_peaks"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
+          <a href="raman.strip_kinetics.html" title="raman.strip_kinetics"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../rraman.html" accesskey="U"><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" accesskey="U"><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="rraman.getRamanSpectrum.html"
-                        title="previous chapter">rraman.getRamanSpectrum</a></p>
+  <p class="topless"><a href="raman.strip_kinetics.html"
+                        title="previous chapter">raman.strip_kinetics</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rraman.getKuboDamping.html"
-                        title="next chapter">rraman.getKuboDamping</a></p>
+  <p class="topless"><a href="raman.find_peaks.html"
+                        title="next chapter">raman.find_peaks</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/rraman.getHomogeneousDamping.txt"
+      <li><a href="../_sources/pages/raman.TAFFT.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,34 +88,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="rraman-gethomogeneousdamping">
-<h1>rraman.getHomogeneousDamping<a class="headerlink" href="#rraman-gethomogeneousdamping" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="raman-tafft">
+<h1>raman.TAFFT<a class="headerlink" href="#raman-tafft" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="rraman.getHomogeneousDamping">
-<code class="descclassname">rraman.</code><code class="descname">getHomogeneousDamping</code><span class="sig-paren">(</span><em>t</em>, <em>Gamma</em>, <em>alpha=0</em>, <em>lmbda=0</em><span class="sig-paren">)</span><a class="headerlink" href="#rraman.getHomogeneousDamping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the damping term arising from the homogeneous linewidth of the electronic transition. Offers phenomenological support for Stokes shift.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Added phenomenological Stokes shift to input parameters on 10-12-2015. See for example <em>New J Phys</em> <strong>11</strong>, 015001 (2009), Eqs. (1) and (2).</p>
-</div>
+<dt id="raman.TAFFT">
+<code class="descclassname">raman.</code><code class="descname">TAFFT</code><span class="sig-paren">(</span><em>t</em>, <em>y</em>, <em>padlength=4</em>, <em>wnd=&lt;function blackman&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.TAFFT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Fourier transform of a 2d transient absorption signal after stripping of the slow kinetics over the time axis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>t</strong> (<em>array</em>) &#8211; Time axis (fs).</li>
-<li><strong>Gamma</strong> (<em>float</em>) &#8211; Decay rate according to <img class="math" src="../_images/math/59d2373d189d900db86d14027d3faa60e2c9e0c9.png" alt="1 / \tau"/> in (cm-1), where <img class="math" src="../_images/math/8606c09f4e0d78a0a7576c353c5e6f33f92cecfa.png" alt="tau"/> is exponential dephasing time.</li>
-<li><strong>alpha</strong> (<em>float</em>) &#8211; <p>Line shape parameter:</p>
-<ul>
-<li>1 = Gaussian</li>
-<li>0 = Lorentzian</li>
-</ul>
-</li>
-<li><strong>lmbda</strong> (<em>float</em>) &#8211; Phenomenological Stokes shift (cm-1) which is added as imaginary part to g(t). Compared to the Brownian oscillator models, lmbda <strong>is</strong> the observed Stokes shift. (default = 0)</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; 2d TA signal of shape [time][wavelength]. The shape of axis 0 has to match that of t.</li>
+<li><strong>padlength</strong> (<em>int</em>) &#8211; Length of zero padding applied to data before transforming in units of original signal shape (default = 4).</li>
+<li><strong>wnd</strong> (<em>function</em>) &#8211; Window function, f(N) with N being array length, to be applied to data before transforming (default = numpy.blackman).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Damping term in the time domain, <img class="math" src="../_images/math/5c89c155fd1ef5cdcaf520335f4b4a90ffcc61d0.png" alt="e^{-g(t) - i \lambda t / 2 \hbar}"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Wavenumber axis (cm-1) and transformed data with shape [wavenumber x padlength][wavelength].</p>
 </td>
 </tr>
 </tbody>
@@ -140,13 +131,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="rraman.getKuboDamping.html" title="rraman.getKuboDamping"
+          <a href="raman.find_peaks.html" title="raman.find_peaks"
              >next</a> |</li>
         <li class="right" >
-          <a href="rraman.getRamanSpectrum.html" title="rraman.getRamanSpectrum"
+          <a href="raman.strip_kinetics.html" title="raman.strip_kinetics"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../rraman.html" ><code class="docutils literal"><span class="pre">rraman</span></code> - Analysis of resonance Raman and absorption profiles</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" ><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

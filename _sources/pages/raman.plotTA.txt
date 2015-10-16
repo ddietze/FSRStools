@@ -1,0 +1,6 @@
+raman.plotTA
+============
+
+.. currentmodule:: raman
+
+.. autofunction:: plotTA

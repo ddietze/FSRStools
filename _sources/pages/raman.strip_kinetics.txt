@@ -1,0 +1,6 @@
+raman.strip_kinetics
+====================
+
+.. currentmodule:: raman
+
+.. autofunction:: strip_kinetics

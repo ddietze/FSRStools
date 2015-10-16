@@ -105,6 +105,14 @@
   <div class="section" id="module-raman">
 <span id="raman-analysis-of-spontaneous-and-time-resolved-raman-spectra"></span><h1><a class="reference internal" href="#module-raman" title="raman"><code class="xref py py-mod docutils literal"><span class="pre">raman</span></code></a> - Analysis of spontaneous and time-resolved Raman spectra<a class="headerlink" href="#module-raman" title="Permalink to this headline">¶</a></h1>
 <p>A collection of functions to process and analyze Raman spectra. These functions work both for spontaneous Raman as well as femtosecond stimulated Raman data. The import functions for spontaneous Raman are optimized for Princeton Instruments&#8217; WinSpec ASCII files, while those for FSRS expect the files in the output format of pyFSRS or David Hoffman&#8217;s LabView FSRS.</p>
+<p><strong>Changelog:</strong></p>
+<p><em>10-13-2015:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Some bug fixes.</li>
+<li>Added more functionality for analyzing TA data, e.g. automated kinetics stripping.</li>
+</ul>
+</div></blockquote>
 <div class="section" id="data-import-functions">
 <h2>Data Import Functions<a class="headerlink" href="#data-import-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
@@ -134,7 +142,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="pages/raman.norm.html#raman.norm" title="raman.norm"><code class="xref py py-obj docutils literal"><span class="pre">norm</span></code></a>(y[,&nbsp;mode])</td>
-<td>Normalize spectrum.</td>
+<td>Normalize 1d spectrum.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/raman.cut.html#raman.cut" title="raman.cut"><code class="xref py py-obj docutils literal"><span class="pre">cut</span></code></a>(x,&nbsp;y,&nbsp;x0,&nbsp;x1)</td>
 <td>Cut out a subarray from x and y according to the <em>closed</em> interval [xfrom, xto].</td>
@@ -249,7 +257,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="pages/raman.shift_data.html#raman.shift_data" title="raman.shift_data"><code class="xref py py-obj docutils literal"><span class="pre">shift_data</span></code></a>(x,&nbsp;y,&nbsp;dx)</td>
-<td>Smoothly translate data by an arbitrary amount along the x-axis using Fourier transformation.</td>
+<td>Smoothly translate 1d data by an arbitrary amount along the x-axis using Fourier transformation.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/raman.correct_t0.html#raman.correct_t0" title="raman.correct_t0"><code class="xref py py-obj docutils literal"><span class="pre">correct_t0</span></code></a>(t,&nbsp;d,&nbsp;c)</td>
 <td>Shift all frequency columns in d along the time axis to correct t0 to 0.</td>
@@ -267,6 +275,15 @@
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="pages/raman.bandintegral.html#raman.bandintegral" title="raman.bandintegral"><code class="xref py py-obj docutils literal"><span class="pre">bandintegral</span></code></a>(x,&nbsp;y,&nbsp;x0,&nbsp;x1)</td>
 <td>Calculate the band integral over time dependent data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/raman.plotTA.html#raman.plotTA" title="raman.plotTA"><code class="xref py py-obj docutils literal"><span class="pre">plotTA</span></code></a>(t,&nbsp;wl,&nbsp;d[,&nbsp;showContour,&nbsp;filename,&nbsp;...])</td>
+<td>Convenience function to generate a fancy TA contour plot using matplotlib&#8217;s <em>contour</em> and <em>contourf</em> functions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.strip_kinetics.html#raman.strip_kinetics" title="raman.strip_kinetics"><code class="xref py py-obj docutils literal"><span class="pre">strip_kinetics</span></code></a>(y[,&nbsp;Nmax,&nbsp;verbose,&nbsp;tryIRF,&nbsp;...])</td>
+<td>Automatically remove slow kinetics from a (single) TA trace.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/raman.TAFFT.html#raman.TAFFT" title="raman.TAFFT"><code class="xref py py-obj docutils literal"><span class="pre">TAFFT</span></code></a>(t,&nbsp;y[,&nbsp;padlength,&nbsp;wnd])</td>
+<td>Calculate the Fourier transform of a 2d transient absorption signal after stripping of the slow kinetics over the time axis.</td>
 </tr>
 </tbody>
 </table>
