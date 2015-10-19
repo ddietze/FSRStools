@@ -659,7 +659,7 @@ def prefA(eEL, M, IOR, dt):
     """
     # Version from Fortran code.
     # to convert from esu to SI divide by 4 pi eps0
-    return 5.7579e-6 * M**2 * eEL * dt / IOR
+    return 5.7579e-6 / 2.0 * M**2 * eEL * dt / IOR
 
 
 # -------------------------------------------------------------------------------------------------------------------------------
