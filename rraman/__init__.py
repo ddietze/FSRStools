@@ -13,6 +13,11 @@ Resonance Raman excitation profile calculation based on the time-domain picture 
    - Added a convenience function to calculate Raman spectra from a set of excitation profiles.
    - Added some more damping functions and phenomenological support for Stokes shift in simple homogeneous damping function.
 
+*10-21-2015:*
+
+    - Some bug fixes concerning the prefactors and the normalization of the fluorescence spectra.
+    - Fixed a bug regarding the Raman overlaps.
+
 
 **Example Code**
 
@@ -235,7 +240,7 @@ def t10A(t, Delta, eVIB):
 
     .. seealso:: Myers, Eqs. (37) - (39).
     """
-    return Delta / np.sqrt(2) * (np.exp(-1j * eVIB / hbar * t) - 1.0) * t00A(t, Delta, eVIB)
+    return Delta / np.sqrt(2) * (np.exp(-1j * eVIB / hbar * t) - 1.0)  # * t00A(t, Delta, eVIB)
 
 
 def t20A(t, Delta, eVIB):
@@ -248,7 +253,7 @@ def t20A(t, Delta, eVIB):
 
     .. seealso:: Myers, Eqs. (37) - (39).
     """
-    return Delta**2 / (2 * np.sqrt(2)) * (np.exp(-1j * eVIB / hbar * t) - 1.0)**2 * t00A(t, Delta, eVIB)
+    return Delta**2 / (2 * np.sqrt(2)) * (np.exp(-1j * eVIB / hbar * t) - 1.0)**2  # * t00A(t, Delta, eVIB)
 
 
 # -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -282,6 +287,8 @@ def t00B(t, Delta, eg, ee):
     # this is the factor that is taken out in the t00A case, as it cancels with the exp in the integral later on
     # however, np.log returns values such that -pi < arg(log(..)) < pi
     gt = 1j / 2.0 * np.log(1j * wg / we * swe + cwe) + pt * (qt - Delta) / 2.0  # skip -E0 t / hbar
+#    gt = gt + wg * t / 2.0 # add +w t / 2 using ground state frequency as this compensates the -w t / 2.0 term coming from the FFT
+
     # add the following term to recover t00A for eg = ee
     gt = gt - 1j / 2.0 * np.log(1j * np.sin(wg * t) + np.cos(wg * t))
 
@@ -313,19 +320,11 @@ def t10B(t, Delta, eg, ee):
 
     pt = we / wg * Delta * swe
     qt = Delta * (1 - cwe)
-    # the log reduces to 0.5 * eg / hbar * t when eg = ee
-    # this is the factor that is taken out in the t00A case, as it cancels with the exp in the integral later on
-    # however, np.log returns values such that -pi < arg(log(..)) < pi
-    gt = 1j / 2.0 * np.log(1j * wg / we * swe + cwe) + pt * (qt - Delta) / 2.0  # skip -E0 t / hbar
-    # add the following term to recover t00A for eg = ee
-    gt = gt - 1j / 2.0 * np.log(1j * np.sin(wg * t) + np.cos(wg * t))
-
-
     at = -0.5 * 1j * (1j * cwe - (we / wg) * swe) / (1j * (wg / we) * swe + cwe)
 
     a = at + 0.5
     pp = pt - 2.0 * 1j * at * qt
-    return 2**(-0.5) * pp / (1j * a) * t00B(t, Delta, eg, ee)
+    return 2**(-0.5) * pp / (1j * a)  # * t00B(t, Delta, eg, ee)
 
 
 def t20B(t, Delta, eg, ee):
@@ -347,19 +346,11 @@ def t20B(t, Delta, eg, ee):
 
     pt = we / wg * Delta * swe
     qt = Delta * (1 - cwe)
-    # the log reduces to 0.5 * eg / hbar * t when eg = ee
-    # this is the factor that is taken out in the t00A case, as it cancels with the exp in the integral later on
-    # however, np.log returns values such that -pi < arg(log(..)) < pi
-    gt = 1j / 2.0 * np.log(1j * wg / we * swe + cwe) + pt * (qt - Delta) / 2.0  # skip -E0 t / hbar
-    # add the following term to recover t00A for eg = ee
-    gt = gt - 1j / 2.0 * np.log(1j * np.sin(wg * t) + np.cos(wg * t))
-
     at = -0.5 * 1j * (1j * cwe - (we / wg) * swe) / (1j * (wg / we) * swe + cwe)
 
     a = at + 0.5
     pp = pt - 2.0 * 1j * at * qt
-    gp = 1j * at * qt**2 - pt * qt + gt
-    return -8**(-0.5) * (pp**2 / a**2 + 2. * (1. - 1. / a)) * t00B(t, Delta, eg, ee)
+    return -8**(-0.5) * (pp**2 / a**2 + 2. * (1. - 1. / a))  # * t00B(t, Delta, eg, ee)
 
 
 # ----------------------------------------------------------------------------------------------------------------------------------
@@ -377,7 +368,10 @@ def t00D(t, beta, eVIB):
 
     .. seealso:: Myers, Eqs. (52) - (54).
     """
-    return (1.0 + 1j * eVIB / hbar * t / 2.0)**(-0.5) * np.exp(-beta**2 * (6 * t**2 + 1j * eVIB / hbar * t**3) / (24 * hbar**2))
+
+    tmp = (1.0 + 1j * eVIB / hbar * t / 2.0)**(-0.5) * np.exp(-beta**2 * (6 * t**2 + 1j * eVIB / hbar * t**3) / (24 * hbar**2))
+    tmp = tmp * np.exp(1j * eVIB / hbar * t / 2.0)      # add this term to compensate for the -1j w t / 2 term coming from the FFt
+    return tmp
 
 
 def t10D(t, beta, eVIB):
@@ -390,7 +384,7 @@ def t10D(t, beta, eVIB):
 
     .. seealso:: Myers, Eqs. (52) - (54).
     """
-    return -1j * 2**(-0.5) * (beta * t / hbar) * t00D(t, beta, eVIB)
+    return -1j * 2**(-0.5) * (beta * t / hbar)  # * t00D(t, beta, eVIB)
 
 
 def t20D(t, beta, eVIB):
@@ -403,20 +397,21 @@ def t20D(t, beta, eVIB):
 
     .. seealso:: Myers, Eqs. (52) - (54).
     """
-    return -2**(-0.5) * (beta**2 * t**2 / (2.0 * hbar**2) - 1j * eVIB / hbar * t / (2.0 + 1j * eVIB / hbar * t)) * t00D(t, beta, eVIB)
+    return -2**(-0.5) * (beta**2 * t**2 / (2.0 * hbar**2) - 1j * eVIB / hbar * t / (2.0 + 1j * eVIB / hbar * t))  # * t00D(t, beta, eVIB)
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------
 def getOverlaps(t, D, RMg, RMe, nquanta):
     """Calculate the time dependent overlap integrals / Franck-Condon factors :math:`<i|i(t)>_k` and :math:`<f|i(t)>_k`.
 
-    .. note:: Format of return value changed on 10-07-2015.
+    .. versionchanged:: 10-07-2015
+        Format of return value changed.
 
     :param array t: Time axis in (fs).
     :param array D: Array of N normalized displacements of excited state surfaces (deltas), or slope of linear dissociative excited state surface.
     :param array RMg: N Raman ground state frequencies (cm-1).
     :param array RMe: N Raman excited state frequencies (cm-1) or -1 if excited state surface is dissociative.
-    :param array nquanta: M x N array containing the quanta of the N possible Raman modes for the M Raman lines to calculate. Use :py:func:`numpy.identity` to just calculate the fundamentals. Possible values are 0, 1, 2.
+    :param array nquanta: M x N array containing the quanta of the N possible Raman modes for the M Raman lines to calculate. Use :py:func:`numpy.identity` to just calculate the fundamentals. Possible values are 0 (no excitation), 1 (fundamental), 2 (first overtone).
     :returns: M + 2 - dimensional array containing the Rayleigh, fluorescence and M Raman overlaps.
     """
     ovlps = []
@@ -446,21 +441,27 @@ def getOverlaps(t, D, RMg, RMe, nquanta):
             FC1.append(t10B(t, D[i], RMg[i], RMe[i]))
             FC2.append(t20B(t, D[i], RMg[i], RMe[i]))
 
+    # go to numpy array..
+    FC0 = np.array(FC0)
+    FC0p = np.array(FC0p)
+    FC1 = np.array(FC1)
+    FC2 = np.array(FC2)
+
     # Rayleigh / absorption overlap
-    o = 1.0
+    oabs = 1.0 + 0.0 * 1j       # reuse this term for the raman overlaps
     for i in range(N):
-        o = o * FC0[i]
-    ovlps.append(o)
+        oabs = oabs * FC0[i]
+    ovlps.append(oabs)
 
     # fluorescence overlap
-    o = 1.0
+    o = 1.0 + 0.0 * 1j
     for i in range(N):
         o = o * FC0p[i]
     ovlps.append(o)
 
     # actual Raman overlaps
     for j in range(M):
-        o = 1.0
+        o = 1.0 * oabs                      # all raman modes are based on this product and additional terms given by the excited modes
         for i in range(N):
             if(nquanta[j][i] == 1):
                 o = o * FC1[i]
@@ -657,9 +658,10 @@ def prefA(eEL, M, IOR, dt):
 
     .. seealso:: Myers, Eq. (35).
     """
-    # Version from Fortran code.
     # to convert from esu to SI divide by 4 pi eps0
-    return 5.7579e-6 / 2.0 * M**2 * eEL * dt / IOR
+    # the factor / 2 arises from the normalization of numpy of the rfft to match the amplitude of fft
+    # so rfft is not completely identical to half-sided FT integral
+    return 5.7579e-6 * M**2 * eEL * dt / IOR / 2.0
 
 
 # -------------------------------------------------------------------------------------------------------------------------------
@@ -695,7 +697,9 @@ def prefF(eEF, M, IOR, dt):
     .. seealso:: Myers, *Chem. Phys.* **180**, 215 (1994), Eqs. (6) and (26).
     """
     # to convert from esu to SI divide by 4 pi eps0
-    return 3.6656e-22 * IOR * M**2 * eEF**3 * dt
+    # the factor / 2 arises from the normalization of numpy of the rfft to match the amplitude of fft
+    # so rfft is not completely identical to half-sided FT integral
+    return 3.6656e-22 * IOR * M**2 * eEF**3 * dt / 2.0
 
 
 # ----------------------------------------------------------------------------------------------------------------------------
@@ -734,7 +738,8 @@ def getCrossSections(t, wn, E0, ovlps, sshift, M, IOR, damp=1, sig=0, ialpha=1):
     # fluorescence rate / intensity - using half sided FT - similar to absorption
     # in order to account for the sign change, the zero-zero energy time domain part and the damping term had to be separated;
     # use the tdpart conjugated and change irfft by hfft to get the factor exp(-1j w t)
-    tmp = np.real(Npoints * np.fft.hfft(ovlps[1] * np.conjugate(tdpart) * damp, Npoints))
+    # numpy does not normalize the forward FFT, so no factor Npoints
+    tmp = np.real(np.fft.hfft(ovlps[1] * np.conjugate(tdpart) * damp, Npoints))
     if(sig > 0):
         tmp = applyInhomogeneousBroadening(wn, tmp, sig, ialpha)
     kF = prefF(wn, M, IOR, dt) * tmp
