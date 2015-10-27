@@ -39,6 +39,7 @@ An optical system consists of the first (semi-infinite) layer (substrate), the i
    System.get_intensity_coefficients
    System.get_field_coefficients_AOI
    System.get_intensity_coefficients_AOI
+   System.get_electric_field
    System.set_substrate
    System.set_superstrate
    System.set_theta

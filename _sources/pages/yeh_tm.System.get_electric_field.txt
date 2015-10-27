@@ -1,0 +1,6 @@
+yeh_tm.System.get_electric_field
+================================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.get_electric_field
