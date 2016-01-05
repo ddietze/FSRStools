@@ -1,0 +1,6 @@
+yeh_tm.System.remove_layer
+==========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.remove_layer

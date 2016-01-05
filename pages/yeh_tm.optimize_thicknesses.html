@@ -92,9 +92,10 @@
 <h1>yeh_tm.optimize_thicknesses<a class="headerlink" href="#yeh-tm-optimize-thicknesses" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="yeh_tm.optimize_thicknesses">
-<code class="descclassname">yeh_tm.</code><code class="descname">optimize_thicknesses</code><span class="sig-paren">(</span><em>S</em>, <em>w</em>, <em>Q</em>, <em>dQ=0.01</em>, <em>Qid=4</em>, <em>keep_first_fixed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.optimize_thicknesses" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">yeh_tm.</code><code class="descname">optimize_thicknesses</code><span class="sig-paren">(</span><em>S</em>, <em>w</em>, <em>Q</em>, <em>dQ=0.01</em>, <em>Qid=4</em>, <em>dmin=0.001</em>, <em>keep_first_fixed=True</em>, <em>MAXit=10</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.optimize_thicknesses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optimize the thicknesses of each layer to minimize the merit function.
-The algorithm uses a simple Newton optimization.</p>
+The algorithm uses a parabolic approximation of the merit function and optimizes
+one layer thickness at a time.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -105,7 +106,9 @@ The algorithm uses a simple Newton optimization.</p>
 <li><strong>Q</strong> (<em>array</em>) &#8211; List of target values at the given frequencies (same shape as w).</li>
 <li><strong>dQ</strong> (<em>float</em>) &#8211; Allowed design tolerance of the target (in absolute units).</li>
 <li><strong>Qid</strong> (<em>int</em>) &#8211; Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).</li>
+<li><strong>dmin</strong> (<em>float</em>) &#8211; Minimum layer thickness and thickness increment (default = 1nm).</li>
 <li><strong>keep_first_fixed</strong> (<em>bool</em>) &#8211; Set to True if first layer should not be modified.</li>
+<li><strong>MAXit</strong> (<em>int</em>) &#8211; Maximum number of iterations (default = 10).</li>
 </ul>
 </td>
 </tr>

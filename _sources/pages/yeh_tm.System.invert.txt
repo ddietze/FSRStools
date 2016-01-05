@@ -1,0 +1,6 @@
+yeh_tm.System.invert
+====================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.invert

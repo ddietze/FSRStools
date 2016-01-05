@@ -92,7 +92,7 @@
 <h1>profilometer.get_film_thickness<a class="headerlink" href="#profilometer-get-film-thickness" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="profilometer.get_film_thickness">
-<code class="descclassname">profilometer.</code><code class="descname">get_film_thickness</code><span class="sig-paren">(</span><em>z</em>, <em>plotHist=False</em><span class="sig-paren">)</span><a class="headerlink" href="#profilometer.get_film_thickness" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">profilometer.</code><code class="descname">get_film_thickness</code><span class="sig-paren">(</span><em>z</em>, <em>plotHist=False</em>, <em>dz=5e-09</em><span class="sig-paren">)</span><a class="headerlink" href="#profilometer.get_film_thickness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract film thickness from height profile using histogram analysis and two Gaussians.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -101,6 +101,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>z</strong> (<em>2d_array</em>) &#8211; Z coordinates / height profile.</li>
 <li><strong>plotHist</strong> (<em>bool</em>) &#8211; If <em>True</em>, the histogram and fit results are plotted in a new figure (optional).</li>
+<li><strong>dz</strong> (<em>float</em>) &#8211; Step size in nm used to calculate the number of bins for the histogram (default = 5nm).</li>
 </ul>
 </td>
 </tr>

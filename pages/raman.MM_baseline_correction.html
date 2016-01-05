@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>yeh_tm.System.txx &mdash; FSRStools 1.1 documentation</title>
+    <title>raman.MM_baseline_correction &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
-    <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
-    <link rel="next" title="yeh_tm.System.txy" href="yeh_tm.System.txy.html" />
-    <link rel="prev" title="yeh_tm.System.set_theta" href="yeh_tm.System.set_theta.html" /> 
+    <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
+    <link rel="next" title="raman.solvent_subtract" href="raman.solvent_subtract.html" />
+    <link rel="prev" title="raman.FT_baseline_correction" href="raman.FT_baseline_correction.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,13 +40,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.txy.html" title="yeh_tm.System.txy"
+          <a href="raman.solvent_subtract.html" title="raman.solvent_subtract"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.set_theta.html" title="yeh_tm.System.set_theta"
+          <a href="raman.FT_baseline_correction.html" title="raman.FT_baseline_correction"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" accesskey="U"><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="yeh_tm.System.set_theta.html"
-                        title="previous chapter">yeh_tm.System.set_theta</a></p>
+  <p class="topless"><a href="raman.FT_baseline_correction.html"
+                        title="previous chapter">raman.FT_baseline_correction</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="yeh_tm.System.txy.html"
-                        title="next chapter">yeh_tm.System.txy</a></p>
+  <p class="topless"><a href="raman.solvent_subtract.html"
+                        title="next chapter">raman.solvent_subtract</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/yeh_tm.System.txx.txt"
+      <li><a href="../_sources/pages/raman.MM_baseline_correction.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,16 +88,32 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="yeh-tm-system-txx">
-<h1>yeh_tm.System.txx<a class="headerlink" href="#yeh-tm-system-txx" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="yeh_tm.System.txx">
-<code class="descclassname">System.</code><code class="descname">txx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.txx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the x,x component of the field transmission coefficient (incident x, transmitted x).</p>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Requires prior execution of <a class="reference internal" href="yeh_tm.System.calculate_T.html#yeh_tm.System.calculate_T" title="yeh_tm.System.calculate_T"><code class="xref py py-func docutils literal"><span class="pre">calculate_T()</span></code></a>.</p>
+  <div class="section" id="raman-mm-baseline-correction">
+<h1>raman.MM_baseline_correction<a class="headerlink" href="#raman-mm-baseline-correction" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="raman.MM_baseline_correction">
+<code class="descclassname">raman.</code><code class="descname">MM_baseline_correction</code><span class="sig-paren">(</span><em>y</em>, <em>w=60</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.MM_baseline_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Baseline correction based on a moving median filter.
+See Grumstrup et al., <em>J. Phys. Chem. B</em> <strong>117</strong>, 8245 (2013) for more details.
+This filter tends to reduce the peak height and works best as supplement to any of the other baseline correction functions.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 01-04-2016.</span></p>
 </div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>y</strong> (<em>array</em>) &#8211; Input spectrum. If y is a list or a 2d array of spectra, correct all spectra.</li>
+<li><strong>w</strong> (<em>int</em>) &#8211; Window size for median filter in indices. Works best for 5x Raman line width.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Baseline corrected spectrum with same shape as y.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -118,13 +134,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.txy.html" title="yeh_tm.System.txy"
+          <a href="raman.solvent_subtract.html" title="raman.solvent_subtract"
              >next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.set_theta.html" title="yeh_tm.System.set_theta"
+          <a href="raman.FT_baseline_correction.html" title="raman.FT_baseline_correction"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" ><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

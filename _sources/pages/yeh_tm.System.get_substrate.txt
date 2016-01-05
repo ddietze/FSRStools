@@ -1,0 +1,6 @@
+yeh_tm.System.get_substrate
+===========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.get_substrate

@@ -1,0 +1,6 @@
+raman.MM_baseline_correction
+============================
+
+.. currentmodule:: raman
+
+.. autofunction:: MM_baseline_correction

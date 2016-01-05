@@ -1,0 +1,6 @@
+yeh_tm.System.insert_layer
+==========================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.insert_layer

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>yeh_tm.System.txx &mdash; FSRStools 1.1 documentation</title>
+    <title>raman.reconstruct_FM_spectrum &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
-    <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
-    <link rel="next" title="yeh_tm.System.txy" href="yeh_tm.System.txy.html" />
-    <link rel="prev" title="yeh_tm.System.set_theta" href="yeh_tm.System.set_theta.html" /> 
+    <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
+    <link rel="next" title="raman.filter_outliers" href="raman.filter_outliers.html" />
+    <link rel="prev" title="raman.calibrate" href="raman.calibrate.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,13 +40,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.txy.html" title="yeh_tm.System.txy"
+          <a href="raman.filter_outliers.html" title="raman.filter_outliers"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.set_theta.html" title="yeh_tm.System.set_theta"
+          <a href="raman.calibrate.html" title="raman.calibrate"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" accesskey="U"><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="yeh_tm.System.set_theta.html"
-                        title="previous chapter">yeh_tm.System.set_theta</a></p>
+  <p class="topless"><a href="raman.calibrate.html"
+                        title="previous chapter">raman.calibrate</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="yeh_tm.System.txy.html"
-                        title="next chapter">yeh_tm.System.txy</a></p>
+  <p class="topless"><a href="raman.filter_outliers.html"
+                        title="next chapter">raman.filter_outliers</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/yeh_tm.System.txx.txt"
+      <li><a href="../_sources/pages/raman.reconstruct_FM_spectrum.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,16 +88,38 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="yeh-tm-system-txx">
-<h1>yeh_tm.System.txx<a class="headerlink" href="#yeh-tm-system-txx" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="yeh_tm.System.txx">
-<code class="descclassname">System.</code><code class="descname">txx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.txx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the x,x component of the field transmission coefficient (incident x, transmitted x).</p>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Requires prior execution of <a class="reference internal" href="yeh_tm.System.calculate_T.html#yeh_tm.System.calculate_T" title="yeh_tm.System.calculate_T"><code class="xref py py-func docutils literal"><span class="pre">calculate_T()</span></code></a>.</p>
+  <div class="section" id="raman-reconstruct-fm-spectrum">
+<h1>raman.reconstruct_FM_spectrum<a class="headerlink" href="#raman-reconstruct-fm-spectrum" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="raman.reconstruct_FM_spectrum">
+<code class="descclassname">raman.</code><code class="descname">reconstruct_FM_spectrum</code><span class="sig-paren">(</span><em>y</em>, <em>delta</em>, <em>MMw=0</em>, <em>bDenoise=False</em>, <em>blOrder=4</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.reconstruct_FM_spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reconstruct Raman spectrum A from a shifted-excitation of frequency-modulated spectrum A - B.</p>
+<p>This algorithm is adapted from Grumstrup et al., <em>J. Phys. Chem. B</em> <strong>117</strong>, 8245 (2013).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The difference frequency spectrum y has to be sampled equidistantly, i.e., apply <a class="reference internal" href="raman.interpolate.html#raman.interpolate" title="raman.interpolate"><code class="xref py py-func docutils literal"><span class="pre">interpolate()</span></code></a> before taking the difference.</p>
 </div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 01-04-2016.</span></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>y</strong> (<em>array</em>) &#8211; Difference spectrum A-B.</li>
+<li><strong>delta</strong> (<em>int</em>) &#8211; Index shift between the two spectra. Has to be positive and nu(A) &lt; nu(B).</li>
+<li><strong>MMw</strong> (<em>int</em>) &#8211; Window size for moving-median filter (use 5x delta when 0, default).</li>
+<li><strong>bDenoise</strong> (<em>bool</em>) &#8211; If True, apply a denoise step before returning the result.</li>
+<li><strong>blOrder</strong> (<em>int</em>) &#8211; Polynomial order for baseline removal (default = 4).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Reconstructed spectrum with same shape as y.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -118,13 +140,13 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.txy.html" title="yeh_tm.System.txy"
+          <a href="raman.filter_outliers.html" title="raman.filter_outliers"
              >next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.set_theta.html" title="yeh_tm.System.set_theta"
+          <a href="raman.calibrate.html" title="raman.calibrate"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../raman.html" ><code class="docutils literal"><span class="pre">raman</span></code> - Analysis of spontaneous and time-resolved Raman spectra</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

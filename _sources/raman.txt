@@ -38,6 +38,14 @@ Calibration Functions
    mol_lines
    calibrate
 
+Frequency-Modulated FSRS Reconstruction Functions
+-------------------------------------------------
+
+.. autosummary::
+    :toctree: pages
+
+    reconstruct_FM_spectrum
+
 Filtering / SNR Improvement Functions
 -------------------------------------
 
@@ -60,6 +68,7 @@ Baseline Correction Functions
    interpolated_bl_correction
    baseline_correction
    FT_baseline_correction
+   MM_baseline_correction
 
 Solvent / Ground State Subtraction Functions
 --------------------------------------------
@@ -79,17 +88,6 @@ Time Zero Functions
    shift_data
    correct_t0
 
-TA Analysis Functions
----------------------
-
-.. autosummary::
-   :toctree: pages
-
-   bandintegral
-   plotTA
-   strip_kinetics
-   TAFFT
-
 Peak Fitting / Manipulation Functions
 -------------------------------------
 
@@ -103,3 +101,14 @@ Peak Fitting / Manipulation Functions
    fit_peaks
    peak_remove
    peak_area
+
+TA Analysis Functions
+---------------------
+
+.. autosummary::
+  :toctree: pages
+
+  bandintegral
+  plotTA
+  strip_kinetics
+  TAFFT

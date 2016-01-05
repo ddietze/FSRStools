@@ -92,8 +92,11 @@
 <h1>yeh_tm.optimized_insert_needle<a class="headerlink" href="#yeh-tm-optimized-insert-needle" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="yeh_tm.optimized_insert_needle">
-<code class="descclassname">yeh_tm.</code><code class="descname">optimized_insert_needle</code><span class="sig-paren">(</span><em>S</em>, <em>w</em>, <em>Q</em>, <em>M1</em>, <em>M2</em>, <em>d=0.01</em>, <em>dQ=0.01</em>, <em>Qid=4</em>, <em>keep_first_fixed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.optimized_insert_needle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">yeh_tm.</code><code class="descname">optimized_insert_needle</code><span class="sig-paren">(</span><em>S</em>, <em>w</em>, <em>Q</em>, <em>eps</em>, <em>d=0.01</em>, <em>dQ=0.01</em>, <em>Qid=4</em>, <em>keep_first_fixed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.optimized_insert_needle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert a needle in the Layer stack at the optimum position by comparing the merit functions of all combinations.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 11-05-2015: </span>Changed input parameters to allow multiple materials.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -102,8 +105,7 @@
 <li><strong>S</strong> (<a class="reference internal" href="yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><em>System</em></a>) &#8211; Optical system containing the layer stack.</li>
 <li><strong>w</strong> (<em>array</em>) &#8211; List of frequencies where a target is specified.</li>
 <li><strong>Q</strong> (<em>array</em>) &#8211; List of target values at the given frequencies (same shape as w).</li>
-<li><strong>M1</strong> (<em>func</em>) &#8211; Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.</li>
-<li><strong>M2</strong> (<em>func</em>) &#8211; Dielectric function 2.</li>
+<li><strong>eps</strong> (<em>array</em>) &#8211; List of possible dielectric functions to choose from. The needle will use the one giving the best improvement in merit.</li>
 <li><strong>d</strong> (<em>float</em>) &#8211; Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).</li>
 <li><strong>dQ</strong> (<em>float</em>) &#8211; Allowed design tolerance of the target (in absolute units).</li>
 <li><strong>Qid</strong> (<em>int</em>) &#8211; Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).</li>

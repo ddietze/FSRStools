@@ -92,9 +92,12 @@
 <h1>yeh_tm.insert_needle<a class="headerlink" href="#yeh-tm-insert-needle" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="yeh_tm.insert_needle">
-<code class="descclassname">yeh_tm.</code><code class="descname">insert_needle</code><span class="sig-paren">(</span><em>S</em>, <em>pos</em>, <em>M1</em>, <em>M2</em>, <em>d=0.01</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.insert_needle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">yeh_tm.</code><code class="descname">insert_needle</code><span class="sig-paren">(</span><em>S</em>, <em>pos</em>, <em>M</em>, <em>d=0.01</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.insert_needle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert a needle, i.e., a very thin layer with different refractive index into the center of the layer at a given position
 and return the resulting System class instance. The function creates a NEW System class using deepcopy and modifies this one. The old System instance remains unchanged.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 11-05-2015: </span>Changed input parameters to allow multiple materials.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -102,8 +105,7 @@ and return the resulting System class instance. The function creates a NEW Syste
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>S</strong> (<a class="reference internal" href="yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><em>System</em></a>) &#8211; Optical system.</li>
 <li><strong>pos</strong> (<em>int</em>) &#8211; Position / index of layer into which the needle is inserted (0..N-1).</li>
-<li><strong>M1</strong> (<em>func</em>) &#8211; Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.</li>
-<li><strong>M2</strong> (<em>func</em>) &#8211; Dielectric function 2.</li>
+<li><strong>M</strong> (<em>func</em>) &#8211; Dielectric function of needle to insert.</li>
 <li><strong>d</strong> (<em>float</em>) &#8211; Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).</li>
 </ul>
 </td>

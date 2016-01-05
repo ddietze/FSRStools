@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="raman - Analysis of spontaneous and time-resolved Raman spectra" href="../raman.html" />
-    <link rel="next" title="raman.solvent_subtract" href="raman.solvent_subtract.html" />
+    <link rel="next" title="raman.MM_baseline_correction" href="raman.MM_baseline_correction.html" />
     <link rel="prev" title="raman.baseline_correction" href="raman.baseline_correction.html" /> 
   </head>
   <body role="document">
@@ -40,7 +40,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="raman.solvent_subtract.html" title="raman.solvent_subtract"
+          <a href="raman.MM_baseline_correction.html" title="raman.MM_baseline_correction"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="raman.baseline_correction.html" title="raman.baseline_correction"
@@ -58,8 +58,8 @@
   <p class="topless"><a href="raman.baseline_correction.html"
                         title="previous chapter">raman.baseline_correction</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="raman.solvent_subtract.html"
-                        title="next chapter">raman.solvent_subtract</a></p>
+  <p class="topless"><a href="raman.MM_baseline_correction.html"
+                        title="next chapter">raman.MM_baseline_correction</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -93,7 +93,11 @@
 <dl class="function">
 <dt id="raman.FT_baseline_correction">
 <code class="descclassname">raman.</code><code class="descname">FT_baseline_correction</code><span class="sig-paren">(</span><em>y</em>, <em>cutoff=None</em>, <em>filter='rect'</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.FT_baseline_correction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Automatic baseline correction based on a Fourier high pass filter after removal of regression line. The stopping criterion for the automatic cutoff search is that the incremental change in the sum over squares should be at least one percent.</p>
+<dd><p>Automatic baseline correction based on a Fourier high pass filter after removal of regression line. The stopping criterion for the automatic cutoff search is that the incremental change in the sum over squares should be at least one percent.
+This algorithm is best suited for spectra with dominant baselines and very small Raman features.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 04-01-2016: </span>Changed type of padding to reduce artifacts from Fourier transformation.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -142,7 +146,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="raman.solvent_subtract.html" title="raman.solvent_subtract"
+          <a href="raman.MM_baseline_correction.html" title="raman.MM_baseline_correction"
              >next</a> |</li>
         <li class="right" >
           <a href="raman.baseline_correction.html" title="raman.baseline_correction"

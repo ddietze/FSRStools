@@ -1,0 +1,6 @@
+yeh_tm.System.get_num_layers
+============================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.get_num_layers

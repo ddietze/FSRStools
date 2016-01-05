@@ -35,19 +35,27 @@ An optical system consists of the first (semi-infinite) layer (substrate), the i
    System
    System.add_layer
    System.calculate_T
-   System.get_field_coefficients
-   System.get_intensity_coefficients
-   System.get_field_coefficients_AOI
-   System.get_intensity_coefficients_AOI
    System.get_electric_field
-   System.set_substrate
-   System.set_superstrate
-   System.set_theta
-   System.set_phi
+   System.get_field_coefficients
+   System.get_field_coefficients_AOI
+   System.get_intensity_coefficients
+   System.get_intensity_coefficients_AOI
+   System.get_layer
+   System.get_layers
+   System.get_num_layers
+   System.get_substrate
+   System.get_superstrate
+   System.insert_layer
+   System.invert
+   System.remove_layer
    System.rxx
    System.rxy
    System.ryx
    System.ryy
+   System.set_phi
+   System.set_substrate
+   System.set_superstrate
+   System.set_theta
    System.txx
    System.txy
    System.tyx
@@ -60,8 +68,10 @@ Needle Algorithm
 The following functions provide support for the so-called needle algorithm for automated design of dielectric / metallic multilayer components.
 The algorithm is a simplified version based on Sullivan and Dobrowolski, *Appl. Opt.* **35**, 5484 (1996).
 Given a set of target optical properties and an initial system class with at least one optical layer, the needle algorithm tries to optimize the
-design by varying the thickness of each layer followed by insertion of a very thin layer with different refractive index.
-Currently, the design can only be optimized for one of the following properties: Rxx, Rxy, Ryx, Ryy, Txx, Txy, Tyx, Tyy.
+design by varying the thickness of each layer followed by insertion of a very thin layer with different refractive index. The results are generally better if the starting
+design is already close to the target. Currently, the design can only be optimized for one of the following properties: Rxx, Rxy, Ryx, Ryy, Txx, Txy, Tyx, Tyy.
+
+The only function to be called directly is :py:func:`needle`.
 
 .. autosummary::
    :toctree: pages

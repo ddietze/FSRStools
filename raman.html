@@ -58,12 +58,13 @@
 <li><a class="reference internal" href="#data-import-functions">Data Import Functions</a></li>
 <li><a class="reference internal" href="#data-selection-normalization">Data Selection / Normalization</a></li>
 <li><a class="reference internal" href="#calibration-functions">Calibration Functions</a></li>
+<li><a class="reference internal" href="#frequency-modulated-fsrs-reconstruction-functions">Frequency-Modulated FSRS Reconstruction Functions</a></li>
 <li><a class="reference internal" href="#filtering-snr-improvement-functions">Filtering / SNR Improvement Functions</a></li>
 <li><a class="reference internal" href="#baseline-correction-functions">Baseline Correction Functions</a></li>
 <li><a class="reference internal" href="#solvent-ground-state-subtraction-functions">Solvent / Ground State Subtraction Functions</a></li>
 <li><a class="reference internal" href="#time-zero-functions">Time Zero Functions</a></li>
-<li><a class="reference internal" href="#ta-analysis-functions">TA Analysis Functions</a></li>
 <li><a class="reference internal" href="#peak-fitting-manipulation-functions">Peak Fitting / Manipulation Functions</a></li>
+<li><a class="reference internal" href="#ta-analysis-functions">TA Analysis Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -111,6 +112,14 @@
 <div><ul class="simple">
 <li>Some bug fixes.</li>
 <li>Added more functionality for analyzing TA data, e.g. automated kinetics stripping.</li>
+</ul>
+</div></blockquote>
+<p><em>01-04-2016:</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Changed type of padding in FT_baseline_correction.</li>
+<li>Added moving-median based baseline correction (MM_baseline_correction).</li>
+<li>Added support for analysis of shifted-excitation or frequency-modulated FSRS spectra (<cite>reconstruct_FM_spectrum</cite>).</li>
 </ul>
 </div></blockquote>
 <div class="section" id="data-import-functions">
@@ -182,6 +191,20 @@
 </tbody>
 </table>
 </div>
+<div class="section" id="frequency-modulated-fsrs-reconstruction-functions">
+<h2>Frequency-Modulated FSRS Reconstruction Functions<a class="headerlink" href="#frequency-modulated-fsrs-reconstruction-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.reconstruct_FM_spectrum.html#raman.reconstruct_FM_spectrum" title="raman.reconstruct_FM_spectrum"><code class="xref py py-obj docutils literal"><span class="pre">reconstruct_FM_spectrum</span></code></a>(y,&nbsp;delta[,&nbsp;MMw,&nbsp;...])</td>
+<td>Reconstruct Raman spectrum A from a shifted-excitation of frequency-modulated spectrum A - B.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="filtering-snr-improvement-functions">
 <h2>Filtering / SNR Improvement Functions<a class="headerlink" href="#filtering-snr-improvement-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
@@ -228,6 +251,9 @@
 <tr class="row-even"><td><a class="reference internal" href="pages/raman.FT_baseline_correction.html#raman.FT_baseline_correction" title="raman.FT_baseline_correction"><code class="xref py py-obj docutils literal"><span class="pre">FT_baseline_correction</span></code></a>(y[,&nbsp;cutoff,&nbsp;filter])</td>
 <td>Automatic baseline correction based on a Fourier high pass filter after removal of regression line.</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.MM_baseline_correction.html#raman.MM_baseline_correction" title="raman.MM_baseline_correction"><code class="xref py py-obj docutils literal"><span class="pre">MM_baseline_correction</span></code></a>(y[,&nbsp;w])</td>
+<td>Baseline correction based on a moving median filter.</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -265,29 +291,6 @@
 </tbody>
 </table>
 </div>
-<div class="section" id="ta-analysis-functions">
-<h2>TA Analysis Functions<a class="headerlink" href="#ta-analysis-functions" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pages/raman.bandintegral.html#raman.bandintegral" title="raman.bandintegral"><code class="xref py py-obj docutils literal"><span class="pre">bandintegral</span></code></a>(x,&nbsp;y,&nbsp;x0,&nbsp;x1)</td>
-<td>Calculate the band integral over time dependent data.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/raman.plotTA.html#raman.plotTA" title="raman.plotTA"><code class="xref py py-obj docutils literal"><span class="pre">plotTA</span></code></a>(t,&nbsp;wl,&nbsp;d[,&nbsp;showContour,&nbsp;filename,&nbsp;...])</td>
-<td>Convenience function to generate a fancy TA contour plot using matplotlib&#8217;s <em>contour</em> and <em>contourf</em> functions.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/raman.strip_kinetics.html#raman.strip_kinetics" title="raman.strip_kinetics"><code class="xref py py-obj docutils literal"><span class="pre">strip_kinetics</span></code></a>(y[,&nbsp;Nmax,&nbsp;verbose,&nbsp;tryIRF,&nbsp;...])</td>
-<td>Automatically remove slow kinetics from a (single) TA trace.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/raman.TAFFT.html#raman.TAFFT" title="raman.TAFFT"><code class="xref py py-obj docutils literal"><span class="pre">TAFFT</span></code></a>(t,&nbsp;y[,&nbsp;padlength,&nbsp;wnd])</td>
-<td>Calculate the Fourier transform of a 2d transient absorption signal after stripping of the slow kinetics over the time axis.</td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="section" id="peak-fitting-manipulation-functions">
 <h2>Peak Fitting / Manipulation Functions<a class="headerlink" href="#peak-fitting-manipulation-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
@@ -296,7 +299,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pages/raman.find_peaks.html#raman.find_peaks" title="raman.find_peaks"><code class="xref py py-obj docutils literal"><span class="pre">find_peaks</span></code></a>(y[,&nbsp;wnd,&nbsp;ath,&nbsp;sth,&nbsp;bl,&nbsp;show,&nbsp;sorted])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.find_peaks.html#raman.find_peaks" title="raman.find_peaks"><code class="xref py py-obj docutils literal"><span class="pre">find_peaks</span></code></a>(y[,&nbsp;wnd,&nbsp;ath,&nbsp;sth,&nbsp;bl,&nbsp;useMMBL,&nbsp;...])</td>
 <td>Automated peak finding algorithm based on zero crossings of smoothed derivative as well as on slope and amplitude thresholds.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/raman.pick_peaks.html#raman.pick_peaks" title="raman.pick_peaks"><code class="xref py py-obj docutils literal"><span class="pre">pick_peaks</span></code></a>(x[,&nbsp;y])</td>
@@ -316,6 +319,29 @@
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pages/raman.peak_area.html#raman.peak_area" title="raman.peak_area"><code class="xref py py-obj docutils literal"><span class="pre">peak_area</span></code></a>(y,&nbsp;peaks)</td>
 <td>Returns the area under the spectrum in a given interval after removing a linear baseline.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ta-analysis-functions">
+<h2>TA Analysis Functions<a class="headerlink" href="#ta-analysis-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.bandintegral.html#raman.bandintegral" title="raman.bandintegral"><code class="xref py py-obj docutils literal"><span class="pre">bandintegral</span></code></a>(x,&nbsp;y,&nbsp;x0,&nbsp;x1)</td>
+<td>Calculate the band integral over time dependent data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/raman.plotTA.html#raman.plotTA" title="raman.plotTA"><code class="xref py py-obj docutils literal"><span class="pre">plotTA</span></code></a>(t,&nbsp;wl,&nbsp;d[,&nbsp;showContour,&nbsp;filename,&nbsp;...])</td>
+<td>Convenience function to generate a fancy TA contour plot using matplotlib&#8217;s <em>contour</em> and <em>contourf</em> functions.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/raman.strip_kinetics.html#raman.strip_kinetics" title="raman.strip_kinetics"><code class="xref py py-obj docutils literal"><span class="pre">strip_kinetics</span></code></a>(y[,&nbsp;Nmax,&nbsp;verbose,&nbsp;tryIRF,&nbsp;...])</td>
+<td>Automatically remove slow kinetics from a (single) TA trace.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/raman.TAFFT.html#raman.TAFFT" title="raman.TAFFT"><code class="xref py py-obj docutils literal"><span class="pre">TAFFT</span></code></a>(t,&nbsp;y[,&nbsp;padlength,&nbsp;wnd])</td>
+<td>Calculate the Fourier transform of a 2d transient absorption signal after stripping of the slow kinetics over the time axis.</td>
 </tr>
 </tbody>
 </table>

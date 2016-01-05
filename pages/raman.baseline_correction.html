@@ -94,7 +94,8 @@
 <dt id="raman.baseline_correction">
 <code class="descclassname">raman.</code><code class="descname">baseline_correction</code><span class="sig-paren">(</span><em>y</em>, <em>n0=2</em>, <em>verbose=False</em>, <em>iterate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#raman.baseline_correction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automated baseline removal algorithm. Code is based on Schulze et al., <em>Appl. Spectrosc.</em> <strong>65</strong>, 75 (2011).</p>
-<p>Works better if baseline is more flat at the beginning and end of the spectrum. If divisor is too high, there will be some ringing of the baseline. Sometimes it is better to start with a higher value for n0 to get a good baseline removal, especially when the baseline is wavy and there are strong Raman lines.</p>
+<p>Works better if baseline is more flat at the beginning and end of the spectrum. If divisor is too high, there will be some ringing of the baseline. Sometimes it is better to start with a higher value for n0 to get a good baseline removal, especially when the baseline is wavy and there are strong Raman lines.
+More suited for spectra with dominant Raman lines than <cite>FT_baseline_correction</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

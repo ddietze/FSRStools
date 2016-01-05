@@ -1,0 +1,6 @@
+raman.reconstruct_FM_spectrum
+=============================
+
+.. currentmodule:: raman
+
+.. autofunction:: reconstruct_FM_spectrum
