@@ -12,6 +12,12 @@ A collection of functions to process and analyze Raman spectra. These functions 
    - Some bug fixes.
    - Added more functionality for analyzing TA data, e.g. automated kinetics stripping.
 
+*01-04-2016:*
+
+   - Changed type of padding in FT_baseline_correction.
+   - Added moving-median based baseline correction (MM_baseline_correction).
+   - Added support for analysis of shifted-excitation or frequency-modulated FSRS spectra (`reconstruct_FM_spectrum`).
+
 ..
    This file is part of the FSRStools python module.
 
@@ -529,6 +535,7 @@ def baseline_correction(y, n0=2, verbose=False, iterate=True):
     """Automated baseline removal algorithm. Code is based on Schulze et al., *Appl. Spectrosc.* **65**, 75 (2011).
 
     Works better if baseline is more flat at the beginning and end of the spectrum. If divisor is too high, there will be some ringing of the baseline. Sometimes it is better to start with a higher value for n0 to get a good baseline removal, especially when the baseline is wavy and there are strong Raman lines.
+    More suited for spectra with dominant Raman lines than `FT_baseline_correction`.
 
     :param array y: Input spectrum. If y is a list or a 2d-array of spectra, apply correction to each one.
     :param int n0: Initial divisor for window size, i.e. initial window size is size of spectrum divided by n0. Must be at least 1 (default = 2).
@@ -607,6 +614,11 @@ def baseline_correction(y, n0=2, verbose=False, iterate=True):
 
 def FT_baseline_correction(y, cutoff=None, filter='rect'):
     """Automatic baseline correction based on a Fourier high pass filter after removal of regression line. The stopping criterion for the automatic cutoff search is that the incremental change in the sum over squares should be at least one percent.
+    This algorithm is best suited for spectra with dominant baselines and very small Raman features.
+
+    .. versionchanged:: 04-01-2016
+
+        Changed type of padding to reduce artifacts from Fourier transformation.
 
     :param array y: Input spectrum. If y is a list or a 2d array of spectra, correct all spectra.
     :param int cutoff: Cutoff frequency for high pass filter:
@@ -635,15 +647,19 @@ def FT_baseline_correction(y, cutoff=None, filter='rect'):
         y = y - line(wnx, *popt)
 
         # get FFT - use padding to reduce edge effects
-        ypad = np.pad(y, len(y), mode='reflect', reflect_type='odd')
-        FT = np.fft.rfft(ypad * np.hanning(len(ypad)))
+        Npad = len(y) // 2
+        ypad = np.pad(y, Npad, mode='reflect', reflect_type='odd')
+        FT = np.fft.rfft(ypad)  # no window as function in ypad is periodic
+        # FT = np.fft.rfft(ypad * np.hanning(len(ypad)))
 
         if(cutoff is None):
+            pl.figure()
+            pl.plot(ypad)
             pl.figure()
             pl.plot(np.absolute(FT))
             pl.show()
             sys.exit()
-        elif(cutoff == 0):
+        elif(cutoff <= 0):
             c = 10
             chi20 = 1e8
             chi2 = np.sum(y**2)
@@ -659,7 +675,7 @@ def FT_baseline_correction(y, cutoff=None, filter='rect'):
                 else:
                     FT[0:c] = np.zeros(c)
 
-                y1 = np.fft.irfft(FT)[len(y):2 * len(y)]
+                y1 = np.fft.irfft(FT)[Npad:Npad + len(y)]
 
                 chi20 = chi2
                 chi2 = np.sum(y1**2)
@@ -674,7 +690,35 @@ def FT_baseline_correction(y, cutoff=None, filter='rect'):
             else:
                 FT[0:cutoff] = np.zeros(cutoff)
 
-            return np.fft.irfft(FT)[len(y):2 * len(y)]
+            return np.fft.irfft(FT)[Npad:Npad + len(y)]
+
+
+def MM_baseline_correction(y, w=60):
+    """Baseline correction based on a moving median filter.
+    See Grumstrup et al., *J. Phys. Chem. B* **117**, 8245 (2013) for more details.
+    This filter tends to reduce the peak height and works best as supplement to any of the other baseline correction functions.
+
+    .. versionadded:: 01-04-2016
+
+    :param array y: Input spectrum. If y is a list or a 2d array of spectra, correct all spectra.
+    :param int w: Window size for median filter in indices. Works best for 5x Raman line width.
+    :returns: Baseline corrected spectrum with same shape as y.
+    """
+    if np.array(y).ndim > 1:
+        out = []
+        for sp in y:
+            out.append(MM_baseline_correction(sp, w))
+        return np.array(out)
+    else:
+        Npad = int(w) // 2
+        ypad = np.pad(y, Npad, mode='reflect', reflect_type='odd')
+        N = ypad.size
+
+        yout = ypad.copy()
+        for i in range(Npad, N - Npad):
+            yout[i] = np.median(ypad[i - Npad:i + Npad])
+
+        return y - yout[Npad:-Npad]
 
 
 # -------------------------------------------------------------------------------------------------------------------
@@ -1062,14 +1106,24 @@ def TAFFT(t, y, padlength=4, wnd=np.blackman):
 
 # -------------------------------------------------------------------------------------------------------------------
 # peak fitting functions
-def find_peaks(y, wnd=9, ath=0.01, sth=1.0, bl=25, show=False, sorted=False):
+def find_peaks(y, wnd=9, ath=0.01, sth=1.0, bl=-1, useMMBL=True, show=False, sorted=False):
     """Automated peak finding algorithm based on zero crossings of smoothed derivative as well as on slope and amplitude thresholds.
+
+    .. versionchanged:: 01-04-2016
+
+        Added more control possibilities over the type of baseline removal. Supports now `baseline_correction` and `FT_baseline_correction`, optionally followed
+        by a moving-median filter step.
 
     :param array y: Spectrum.
     :param int wnd: Smoothing window size. Has to be an odd integer (default = 9).
     :param float ath: Amplitude threshold in units of maximum amplitude (default = 0.01).
     :param float sth: Slope threshold in units of estimated noise standard deviation (default = 1.0).
-    :param in bl: Initial window size divisor for automated baseline removal. If None, no baseline removal is performed (default = 25).
+    :param in bl: Control baseline removal.
+
+        - If `bl > 0`: Initial window size divisor for automated baseline removal.
+        - If `bl == None`: No baseline removal is performed.
+        - If `bl == -1`: Perform automated Fourier transform baseline removal (default).
+    :param bool useMMBL: If True, use a moving-median baseline correction following the initial baseline removal (default).
     :param bool show: If True, make a plot showing the extracted peak positions in the spectrum.
     :param bool sorted: If True, return sorted by amplitude (highest first). If False, returns sorted by frequency.
     :returns: A list of peak position *INDICES*, not wavenumbers.
@@ -1078,7 +1132,12 @@ def find_peaks(y, wnd=9, ath=0.01, sth=1.0, bl=25, show=False, sorted=False):
 
     # baseline removal
     if bl is not None:
-        g = baseline_correction(g, bl)
+        if bl > 0:
+            g = baseline_correction(g, bl)
+        else:
+            g = FT_baseline_correction(g, cutoff=-1)
+        if useMMBL:
+            g = MM_baseline_correction(g)
 
     # get derivative of smoothed data
     dg = np.gradient(savitzky_golay(g, wnd, 0))
@@ -1214,16 +1273,17 @@ def get_peak_estimate(x, y, peaks):
 
     # iterate over all guesses and get indices of peaks
     for i in range(len(peaks)):
-        i0.append(np.argmin(np.absolute(x - peaks[i])))
+        i0.append(np.argmin(np.absolute(x - peaks[i])))  # center index
+
+        # get interval containing this peak
         if(i != 0):
             imin.append(np.argmin(np.absolute(x - (peaks[i] + peaks[i - 1]) / 2)))
+        else:
+            imin.append(0)  # np.maximum(0, 2 * i0[-1] - imax[-1]))
         if(i != len(peaks) - 1):
             imax.append(np.argmin(np.absolute(x - (peaks[i] + peaks[i + 1]) / 2)))
-
-        if(i == 0):
-            imin.append(np.maximum(0, 2 * i0[-1] - imax[-1]))
-        if(i == len(peaks) - 1):
-            imax.append(np.maximum(0, 2 * i0[-1] - imin[-1]))
+        else:
+            imax.append(-1)  # np.maximum(0, 2 * i0[-1] - imin[-1]))
 
     # now get the estimates
     for i, _ in enumerate(peaks):
@@ -1255,7 +1315,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds=None, estimate_bl=False, use_popt0=T
     :param int inc_blorder: When fitting the baseline, the order of the polynomial is increased by `inc_blorder` until no further improvement can be achieved (default = 1).
     :param int max_blorder: Maximum permitted order of the baseline polynomial. Set to -1 for no restriction (default).
     :param bool global_opt: If True, attempt a simultaneous fit of baseline AND peaks once a decent fit for each has been found.
-    :returns: The fitted spectrum, same shape as y, and the final peak fit parameters (popt0).
+    :returns: The fitted spectrum, same shape as y, and the final peak fit parameters (popt0). If y is a list or 2d array of spectra, the returned array has the shape [[yfit], [popt]].
     """
     popt_p0 = np.copy(popt0)
 
@@ -1286,7 +1346,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds=None, estimate_bl=False, use_popt0=T
 
         if(estimate_bl):
 
-            err1 = 1e8
+            err1 = np.inf
             while(1):
 
                 y1 = np.copy(y)
@@ -1333,6 +1393,7 @@ def fit_peaks(x, y, popt0, fit_func, bounds=None, estimate_bl=False, use_popt0=T
             elif bounds is not None:
                 pcov_p = np.zeros((len(popt0), len(popt0)))
         else:
+            popt_p = np.copy(popt_p0)
             popt_p, pcov_p = curve_fit(fit_func, x, y, popt_p)
 
         print("Peak fit parameters:")
@@ -1375,3 +1436,59 @@ def peak_area(y, peaks):
         p = peaks[i]
         areas[i] = simps(y[p[0] + 1:p[1]] - ((y[p[1]] - y[p[0]]) * (np.arange(p[0] + 1, p[1]) - p[0]) / (p[1] - p[0]) + y[p[0]]))
     return areas
+
+
+# -------------------------------------------------------------------------------------------------------------------
+# FM modulated FSRS stuff
+def reconstruct_FM_spectrum(y, delta, MMw=0, bDenoise=False, blOrder=4):
+    """Reconstruct Raman spectrum A from a shifted-excitation of frequency-modulated spectrum A - B.
+
+    This algorithm is adapted from Grumstrup et al., *J. Phys. Chem. B* **117**, 8245 (2013).
+
+    .. note:: The difference frequency spectrum y has to be sampled equidistantly, i.e., apply :py:func:`interpolate` before taking the difference.
+
+    .. versionadded:: 01-04-2016
+
+    :param array y: Difference spectrum A-B.
+    :param int delta: Index shift between the two spectra. Has to be positive and nu(A) < nu(B).
+    :param int MMw: Window size for moving-median filter (use 5x delta when 0, default).
+    :param bool bDenoise: If True, apply a denoise step before returning the result.
+    :param int blOrder: Polynomial order for baseline removal (default = 4).
+    :returns: Reconstructed spectrum with same shape as y.
+    """
+    # 1. baseline removal by fitting with polynomial
+    popt, _ = ft.curve_fit(ft.poly, np.arange(len(y)), y, np.zeros(blOrder))
+    y = y - ft.poly(np.arange(len(y)), *popt)
+
+    # 2. sum up
+    y1 = np.zeros(len(y))
+    for i, _ in enumerate(y1):
+        y1[i] = y[i]
+        if i >= delta:
+            y1[i] += y1[i - delta]
+
+    # 3. apply FT notch filter
+    Npad = len(y1) // 2
+    ypad = np.pad(y1, Npad, mode='reflect', reflect_type='odd')
+    FT = np.fft.fft(ypad * np.hamming(len(ypad)))
+    alpha = 1.0
+    beta = delta
+    f0 = int(len(FT) / delta)
+
+    N = int(round(len(FT) / float(f0)))
+    w = np.ones(len(FT))
+    nu = np.arange(len(FT))
+    for i in range(1, N):
+        w = w * (1.0 - 0.5 * (np.tanh((nu - (f0 * i - beta)) / alpha) + np.tanh(((f0 * i + beta) - nu) / alpha)))
+    FT = FT * w
+    y2 = np.fft.ifft(FT)[Npad:Npad + len(y1)]
+
+    # 4. apply moving-median filter and maybe smoothing
+    if MMw <= 1:
+        MMw = 5 * delta
+    y3 = MM_baseline_correction(y2, w=MMw)
+
+    if bDenoise:
+        y3 = denoise(y3)
+
+    return y3

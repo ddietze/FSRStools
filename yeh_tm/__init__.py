@@ -174,15 +174,15 @@ class Layer:
         self.d = thickness
 
         # dielectric tensor in crystal frame
-        if(epsilon1 != None):
+        if(epsilon1 is not None):
             self.fepsilon1 = epsilon1
         else:
             self.fepsilon1 = evacuum
         self.fepsilon2 = epsilon2
         self.fepsilon3 = epsilon3
-        if(self.fepsilon2 == None):
+        if(self.fepsilon2 is None):
             self.fepsilon2 = self.fepsilon1
-        if(self.fepsilon3 == None):
+        if(self.fepsilon3 is None):
             self.fepsilon3 = self.fepsilon1
 
         # this variable tells us whether propagation through this layer should be handled coherently or not
@@ -192,15 +192,15 @@ class Layer:
 
         # euler matrix for rotation of dielectric tensor
         self.euler = np.identity(3, dtype=np.complex128)
-        self.euler[0,0] = np.cos(psi) * np.cos(phi) - np.cos(theta) * np.sin(phi) * np.sin(psi)
-        self.euler[0,1] = -np.sin(psi) * np.cos(phi) - np.cos(theta) * np.sin(phi) * np.cos(psi)
-        self.euler[0,2] = np.sin(theta) * np.sin(phi)
-        self.euler[1,0] = np.cos(psi) * np.sin(phi) + np.cos(theta) * np.cos(phi) * np.sin(psi)
-        self.euler[1,1] = -np.sin(psi) * np.sin(phi) + np.cos(theta) * np.cos(phi) * np.cos(psi)
-        self.euler[1,2] = -np.sin(theta) * np.cos(phi)
-        self.euler[2,0] = np.sin(theta) * np.sin(psi)
-        self.euler[2,1] = np.sin(theta) * np.cos(psi)
-        self.euler[2,2] = np.cos(theta)
+        self.euler[0, 0] = np.cos(psi) * np.cos(phi) - np.cos(theta) * np.sin(phi) * np.sin(psi)
+        self.euler[0, 1] = -np.sin(psi) * np.cos(phi) - np.cos(theta) * np.sin(phi) * np.cos(psi)
+        self.euler[0, 2] = np.sin(theta) * np.sin(phi)
+        self.euler[1, 0] = np.cos(psi) * np.sin(phi) + np.cos(theta) * np.cos(phi) * np.sin(psi)
+        self.euler[1, 1] = -np.sin(psi) * np.sin(phi) + np.cos(theta) * np.cos(phi) * np.cos(psi)
+        self.euler[1, 2] = -np.sin(theta) * np.cos(phi)
+        self.euler[2, 0] = np.sin(theta) * np.sin(psi)
+        self.euler[2, 1] = np.sin(theta) * np.cos(psi)
+        self.euler[2, 2] = np.cos(theta)
 
     def calculate_epsilon(self, w):
         """Calculate the dielectric tensor for given frequency w. Stores the result in `self.epsilon`, which can be used for repeated access.
@@ -209,13 +209,13 @@ class Layer:
         :returns: Dielectric tensor (4x4).
         """
         # get epsilon for given frequency in crystal frame
-        if(self.fepsilon1 == None):
+        if(self.fepsilon1 is None):
             epsilon0 = np.identity(3, dtype=np.complex128)
         else:
-            epsilon0 = np.zeros((3,3), dtype=np.complex128)
-            epsilon0[0,0] = self.fepsilon1(w)
-            epsilon0[1,1] = self.fepsilon2(w)
-            epsilon0[2,2] = self.fepsilon3(w)
+            epsilon0 = np.zeros((3, 3), dtype=np.complex128)
+            epsilon0[0, 0] = self.fepsilon1(w)
+            epsilon0[1, 1] = self.fepsilon2(w)
+            epsilon0[2, 2] = self.fepsilon3(w)
 
         # rotate dielectric tensor to lab frame
         self.epsilon = np.dot(np.linalg.pinv(self.euler), np.dot(epsilon0, self.euler))
@@ -235,7 +235,7 @@ class Layer:
         p[0] = w**2 * self.epsilon[2,2]
         p[1] = w**2 * self.epsilon[2,0] * a + b * w**2 * self.epsilon[2,1] + a * w**2 * self.epsilon[0,2] + w**2 * self.epsilon[1,2] * b
         p[2] = w**2 * self.epsilon[0,0] * a**2 + w**2 * self.epsilon[1,0] * b * a - w**4 * self.epsilon[0,0] * self.epsilon[2,2] + w**2 * self.epsilon[1,1] * b**2 + w**4 * self.epsilon[1,2] * self.epsilon[2,1] + b**2 * w**2 * self.epsilon[2,2] + w**4 * self.epsilon[2,0] * self.epsilon[0,2] + a**2 * w**2 * self.epsilon[2,2] + a * w**2 * self.epsilon[0,1] * b - w**4 * self.epsilon[1,1] * self.epsilon[2,2]
-        p[3] =  - w**4 * self.epsilon[0,0] * self.epsilon[1,2] * b + w**2 * self.epsilon[2,0] * a * b**2 - w**4 * self.epsilon[0,0] * b * self.epsilon[2,1] - a * w**4 * self.epsilon[1,1] * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * b * self.epsilon[0,2] + a**2 * b * w**2 * self.epsilon[1,2] + a**3 * w**2 * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * self.epsilon[2,1] * a + b**3 * w**2 * self.epsilon[2,1] + a * b**2 * w**2 * self.epsilon[0,2] - w**4 * self.epsilon[2,0] * self.epsilon[1,1] * a + b**3 * w**2 * self.epsilon[1,2] + w**4 * self.epsilon[2,0] * self.epsilon[0,1] * b + w**2 * self.epsilon[2,0] * a**3 + a**2 * b * w**2 * self.epsilon[2,1] + a * w**4 * self.epsilon[0,1] * self.epsilon[1,2]
+        p[3] = -w**4 * self.epsilon[0,0] * self.epsilon[1,2] * b + w**2 * self.epsilon[2,0] * a * b**2 - w**4 * self.epsilon[0,0] * b * self.epsilon[2,1] - a * w**4 * self.epsilon[1,1] * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * b * self.epsilon[0,2] + a**2 * b * w**2 * self.epsilon[1,2] + a**3 * w**2 * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * self.epsilon[2,1] * a + b**3 * w**2 * self.epsilon[2,1] + a * b**2 * w**2 * self.epsilon[0,2] - w**4 * self.epsilon[2,0] * self.epsilon[1,1] * a + b**3 * w**2 * self.epsilon[1,2] + w**4 * self.epsilon[2,0] * self.epsilon[0,1] * b + w**2 * self.epsilon[2,0] * a**3 + a**2 * b * w**2 * self.epsilon[2,1] + a * w**4 * self.epsilon[0,1] * self.epsilon[1,2]
         p[4] = w**6 * self.epsilon[2,0] * self.epsilon[0,1] * self.epsilon[1,2] - w**6 * self.epsilon[2,0] * self.epsilon[1,1] * self.epsilon[0,2] + w**4 * self.epsilon[2,0] * a**2 * self.epsilon[0,2] + w**6 * self.epsilon[0,0] * self.epsilon[1,1] * self.epsilon[2,2] - w**4 * self.epsilon[0,0] * self.epsilon[1,1] * a**2 - w**4 * self.epsilon[0,0] * self.epsilon[1,1] * b**2 - w**4 * self.epsilon[0,0] * a**2 * self.epsilon[2,2] + w**2 * self.epsilon[0,0] * a**2 * b**2 - w**6 * self.epsilon[0,0] * self.epsilon[1,2] * self.epsilon[2,1] - b**2 * w**4 * self.epsilon[1,1] * self.epsilon[2,2] + b**2 * w**2 * self.epsilon[1,1] * a**2 + b**2 * w**4 * self.epsilon[1,2] * self.epsilon[2,1] + w**6 * self.epsilon[1,0] * self.epsilon[2,1] * self.epsilon[0,2] - w**6 * self.epsilon[1,0] * self.epsilon[0,1] * self.epsilon[2,2] + w**4 * self.epsilon[1,0] * self.epsilon[0,1] * a**2 + w**4 * self.epsilon[1,0] * self.epsilon[0,1] * b**2 + w**2 * self.epsilon[1,0] * a**3 * b + w**2 * self.epsilon[1,0] * a * b**3 + a**3 * b * w**2 * self.epsilon[0,1] + a * b**3 * w**2 * self.epsilon[0,1] - w**4 * self.epsilon[1,0] * a * b * self.epsilon[2,2] + a * b * w**4 * self.epsilon[2,1] * self.epsilon[0,2] - a * b * w**4 * self.epsilon[0,1] * self.epsilon[2,2] + w**4 * self.epsilon[2,0] * a * b * self.epsilon[1,2] + w**2 * self.epsilon[0,0] * a**4 + b**4 * w**2 * self.epsilon[1,1]
 
         # the four solutions for the g's are obtained by numerically solving the polynomial equation
@@ -243,22 +243,23 @@ class Layer:
         self.g = np.roots(p)
 
         # force all roots to have the same sign for real and imaginary parts
-        self.g = np.where( np.sign(np.real(self.g)) != np.sign(np.imag(self.g)), np.conj(self.g), self.g )
+        self.g = np.where(np.sign(np.real(self.g)) != np.sign(np.imag(self.g)), np.conj(self.g), self.g)
 
         # some cleaning
-        self.g = np.where( np.absolute(np.imag(self.g)) > 1e-6, self.g, np.real(self.g) )
+        self.g = np.where(np.absolute(np.imag(self.g)) > 1e-6, self.g, np.real(self.g))
 
         # sort the solution in two steps:
         # first, sort according to the sign of Re(g) +,-,+,-
         # second, sort for polarization; this is done in the next step (calculate_p_q)
         for i in range(4):
-            if( np.sign(np.real(self.g[i])) == np.power(-1, i+1) ): # wrong sign
-                for j in range(i+1, 4):
+            if(np.sign(np.real(self.g[i])) == np.power(-1, i + 1)):  # wrong sign
+                for j in range(i + 1, 4):
                     if(np.sign(np.real(self.g[i])) != np.sign(np.real(self.g[j]))):
                         self.g[i], self.g[j] = self.g[j], self.g[i]         # swap values
                         break                                               # break j-for loop
 
         return self.g.copy()
+
 
     def calculate_p_q(self, w, a, b):
         """Calculate the electric and magnetic polarization vectors p and q for the four solutions of `self.g`.
@@ -339,6 +340,7 @@ class Layer:
 
         return [self.p.copy(), self.q.copy()]
 
+
     # calculate the dynamic matrix and its inverse
     def calculate_D(self):
         """Calculate the dynamic matrix and its inverse using the previously calculated values for p and q.
@@ -368,6 +370,7 @@ class Layer:
 
         return [self.D.copy(), self.Di.copy()]
 
+
     # calculate the propagation matrix
     def calculate_P(self):
         """Calculate the propagation matrix using the previously calculated values for g.
@@ -378,6 +381,7 @@ class Layer:
         """
         self.P = np.diag(np.exp(-1j * self.g * self.d))
         return self.P.copy()
+
 
     # calculate the layer transfer matrix
     def calculate_T(self, calculateDP = True):
@@ -395,6 +399,7 @@ class Layer:
 
         self.T = np.dot(self.D, np.dot(self.P, self.Di))
         return self.T.copy()
+
 
     # shortcut that can be used when the wavelength is changed; can be called directly after __init__()
     # uses the frequency w, and in-plane propagation constants a and b to recalculate all layer properties
@@ -414,6 +419,7 @@ class Layer:
         self.calculate_T()
         return [self.D.copy(), self.Di.copy(), self.P.copy(), self.T.copy()]
 
+
 # ******************************************************************************************************************************* #
 # system class
 # this is the actual interface for calculations
@@ -430,7 +436,7 @@ class System:
 
     .. important:: The frequency w which is used for the calculations is actually the wavenumber in vacuum, i.e. :math:`w = \\frac{2\\pi}{\\lambda}`.
     """
-    c = 1 #: speed of light in vacuum
+    c = 1  #: speed of light in vacuum
 
     # these are the first (semiinfinite) layer, central layers and last (semiinfinite) layer
     # the superstrate is assumed to be isotropic (!) and only the x,x component of the dielectric tensor
@@ -439,7 +445,7 @@ class System:
     # theta and phi are the angles (in deg) of incidence relative to the z-axis and the rotation of the system relative to
     # the x-axis that are used to calculate the in-plane propagation constants a, b
     # the frequency w is actually wavevector in vacuum, i.e. w = 2 Pi / lambda
-    def __init__(self, theta = 0.0, phi = 0.0, substrate = None, superstrate = None, layers = []):
+    def __init__(self, theta=0.0, phi=0.0, substrate=None, superstrate=None, layers=[]):
 
         self.layers = []
         if(len(layers) > 0):
@@ -462,35 +468,42 @@ class System:
         else:
             self.superstrate = Layer()
 
+
     def set_substrate(self, S):
         """Set the substrate to S.
         """
         self.substrate = np.copy(S)
+
 
     def set_superstrate(self, S):
         """Set the superstrate to S.
         """
         self.superstrate = np.copy(S)
 
+
     def get_substrate(self):
         """Returns the substrate layer class.
         """
         return self.substrate
+
 
     def get_superstrate(self):
         """Returns the superstrate layer class.
         """
         return self.superstrate
 
+
     def set_theta(self, theta):
         """Set angle of incidence to theta (in deg).
         """
         self.theta = theta * np.pi / 180.0
 
+
     def set_phi(self, phi):
         """Set rotation of sample around the z-axis (in deg).
         """
         self.phi = phi * np.pi / 180.0
+
 
     # layers have to be added from substrate to superstrate!!; the beam is assumed incident from the superstrate!!
     def add_layer(self, L):
@@ -500,15 +513,18 @@ class System:
         """
         self.layers.append(L)
 
+
     def get_layers(self):
         """Returns the list of layers.
         """
         return self.layers
 
+
     def get_num_layers(self):
         """Returns the number of layers in the stack.
         """
         return len(self.layers)
+
 
     def get_layer(self, pos):
         """Returns the layer specified by position.
@@ -520,6 +536,7 @@ class System:
         else:
             return None
 
+
     def insert_layer(self, L, pos):
         """Insert a layer at a given position.
 
@@ -528,6 +545,7 @@ class System:
         """
         self.layers.insert(max(min(len(self.layers), pos), 0), L)
 
+
     def remove_layer(self, pos):
         """Removes the layer at a given position.
 
@@ -535,6 +553,14 @@ class System:
         """
         if pos >= 0 and pos < len(self.layers):
             self.layers.pop(pos)
+
+
+    def invert(self):
+        """Inverts the layer sequence and also exchanges substrate and superstrate.
+        """
+        self.substrate, self.superstrate = self.superstrate, self.substrate
+        self.layers.reverse()
+
 
     # calculate system transfer matrix for given frequency w
     def calculate_T(self, w):
@@ -599,6 +625,7 @@ class System:
 
         return self.T.copy()
 
+
     # reflection and transmission coefficients
     def rxx(self):
         """Returns the x,x component of the field reflection coefficient (incident x, reflected x).
@@ -607,12 +634,14 @@ class System:
         """
         return np.nan_to_num((self.T[1,0] * self.T[2,2] - self.T[1,2] * self.T[2,0])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
 
+
     def rxy(self):
         """Returns the x,y component of the field reflection coefficient (incident x, reflected y).
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
         return np.nan_to_num((self.T[3,0] * self.T[2,2] - self.T[3,2] * self.T[2,0])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+
 
     def ryx(self):
         """Returns the y,x component of the field reflection coefficient (incident y, reflected x).
@@ -621,12 +650,14 @@ class System:
         """
         return np.nan_to_num((self.T[0,0] * self.T[1,2] - self.T[1,0] * self.T[0,2])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
 
+
     def ryy(self):
         """Returns the y,y component of the field reflection coefficient (incident y, reflected y).
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
         return np.nan_to_num((self.T[0,0] * self.T[3,2] - self.T[3,0] * self.T[0,2])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+
 
     def txx(self):
         """Returns the x,x component of the field transmission coefficient (incident x, transmitted x).
@@ -635,12 +666,14 @@ class System:
         """
         return np.nan_to_num(self.T[2,2]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
 
+
     def txy(self):
         """Returns the x,y component of the field transmission coefficient (incident x, transmitted y).
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
         return np.nan_to_num(-self.T[2,0]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+
 
     def tyx(self):
         """Returns the y,x component of the field transmission coefficient (incident y, transmitted x).
@@ -649,12 +682,14 @@ class System:
         """
         return np.nan_to_num(-self.T[0,2]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
 
+
     def tyy(self):
         """Returns the y,y component of the field transmission coefficient (incident y, transmitted x).
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
         return np.nan_to_num(self.T[0,0]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+
 
     def get_field_coefficients(self, w):
         """Shortcut to calculate all reflection / transmission coefficients as function of frequency w.
@@ -683,6 +718,7 @@ class System:
             tyy[i] = self.tyy()
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
+
 
     # shortcut to calculate all transmittance / reflectance terms as function of frequency w - this time a numpy.array
     def get_intensity_coefficients(self, w):
@@ -714,6 +750,7 @@ class System:
             tyy[i] = np.real(self.substrate.g[2] / self.superstrate.g[2]) * np.absolute(self.tyy())**2
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
+
 
     # shortcut to calculate all reflection / transmission coefficients as function of incidence angle AOI for given
     # frequency w; AOI is a numpy array
@@ -750,6 +787,7 @@ class System:
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
+
     # same for intensities
     def get_intensity_coefficients_AOI(self, w, AOI):
         """Shortcut to calculate all intensity reflectance / transmittance terms as function of angle of incidence.
@@ -784,7 +822,8 @@ class System:
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
-    def get_electric_field(self, w, dz, pol=(1,0), x = 0.0, y = 0.0):
+
+    def get_electric_field(self, w, dz, pol=(1, 0), x = 0.0, y = 0.0):
         """Calculate the electric field profile for a given frequency.
 
         The z-axis range is taken according to the total thickness of the layer stack plus the thicknesses of substrate and superstrate.
@@ -839,7 +878,7 @@ class System:
             An[-1] = np.dot(T, An[-2])
         else:
             zn[1] = 0.0
-            #T = np.dot(self.superstrate.Di, np.dot(self.substrate.D, self.substrate.P))
+            # T = np.dot(self.superstrate.Di, np.dot(self.substrate.D, self.substrate.P))
             T = np.dot(self.superstrate.Di, self.substrate.D)
             An[1] = np.dot(T, An[0])
 
@@ -850,7 +889,7 @@ class System:
         z = np.arange(-self.superstrate.d, zn[0] + self.substrate.d, dz)
         E = np.zeros((len(z), 3), dtype=np.complex128)
 
-        current_layer = N+1
+        current_layer = N + 1
 
         # calculate the field distribution
         for i in range(len(z)):
@@ -861,7 +900,7 @@ class System:
 
             if current_layer == 0:
                 L = self.substrate
-            elif current_layer == N+1:
+            elif current_layer == N + 1:
                 L = self.superstrate
             else:
                 L = self.layers[current_layer - 1]
@@ -891,7 +930,69 @@ def get_merit(S, w, Q, dQ=0.01, Qid=4):
     return np.sqrt(np.mean(((QS - Q) / dQ)**2))
 
 
-def optimize_thicknesses(S, w, Q, dQ=0.01, Qid=4, keep_first_fixed=True):
+def optimize_thicknesses(S, w, Q, dQ=0.01, Qid=4, dmin=0.001, keep_first_fixed=True, MAXit=10):
+    """Optimize the thicknesses of each layer to minimize the merit function.
+    The algorithm uses a parabolic approximation of the merit function and optimizes
+    one layer thickness at a time.
+
+    :param System S: Optical system containing the layer stack.
+    :param array w: List of frequencies where a target is specified.
+    :param array Q: List of target values at the given frequencies (same shape as w).
+    :param float dQ: Allowed design tolerance of the target (in absolute units).
+    :param int Qid: Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).
+    :param float dmin: Minimum layer thickness and thickness increment (default = 1nm).
+    :param bool keep_first_fixed: Set to True if first layer should not be modified.
+    :param int MAXit: Maximum number of iterations (default = 10).
+    :returns: Value of merit function.
+    """
+    if S is None:
+        return S
+
+    SO = copy.deepcopy(S)
+
+    # minimization function, x is list of layer thicknesses
+    def minfunc(x):
+        """Return error function for given layer thicknesses.
+        """
+        for i, d in enumerate(x):
+            SO.get_layer(i + int(keep_first_fixed)).d = d
+        return get_merit(SO, w, Q, dQ, Qid)
+
+    def get_vertex(x1, y1, x2, y2, x3, y3):
+        """Return vertex (x, y) of a parabola through the three points given by x1, y1 -- x3, y3.
+        """
+        denom = (x1 - x2) * (x1 - x3) * (x2 - x3)
+        A = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom
+        B = (x3**2 * (y1 - y2) + x2**2 * (y3 - y1) + x1**2 * (y2 - y3)) / denom
+        xv = -B / (2.0 * A)
+        return xv
+
+    # get initial thicknesses as list
+    x0 = np.array([L.d for i, L in enumerate(SO.get_layers()[int(keep_first_fixed):])])
+    dx = np.identity(len(x0)) * dmin
+
+    for j in range(MAXit):
+        # optimize each layer's thickness, one step at a time
+        for i, _ in enumerate(x0):
+            e0 = minfunc(x0)
+            ep = minfunc(x0 + dx[i])
+            em = minfunc(np.maximum(dmin, x0 - dx[i]))
+            x0[i] = get_vertex((x0 + dx[i])[i], ep, x0[i], e0, (x0 - dx[i])[i], em)
+            x0 = np.maximum(dmin, (x0 // dmin) * dmin)
+        if e0 < 1.0:
+            break
+
+    # apply new thicknesses
+    print "========================================="
+    print "New thicknesses:"
+    for i, d in enumerate(x0):
+        SO.get_layer(i + int(keep_first_fixed)).d = d
+        print "Layer %d: thickness = %f" % (i + int(keep_first_fixed), d)
+    print "========================================="
+    return SO
+
+
+def optimize_thicknesses_scipy(S, w, Q, dQ=0.01, Qid=4, keep_first_fixed=True):
     """Optimize the thicknesses of each layer to minimize the merit function.
     The algorithm uses a simple Newton optimization.
 
@@ -903,8 +1004,10 @@ def optimize_thicknesses(S, w, Q, dQ=0.01, Qid=4, keep_first_fixed=True):
     :param bool keep_first_fixed: Set to True if first layer should not be modified.
     :returns: Value of merit function.
     """
-    SO = copy.deepcopy(S)
+    if S is None:
+        return S
 
+    SO = copy.deepcopy(S)
 
     # minimization function, x is list of layer thicknesses
     def minfunc(x):
@@ -914,7 +1017,8 @@ def optimize_thicknesses(S, w, Q, dQ=0.01, Qid=4, keep_first_fixed=True):
 
     # get initial thicknesses as list
     x0 = [L.d for i, L in enumerate(SO.get_layers()[int(keep_first_fixed):])]
-    bnds = [(0, None) for _ in x0]
+    bnds = [(0.0005, 1.0) for _ in x0]
+
     # minimize the merit function by changing layer thicknesses
     x = sp.minimize(minfunc, x0, bounds=bnds).x
     # apply new thicknesses
@@ -927,28 +1031,28 @@ def optimize_thicknesses(S, w, Q, dQ=0.01, Qid=4, keep_first_fixed=True):
     return SO
 
 
-def insert_needle(S, pos, M1, M2, d=1e-2):
+def insert_needle(S, pos, M, d=1e-2):
     """Insert a needle, i.e., a very thin layer with different refractive index into the center of the layer at a given position
     and return the resulting System class instance. The function creates a NEW System class using deepcopy and modifies this one. The old System instance remains unchanged.
 
+    .. versionchanged:: 11-05-2015
+       Changed input parameters to allow multiple materials.
+
     :param System S: Optical system.
     :param int pos: Position / index of layer into which the needle is inserted (0..N-1).
-    :param func M1: Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.
-    :param func M2: Dielectric function 2.
+    :param func M: Dielectric function of needle to insert.
     :param float d: Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).
     :returns: New System class.
     """
     SN = copy.deepcopy(S)
     L0 = SN.get_layer(pos)
     if L0 is not None:
-        if L0.fepsilon1 is M1:
-            neps = M2
-        else:
-            neps = M1
-        L0.d = L0.d / 2.0
+        if L0.fepsilon1 == M:       # do nothing if material is equal
+            return SN
 
+        L0.d = (L0.d - d) / 2.0       # otherwise split the original layer
         SN.insert_layer(copy.deepcopy(L0), pos + 1)
-        SN.insert_layer(Layer(epsilon1=neps, thickness=d), pos + 1)
+        SN.insert_layer(Layer(epsilon1=M, thickness=d), pos + 1)
     return SN
 
 
@@ -988,14 +1092,16 @@ def remove_all_needles(S, dmin=1e-4):
     return S
 
 
-def optimized_insert_needle(S, w, Q, M1, M2, d=1e-2, dQ=0.01, Qid=4, keep_first_fixed=True):
+def optimized_insert_needle(S, w, Q, eps, d=1e-2, dQ=0.01, Qid=4, keep_first_fixed=True):
     """Insert a needle in the Layer stack at the optimum position by comparing the merit functions of all combinations.
+
+    .. versionchanged:: 11-05-2015
+       Changed input parameters to allow multiple materials.
 
     :param System S: Optical system containing the layer stack.
     :param array w: List of frequencies where a target is specified.
     :param array Q: List of target values at the given frequencies (same shape as w).
-    :param func M1: Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.
-    :param func M2: Dielectric function 2.
+    :param array eps: List of possible dielectric functions to choose from. The needle will use the one giving the best improvement in merit.
     :param float d: Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).
     :param float dQ: Allowed design tolerance of the target (in absolute units).
     :param int Qid: Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).
@@ -1006,54 +1112,68 @@ def optimized_insert_needle(S, w, Q, M1, M2, d=1e-2, dQ=0.01, Qid=4, keep_first_
     positions = range(S.get_num_layers())[int(keep_first_fixed):]
 
     # list of merit function values
-    M = np.zeros(len(positions))
     M0 = get_merit(S, w, Q, dQ, Qid)
+    M = np.ones(len(positions)) * M0
+    Meps = np.zeros(len(positions), dtype=int)
 
     # get merit values for all layers
-    for i, pos in enumerate(positions):
-        SN = insert_needle(S, pos, M1, M2, d)
-        M[i] = get_merit(SN, w, Q, dQ, Qid)
+    for i, pos in enumerate(positions):                     # iterate all positions
+        for j, f0 in enumerate(eps):                        # iterate all materials
+            SN = insert_needle(S, pos, f0, d)
+            if SN.get_num_layers() > S.get_num_layers():    # if inserted, check merit
+                Mtmp = get_merit(SN, w, Q, dQ, Qid)
+                if Mtmp <= M[i]:                             # if better than previously stored, change
+                    M[i] = Mtmp
+                    Meps[i] = j
 
     # retain the one with the lowest merit function if its value is below the initial one
     i1 = np.argmin(M)
-#    if M[i1] < M0:
-    return insert_needle(S, positions[i1], M1, M2, d)
-#    return S
+    if M[i1] < M0:
+        return insert_needle(S, positions[i1], eps[Meps[i1]], d)
+    else:
+        return copy.deepcopy(S)
 
 
-def needle(S, w, Q, M1, M2, d=1e-2, dQ=0.01, Qid=4, keep_first_fixed=True, max_num_layers=100, max_num_iterations=100, min_layer_thickness=1e-3, min_merit=1e-4):
+def needle(S, w, Q, eps, d=1e-2, dQ=0.01, Qid=4, keep_first_fixed=True, max_num_layers=100, max_num_iterations=10, min_layer_thickness=1e-3):
     """Simplified implementation of the needle algorithm for thin film design. See Appl. Opt. 35, 5484 (1996) for details.
     This is the only function to be called directly by the user. Given an initial layer stack and some target values, the algorithm tries to replicate the target by insertion of additional layers and thickness optimization.
+
+    .. versionchanged:: 11-05-2015
+       Changed input parameters to allow multiple materials.
 
     :param System S: Initial optical system containing the layer stack.
     :param array w: List of frequencies where a target is specified.
     :param array Q: List of target values at the given frequencies (same shape as w).
-    :param func M1: Dielectric function 1. The needle will use either M1 or M2 depending on the dielectric function of the host layer.
-    :param func M2: Dielectric function 2.
+    :param array eps: List of possible dielectric functions to choose from (min 2).
     :param float d: Thickness of the needle layer. Usually around 10nm (default 0.01 assumes units are um).
     :param float dQ: Allowed design tolerance of the target (in absolute units).
     :param int Qid: Identifier of the quantity that should be used for calculation of the merit function. (0 = Rxx, ..., 7 = Tyy).
     :param bool keep_first_fixed: Set to True if first layer should not be modified.
     :param int max_num_layers: Maximum number of layers permitted (default 100).
-    :param int max_num_iterations: Maximum number of iterations (default 100).
+    :param int max_num_iterations: Maximum number of iterations (default 10).
     :param float min_layer_thickness: Minimum thickness of a layer. If, after thickness optimization, a layer turns out thinner, it is discarded and the resulting stack simplified (default 1e-3, i.e. 1nm assuming units are um).
-    :param float min_merit: Threshold value for merit function to be reached for convergence (default 1e-4).
     :returns: System class instance with optimized design.
     """
-    SO = optimize_thicknesses(S, w, Q, dQ, Qid, keep_first_fixed)
-    ME0 = get_merit(SO, w, Q, dQ, Qid)
+    # SO = optimize_thicknesses_scipy(SN, w, Q, dQ, Qid, keep_first_fixed)
+    # SO = optimize_thicknesses(S, w, Q, dQ, Qid, min_layer_thickness / 2.0, keep_first_fixed, max_num_iterations)
+    ME0 = get_merit(S, w, Q, dQ, Qid)
     print "Initial merit = %f" % ME0
+    SO = optimize_thicknesses_scipy(S, w, Q, dQ, Qid, keep_first_fixed)
+    # SO = optimize_thicknesses(S, w, Q, dQ, Qid, min_layer_thickness / 2.0, keep_first_fixed, max_num_iterations)
+    ME0 = get_merit(SO, w, Q, dQ, Qid)
+    print "Initial merit, thickness opt. = %f" % ME0
 
     for i in range(max_num_iterations):
         print "iteration %d" % i
 
         # insert needle
         print " .. insert needle"
-        SN = optimized_insert_needle(SO, w, Q, M1, M2, d, dQ, Qid, keep_first_fixed)
+        SN = optimized_insert_needle(SO, w, Q, eps, d, dQ, Qid, keep_first_fixed)
 
         # optimize thicknesses first
         print " .. optimize thicknesses"
-        SN = optimize_thicknesses(SN, w, Q, dQ, Qid, keep_first_fixed)
+        SN = optimize_thicknesses_scipy(SN, w, Q, dQ, Qid, keep_first_fixed)
+        # SN = optimize_thicknesses(SN, w, Q, dQ, Qid, min_layer_thickness / 2.0, keep_first_fixed, max_num_iterations)
 
         # remove too thin layers
         SN = remove_all_needles(SN, min_layer_thickness)
@@ -1061,15 +1181,15 @@ def needle(S, w, Q, M1, M2, d=1e-2, dQ=0.01, Qid=4, keep_first_fixed=True, max_n
         # if no improvement of merit function was achieved, break
         ME1 = get_merit(SN, w, Q, dQ, Qid)
         print " .. new merit = %f" % ME1
-        if ME1 >= ME0 and i > 3:
+        if ME1 >= ME0:  # and i > 3:
             break
 
         # assign new System class
-        SO = SN
+        SO = copy.deepcopy(SN)
         ME0 = ME1
 
         # if current merit function value is below threshold, break
-        if ME0 <= min_merit:
+        if ME0 <= 1.0:
             break
 
         # check number of layers before next iteration

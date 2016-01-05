@@ -53,7 +53,7 @@ def load_data(filename, **argv):
 def dN(N, wl, *args):
     """First order derivative of the refractive index as function of wavelength using first-order finite difference.
 
-    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, *args).
+    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, args).
     :param array wl: Wavelenth axis in um (can also be a single float).
     :param mixed args: Variable number of arguments to be provided to N.
     :returns: First order derivative of N with same shape as wl.
@@ -65,7 +65,7 @@ def dN(N, wl, *args):
 def d2N(N, wl, *args):
     """Second order derivative of the refractive index as function of wavelength using first-order finite difference.
 
-    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, *args).
+    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, args).
     :param array wl: Wavelenth axis in um (can also be a single float).
     :param mixed args: Variable number of arguments to be provided to N.
     :returns: First order derivative of N with same shape as wl.
@@ -77,7 +77,7 @@ def d2N(N, wl, *args):
 def d3N(N, wl, *args):
     """Third order derivative of the refractive index as function of wavelength using first-order finite difference.
 
-    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, *args).
+    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, args).
     :param array wl: Wavelenth axis in um (can also be a single float).
     :param mixed args: Variable number of arguments to be provided to N.
     :returns: First order derivative of N with same shape as wl.
@@ -92,7 +92,7 @@ def d3N(N, wl, *args):
 def n_group(N, wl, *args):
     """Group velocity refractive index.
 
-    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, *args).
+    :param func N: (Complex) Refractive index as function of wavelength and possible arguments: N(wl, args).
     :param array wl: Wavelenth axis in um (can also be a single float).
     :param mixed args: Variable number of arguments to be provided to N.
     :returns: Group velocity refractive index Ng = N - wl * dN with same shape as wl.
@@ -312,23 +312,31 @@ def n_glass(wl, type="SiO2"):
 def n_coatings(wl, type="MgF2_o"):
     """Refractive index of common materials used for optical coatings. Data taken from refractiveindex.info.
 
+    .. versionadded:: 10-28-2015
+        Added indices for rutile TiO2.
+
     :param array wl: Wavelength axis in um.
-    :param str type: Type of coating ('MgF2_o', 'MgF2_e', 'ZnSe').
+    :param str type: Type of coating ('MgF2_o', 'MgF2_e', 'ZnSe', 'TiO2_o', 'TiO2_e').
     :returns: Rerfractive index (same shape as wl).
     """
-    Bdict = {"MgF2_o": [0.27620, 0.60967, 0.0080, 2.14973],
-             "MgF2_e": [0.25385, 0.66405, 1.0899, 0.1816, 2.1227],
-             "ZnSe": [4.45813734, 0.467216334, 2.89566290]}
-    Cdict = {"MgF2_o": [0.0, 0.08636**2, 18.0**2, 25.0**2],
-             "MgF2_e": [0.0, 0.08504**2, 22.2**2, 24.4**2, 40.6**2],
-             "ZnSe": [0.200859853**2, 0.391371166**2, 47.1362108**2]}
+    if type == "TiO2_o":
+        return np.sqrt(5.913 + 0.2441 / (wl**2 - 0.0803))
+    elif type == "TiO2_e":
+        return np.sqrt(7.197 + 0.3322 / (wl**2 - 0.0843))
+    else:
+        Bdict = {"MgF2_o": [0.27620, 0.60967, 0.0080, 2.14973],
+                 "MgF2_e": [0.25385, 0.66405, 1.0899, 0.1816, 2.1227],
+                 "ZnSe": [4.45813734, 0.467216334, 2.89566290]}
+        Cdict = {"MgF2_o": [0.0, 0.08636**2, 18.0**2, 25.0**2],
+                 "MgF2_e": [0.0, 0.08504**2, 22.2**2, 24.4**2, 40.6**2],
+                 "ZnSe": [0.200859853**2, 0.391371166**2, 47.1362108**2]}
 
-    try:
-        args = Bdict[type] + Cdict[type]
-    except:
-        print("unknown coating type!")
+        try:
+            args = Bdict[type] + Cdict[type]
+        except:
+            raise ValueError("unknown coating type!")
 
-    return n_sellmeier(wl, *args)
+        return n_sellmeier(wl, *args)
 
 
 # #################################################################################################################

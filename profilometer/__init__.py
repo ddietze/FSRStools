@@ -118,53 +118,58 @@ def convert(filename):
         x, y, data = load_sdf(f)
         save_xyz(o, x, y, data)
 
+
 # #########################################################################################################
 # Thin film thickness extraction
-def get_film_thickness(z, plotHist = False):
+def get_film_thickness(z, plotHist=False, dz=5e-9):
     """Extract film thickness from height profile using histogram analysis and two Gaussians.
 
     :param 2d_array z: Z coordinates / height profile.
     :param bool plotHist: If *True*, the histogram and fit results are plotted in a new figure (optional).
+    :param float dz: Step size in nm used to calculate the number of bins for the histogram (default = 5nm).
     :returns: Extracted height of the thin film along with its uncertainty in meters (*float*, *float*).
     """
     # get histogram and bin centers
-    hist, edges = np.histogram(z, bins = 100, density=False)
+    Nbins = int((np.amax(z) - np.amin(z)) / dz)
+
+    hist, edges = np.histogram(z, bins=Nbins, density=True)     # changed 2015-10-27: if density=False, numpy returns an integer array instead of float
     hist = hist[:-1] / np.amax(hist)        # remove invalid data
+
     edges = edges[:-1] * 1e6
     centers = ((edges + np.roll(edges, -1)) * 0.5)[:-1]
 
     # assume two dominant peaks corresponding to the lower and upper surface (substrate and film)
     # split data in two parts, look for maxima and perform fitting with two gaussians
-    g = lambda x, A1, x01, dx1, A2, x02, dx2: A1 * np.exp(-(x - x01)**2 / (2*dx1**2)) + A2 * np.exp(-(x - x02)**2 / (2*dx2**2))
+    g = lambda x, A1, x01, dx1, A2, x02, dx2: A1 * np.exp(-(x - x01)**2 / (2 * dx1**2)) + A2 * np.exp(-(x - x02)**2 / (2 * dx2**2))
 
     # find approximate center between the two peaks using the second derivative and its center of mass
     tmp = np.absolute(np.diff(hist, 2))
     hp = int(np.sum(tmp * np.arange(len(tmp))) / np.sum(tmp))
 
     # fit with two gaussians
-    popt = [np.amax(hist[:hp]), centers[np.argmax(hist[:hp])], (centers[-1]-centers[0])/50.0, np.amax(hist[hp:]), centers[hp + np.argmax(hist[hp:])], (centers[-1]-centers[0])/50.0]
+    popt = [np.amax(hist[:hp]), centers[np.argmax(hist[:hp])], (centers[-1] - centers[0]) / 50.0, np.amax(hist[hp:]), centers[hp + np.argmax(hist[hp:])], (centers[-1] - centers[0]) / 50.0]
     popt, _ = sp.curve_fit(g, centers, hist, popt, maxfev=10000)
 
     # get thickness and stddev
     d = abs(popt[1] - popt[4]) * 1e-6
-    dd = np.sqrt( popt[2]**2 + popt[5]**2 ) * 1e-6
+    dd = np.sqrt(popt[2]**2 + popt[5]**2) * 1e-6
 
     # if we were not able to find two distinct peaks in the first attempt, use a different method to find those peaks
     # based on the original histogram and its center of mass
     if d / 2 <= dd:
         hp = int(np.sum(hist * np.arange(len(hist))) / np.sum(hist))
 
-        popt = [np.amax(hist[:hp]), centers[np.argmax(hist[:hp])], (centers[-1]-centers[0])/50.0, np.amax(hist[hp:]), centers[hp + np.argmax(hist[hp:])], (centers[-1]-centers[0])/50.0]
+        popt = [np.amax(hist[:hp]), centers[np.argmax(hist[:hp])], (centers[-1] - centers[0]) / 50.0, np.amax(hist[hp:]), centers[hp + np.argmax(hist[hp:])], (centers[-1] - centers[0]) / 50.0]
         popt, _ = sp.curve_fit(g, centers, hist, popt, maxfev=10000)
 
         d = abs(popt[1] - popt[4]) * 1e-6
-        dd = np.sqrt( popt[2]**2 + popt[5]**2 ) * 1e-6
+        dd = np.sqrt(popt[2]**2 + popt[5]**2) * 1e-6
 
     # if we want plotting, plot..
     if plotHist:
         pl.figure()
         x = np.linspace(edges[0], edges[-2], 256)
-        pl.bar(edges[:-1], hist, width=(edges[1]-edges[0]), color="r")
+        pl.bar(edges[:-1], hist, width=(edges[1] - edges[0]), color="r")
         pl.plot(x, g(x, *popt), "b-")
         pl.xlabel("Z Position ($\mu$m)")
         pl.ylabel("Histogram (norm)")
