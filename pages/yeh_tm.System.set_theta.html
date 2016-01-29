@@ -94,6 +94,11 @@
 <dt id="yeh_tm.System.set_theta">
 <code class="descclassname">System.</code><code class="descname">set_theta</code><span class="sig-paren">(</span><em>theta</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.set_theta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set angle of incidence to theta (in deg).</p>
+<p>In good faith, accepts a list or array of angles. The length of this list has to
+match the length of the wavelength axis in <cite>get_field_coefficients</cite> and <cite>get_intensity_coefficients</cite>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 01-29-2016: </span>Added supprt for angles of incidence on a per-wavelength basis.</p>
+</div>
 </dd></dl>
 
 </div>

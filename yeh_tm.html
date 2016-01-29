@@ -102,6 +102,14 @@
 <span id="yeh-tm-yeh-s-4x4-transfer-matrix-formalism"></span><h1><a class="reference internal" href="#module-yeh_tm" title="yeh_tm"><code class="xref py py-mod docutils literal"><span class="pre">yeh_tm</span></code></a> - Yeh&#8217;s 4x4 Transfer Matrix Formalism<a class="headerlink" href="#module-yeh_tm" title="Permalink to this headline">¶</a></h1>
 <p>Python implementation of Yeh&#8217;s 4x4 transfer matrix formalism for arbitrary birefringent layers and arbitrary angles of incidence. The code follows Yeh&#8217;s two seminal papers: Yeh, <em>J. Opt. Soc. Am.</em> <strong>69</strong>, 742 (1979) and Yeh, <em>Surf. Sci.</em> <strong>96</strong>, 41 (1980).</p>
 <p>Layers are represented by the <a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-class docutils literal"><span class="pre">Layer</span></code></a> class that holds all parameters describing the optical properties of a single layer. The optical system is assembled using the <a class="reference internal" href="pages/yeh_tm.System.html#yeh_tm.System" title="yeh_tm.System"><code class="xref py py-class docutils literal"><span class="pre">System</span></code></a> class.</p>
+<p><strong>Change log:</strong></p>
+<p><em>01-29-2016</em>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Added support for angles of incidence on a per-wavelength basis.</li>
+<li>Some stylistic improvements to the code.</li>
+</ul>
+</div></blockquote>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Reflection spectrum of an 8-layer high-reflector designed for 800nm:</p>
