@@ -11,6 +11,12 @@ wavelength. Furthermore, functions for conversion from refractive index to group
 
 .. note:: All functions for tabulated refractive indices expect wavelength to be in um.
 
+**Change log:**
+
+*01-29-2016*:
+
+    - Changed syntax in `load_data` in response to numpy V 1.10 changes.
+
 ..
    This file is part of the FSRStools python module.
 
@@ -42,6 +48,11 @@ from StringIO import StringIO
 def load_data(filename, **argv):
     s = pkgutil.get_data(__package__, filename)
     ss = StringIO(s)
+
+    # fix change in numpy version
+    if np.__version__.startswith('1.10') and 'skiprows' in argv:
+        argv['skip_header'] = argv.pop('skiprows')
+
     data = np.genfromtxt(ss, dtype='float', unpack=True, **argv)
     return data
 

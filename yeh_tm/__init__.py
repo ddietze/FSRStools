@@ -7,6 +7,13 @@ Python implementation of Yeh's 4x4 transfer matrix formalism for arbitrary biref
 
 Layers are represented by the :py:class:`Layer` class that holds all parameters describing the optical properties of a single layer. The optical system is assembled using the :py:class:`System` class.
 
+**Change log:**
+
+*01-29-2016*:
+
+    - Added support for angles of incidence on a per-wavelength basis.
+    - Some stylistic improvements to the code.
+
 Example
 -------
 
@@ -277,7 +284,7 @@ class Layer:
         has_to_sort = False
 
         # calculate normal vector on plane of incidence
-        nPOI = np.cross(np.array([a, b, 0]), np.array([0,0,1]))
+        nPOI = np.cross(np.array([a, b, 0]), np.array([0, 0, 1]))
 
         # iterate over the four solutions of the z-propagation constant self.g
         for i in range(4):
@@ -298,8 +305,8 @@ class Layer:
             else:
 
                 if(i < 2):  # should be p pol
-                #   print("looking for p:", np.absolute(np.dot(nPOI, P[0])))
-                    if( np.absolute(np.dot(nPOI, P[0])) < 1e-3 ):
+                    #   print("looking for p:", np.absolute(np.dot(nPOI, P[0])))
+                    if(np.absolute(np.dot(nPOI, P[0])) < 1e-3):
                         # polarization lies in plane of incidence made up by vectors ax + by and z
                         # => P[0] is p pol
                         self.p[i] = norm(P[0])
@@ -309,8 +316,8 @@ class Layer:
                         self.p[i] = norm(P[1])
                     #   print("\t-> 1")
                 else:       # should be s pol
-                #   print("looking for s:", np.absolute(np.dot(nPOI, P[0])))
-                    if( np.absolute(np.dot(nPOI, P[0])) < 1e-3 ):
+                    #   print("looking for s:", np.absolute(np.dot(nPOI, P[0])))
+                    if(np.absolute(np.dot(nPOI, P[0])) < 1e-3):
                         # polarization lies in plane of incidence made up by vectors ax + by and z
                         # => P[1] is s pol
                         self.p[i] = norm(P[1])
@@ -323,17 +330,17 @@ class Layer:
 
         # if solutions were unique, sort the polarization vectors according to p and s polarization
         # the sign of Re(g) has been taken care of already
-        if(has_to_sort == True):
+        if has_to_sort:
             for i in range(2):
-                if( np.absolute(np.dot(nPOI, self.p[i])) > 1e-3 ):
-                    self.g[i], self.g[i+2] = self.g[i+2], self.g[i]
-                    self.p[[i, i+2]] = self.p[[i+2, i]]                 # IMPORTANT! standard python swapping does not work for 2d numpy arrays; use advanced indexing instead
+                if(np.absolute(np.dot(nPOI, self.p[i])) > 1e-3):
+                    self.g[i], self.g[i + 2] = self.g[i + 2], self.g[i]
+                    self.p[[i, i + 2]] = self.p[[i + 2, i]]                 # IMPORTANT! standard python swapping does not work for 2d numpy arrays; use advanced indexing instead
 
         for i in range(4):
             # select right orientation or p vector - see Born, Wolf, pp 39
             if((i == 0 and np.real(self.p[i][0]) > 0.0) or (i == 1 and np.real(self.p[i][0]) < 0.0) or (i >= 2 and np.real(self.p[i][1]) < 0.0)):
                 self.p[i] *= -1.0
-            #self.p[i][2] = np.conj(self.p[i][2])
+            # self.p[i][2] = np.conj(self.p[i][2])
             # calculate the corresponding q-vectors by taking the cross product between the normalized propagation constant and p[i]
             K = np.array([a, b, self.g[i]], dtype=np.complex128)
             self.q[i] = np.cross(K, self.p[i]) * self.c / (w * self.mu)
@@ -349,24 +356,24 @@ class Layer:
 
          .. important:: Requires prior execution of :py:func:`calculate_p_q`.
         """
-        self.D[0,0] = self.p[0,0]
-        self.D[0,1] = self.p[1,0]
-        self.D[0,2] = self.p[2,0]
-        self.D[0,3] = self.p[3,0]
-        self.D[1,0] = self.q[0,1]
-        self.D[1,1] = self.q[1,1]
-        self.D[1,2] = self.q[2,1]
-        self.D[1,3] = self.q[3,1]
-        self.D[2,0] = self.p[0,1]
-        self.D[2,1] = self.p[1,1]
-        self.D[2,2] = self.p[2,1]
-        self.D[2,3] = self.p[3,1]
-        self.D[3,0] = self.q[0,0]
-        self.D[3,1] = self.q[1,0]
-        self.D[3,2] = self.q[2,0]
-        self.D[3,3] = self.q[3,0]
+        self.D[0, 0] = self.p[0, 0]
+        self.D[0, 1] = self.p[1, 0]
+        self.D[0, 2] = self.p[2, 0]
+        self.D[0, 3] = self.p[3, 0]
+        self.D[1, 0] = self.q[0, 1]
+        self.D[1, 1] = self.q[1, 1]
+        self.D[1, 2] = self.q[2, 1]
+        self.D[1, 3] = self.q[3, 1]
+        self.D[2, 0] = self.p[0, 1]
+        self.D[2, 1] = self.p[1, 1]
+        self.D[2, 2] = self.p[2, 1]
+        self.D[2, 3] = self.p[3, 1]
+        self.D[3, 0] = self.q[0, 0]
+        self.D[3, 1] = self.q[1, 0]
+        self.D[3, 2] = self.q[2, 0]
+        self.D[3, 3] = self.q[3, 0]
 
-        self.Di = np.linalg.pinv(self.D)#, rcond=1e-20)
+        self.Di = np.linalg.pinv(self.D)  # , rcond=1e-20)
 
         return [self.D.copy(), self.Di.copy()]
 
@@ -384,7 +391,7 @@ class Layer:
 
 
     # calculate the layer transfer matrix
-    def calculate_T(self, calculateDP = True):
+    def calculate_T(self, calculateDP=True):
         """Calculate the layer transfer matrix. If D and P have not yet been calculated, these are calculated automatically.
 
         :returns: :math:`T = D P D^{-1}`.
@@ -393,7 +400,7 @@ class Layer:
 
         .. important:: Requires prior execution of :py:func:`calculate_g` and :py:func:`calculate_p_q`.
         """
-        if(calculateDP == True):
+        if calculateDP:
             self.calculate_D()
             self.calculate_P()
 
@@ -453,17 +460,17 @@ class System:
 
         self.a = 0.0
         self.b = 0.0
-        self.T = np.zeros((4,4), dtype=np.complex128)
+        self.T = np.zeros((4, 4), dtype=np.complex128)
 
         # in-plane propagation constants are initialized with zero for normal incidence; use interface functions to change that
         self.theta = theta * np.pi / 180.0
         self.phi = phi * np.pi / 180.0
 
-        if(substrate != None):
+        if(substrate is not None):
             self.substrate = substrate
         else:
             self.substrate = Layer()
-        if(superstrate != None):
+        if(superstrate is not None):
             self.superstrate = superstrate
         else:
             self.superstrate = Layer()
@@ -495,8 +502,18 @@ class System:
 
     def set_theta(self, theta):
         """Set angle of incidence to theta (in deg).
+
+        In good faith, accepts a list or array of angles. The length of this list has to
+        match the length of the wavelength axis in `get_field_coefficients` and `get_intensity_coefficients`.
+
+        .. versionchanged:: 01-29-2016
+
+            Added supprt for angles of incidence on a per-wavelength basis.
         """
-        self.theta = theta * np.pi / 180.0
+        if isinstance(theta, list) or isinstance(theta, np.ndarray):
+            self.theta = np.array(theta) * np.pi / 180.0
+        else:
+            self.theta = theta * np.pi / 180.0
 
 
     def set_phi(self, phi):
@@ -569,11 +586,19 @@ class System:
         :param float w: Frequency value.
         :returns: System transfer matrix.
         """
+        # changed 01-29-2016: catch self.theta being an array
+        tmpTheta = None
+        if isinstance(w, np.ndarray) or isinstance(w, list):
+            w = w[0]
+        if isinstance(self.theta, np.ndarray) or isinstance(w, list):
+            tmpTheta = self.theta.copy()
+            self.theta = tmpTheta[0]
+
         # calculate dielectric tensor of superstrate
         e = self.superstrate.calculate_epsilon(w)
 
         # use only xx component assuming it's an isotropic layer
-        k0 = w / self.c * np.lib.scimath.sqrt(e[0,0])
+        k0 = w / self.c * np.lib.scimath.sqrt(e[0, 0])
 
         # the in-plane propagation constants are the projection of k0 onto the x and y axes
         self.a = k0 * np.sin(self.theta) * np.cos(self.phi)
@@ -590,7 +615,7 @@ class System:
             # calculate dynamic and propagation matrices
             D, Di, P, Ttmp = self.layers[i].update(w, self.a, self.b)
 
-            if(self.layers[i].thick == True):
+            if self.layers[i].thick:
                 # if the layer is thick, i.e. incoherent propagation should be used, finish the existing T matrix by multiplying
                 # with Di and add as new matrix in Ttot
                 # then add P as new matrix in Ttot
@@ -623,6 +648,9 @@ class System:
                 self.T = np.dot(np.absolute(Ttot[i])**2, self.T)
             self.T = np.sqrt(self.T)
 
+        if tmpTheta is not None:
+            self.theta = tmpTheta.copy()
+
         return self.T.copy()
 
 
@@ -632,7 +660,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num((self.T[1,0] * self.T[2,2] - self.T[1,2] * self.T[2,0])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num((self.T[1, 0] * self.T[2, 2] - self.T[1, 2] * self.T[2, 0]) / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def rxy(self):
@@ -640,7 +668,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num((self.T[3,0] * self.T[2,2] - self.T[3,2] * self.T[2,0])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num((self.T[3, 0] * self.T[2, 2] - self.T[3, 2] * self.T[2, 0]) / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def ryx(self):
@@ -648,7 +676,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num((self.T[0,0] * self.T[1,2] - self.T[1,0] * self.T[0,2])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num((self.T[0, 0] * self.T[1, 2] - self.T[1, 0] * self.T[0, 2]) / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def ryy(self):
@@ -656,7 +684,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num((self.T[0,0] * self.T[3,2] - self.T[3,0] * self.T[0,2])/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num((self.T[0, 0] * self.T[3, 2] - self.T[3, 0] * self.T[0, 2]) / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def txx(self):
@@ -664,7 +692,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num(self.T[2,2]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num(self.T[2, 2] / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def txy(self):
@@ -672,7 +700,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num(-self.T[2,0]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num(-self.T[2, 0] / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def tyx(self):
@@ -680,7 +708,7 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num(-self.T[0,2]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num(-self.T[0, 2] / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def tyy(self):
@@ -688,11 +716,15 @@ class System:
 
         .. important:: Requires prior execution of :py:func:`calculate_T`.
         """
-        return np.nan_to_num(self.T[0,0]/(self.T[0,0] * self.T[2,2] - self.T[0,2] * self.T[2,0]))
+        return np.nan_to_num(self.T[0, 0] / (self.T[0, 0] * self.T[2, 2] - self.T[0, 2] * self.T[2, 0]))
 
 
     def get_field_coefficients(self, w):
         """Shortcut to calculate all reflection / transmission coefficients as function of frequency w.
+
+        .. versionchanged:: 01-29-2016
+
+            Added support for angles of incidence on a per-wavelength basis.
 
         :param array w: Frequency axis.
         :returns: rxx, rxy, ryx, ryy, txx, txy, tyx, tyy (with same shape as w).
@@ -706,7 +738,16 @@ class System:
         tyx = np.zeros(len(w), dtype=np.complex128)
         tyy = np.zeros(len(w), dtype=np.complex128)
 
-        for i in range(len(w)):
+        # if self.theta is a list with angles, apply individual angles per wavelength
+        tmpTheta = None
+        if isinstance(self.theta, np.ndarray) and len(self.theta) == len(w):
+            tmpTheta = self.theta.copy()
+
+        for i, _ in enumerate(w):
+
+            if tmpTheta is not None:
+                self.theta = tmpTheta[i]
+
             self.calculate_T(w[i])
             rxx[i] = self.rxx()
             rxy[i] = self.rxy()
@@ -717,6 +758,9 @@ class System:
             tyx[i] = self.tyx()
             tyy[i] = self.tyy()
 
+        if tmpTheta is not None:
+            self.theta = tmpTheta.copy()
+
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
 
@@ -724,6 +768,10 @@ class System:
     def get_intensity_coefficients(self, w):
         """Shortcut to calculate all intensity reflectance / transmittance terms as function of frequency w.
         The transmittance terms are angle of incidence and refractive index corrected.
+
+        .. versionchanged:: 01-29-2016
+
+            Added support for angles of incidence on a per-wavelength basis.
 
         :param array w: Frequency axis.
         :returns: Rxx, Rxy, Ryx, Ryy, Txx, Txy, Tyx, Tyy (with same shape as w).
@@ -737,9 +785,18 @@ class System:
         tyx = np.zeros(len(w), dtype=np.float64)
         tyy = np.zeros(len(w), dtype=np.float64)
 
-        for i in range(len(w)):
+        # if self.theta is a list with angles, apply individual angles per wavelength
+        tmpTheta = None
+        if isinstance(self.theta, np.ndarray) and len(self.theta) == len(w):
+            tmpTheta = self.theta.copy()
+
+        for i, _ in enumerate(w):
+
+            if tmpTheta is not None:
+                self.theta = tmpTheta[i]
+
             self.calculate_T(w[i])
-            # get coefficients
+
             rxx[i] = np.absolute(self.rxx())**2
             rxy[i] = np.absolute(self.rxy())**2
             ryx[i] = np.absolute(self.ryx())**2
@@ -748,6 +805,9 @@ class System:
             txy[i] = np.real(self.substrate.g[0] / self.superstrate.g[2]) * np.absolute(self.txy())**2
             tyx[i] = np.real(self.substrate.g[2] / self.superstrate.g[0]) * np.absolute(self.tyx())**2
             tyy[i] = np.real(self.substrate.g[2] / self.superstrate.g[2]) * np.absolute(self.tyy())**2
+
+        if tmpTheta is not None:
+            self.theta = tmpTheta.copy()
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
@@ -844,17 +904,17 @@ class System:
         N = len(self.layers)
 
         # z-coordinate of substrate sided boundary
-        zn = np.zeros(N+2)
+        zn = np.zeros(N + 2)
 
         # amplitude vector
-        An = np.zeros((N+2, 4), dtype=np.complex128)
+        An = np.zeros((N + 2, 4), dtype=np.complex128)
 
         # get incident polarization and calculate the correct outgoing amplitudes
         Ax = pol[0] / np.sqrt(pol[0]**2 + pol[1]**2)
         Ay = pol[1] / np.sqrt(pol[0]**2 + pol[1]**2)
 
         # start with substrate
-        zn[0] = 0.0#self.substrate.d   # set the substrate layer z to zero to get the correct amplitudes
+        zn[0] = 0.0  # self.substrate.d   # set the substrate layer z to zero to get the correct amplitudes
         An[0] = np.array([self.txx() * Ax + self.tyx() * Ay, 0.0, self.tyy() * Ay + self.txy() * Ax, 0.0])
 
         if N > 0:
@@ -865,11 +925,11 @@ class System:
             An[1] = np.dot(T, An[0])
 
             # calculate intermediate layers in loop
-            for i in range(2, N+1):
-                zn[i] = zn[i-1] - self.layers[i-2].d
+            for i in range(2, N + 1):
+                zn[i] = zn[i - 1] - self.layers[i - 2].d
 
-                T = np.dot(self.layers[i-1].Di, np.dot(self.layers[i-2].D, self.layers[i-2].P))
-                An[i] = np.dot(T, An[i-1])
+                T = np.dot(self.layers[i - 1].Di, np.dot(self.layers[i - 2].D, self.layers[i - 2].P))
+                An[i] = np.dot(T, An[i - 1])
 
             # calculate last layer / superstrate manually again
             zn[-1] = zn[-2] - self.layers[-1].d
