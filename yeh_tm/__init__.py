@@ -9,10 +9,22 @@ Layers are represented by the :py:class:`Layer` class that holds all parameters 
 
 **Change log:**
 
+*11-05-2015*:
+
+   - Changed needle algorithm to allow multiple materials.
+
 *01-29-2016*:
 
     - Added support for angles of incidence on a per-wavelength basis.
     - Some stylistic improvements to the code.
+
+*02-05-2016*:
+
+    - Added the angle phi of the plane of incidence to the `Layer` class.
+    - Removed a bug related to sorting the polarization vectors.
+    - Removed a bug related to very small but non-zero angles of incidence.
+    - Added support for 2d and 3d-field maps.
+    - Added support for creating field animations.
 
 Example
 -------
@@ -86,6 +98,9 @@ import numpy as np
 import scipy.optimize as sp
 import copy
 
+import matplotlib.animation as animation
+import pylab as pl
+
 # ************************************************************************************************************** #
 # some helper functions
 
@@ -158,6 +173,7 @@ class Layer:
     # speed of light and magnetic permeability
     c = 1   #: speed of light in vacuum
     mu = 1  #: permeability of free space
+    gsigns = [1, -1, 1, -1]
 
     # constructor
     # thickness = thickness of layer in same units as wavelength / wavenumber
@@ -209,6 +225,16 @@ class Layer:
         self.euler[2, 1] = np.sin(theta) * np.cos(psi)
         self.euler[2, 2] = np.cos(theta)
 
+        # new 02-05-2016
+        # normal vector on plane of incidence, originally the x-z-plane
+        self.nPOI = np.array([0, 1, 0])
+
+    def set_plane_of_incidence(self, phi):
+        """Set the plane of incidence according to the angle phi in rad (rotation of the plane of incidence around z-axis).
+        Call this function only if you change the angle phi in the system matrix and do not use the `update` function.
+        """
+        self.nPOI = np.array([np.sin(phi), np.cos(phi), 0.0])
+
     def calculate_epsilon(self, w):
         """Calculate the dielectric tensor for given frequency w. Stores the result in `self.epsilon`, which can be used for repeated access.
 
@@ -239,29 +265,33 @@ class Layer:
         # set up the coefficients for the fourth-order polynomial that yields the z-propagation constant as the four roots
         # these terms are taken from my Maple calculation of the determinant of the matrix in Eq. 4 of Yeh's paper
         p = np.zeros(5, dtype=np.complex128)
-        p[0] = w**2 * self.epsilon[2,2]
-        p[1] = w**2 * self.epsilon[2,0] * a + b * w**2 * self.epsilon[2,1] + a * w**2 * self.epsilon[0,2] + w**2 * self.epsilon[1,2] * b
-        p[2] = w**2 * self.epsilon[0,0] * a**2 + w**2 * self.epsilon[1,0] * b * a - w**4 * self.epsilon[0,0] * self.epsilon[2,2] + w**2 * self.epsilon[1,1] * b**2 + w**4 * self.epsilon[1,2] * self.epsilon[2,1] + b**2 * w**2 * self.epsilon[2,2] + w**4 * self.epsilon[2,0] * self.epsilon[0,2] + a**2 * w**2 * self.epsilon[2,2] + a * w**2 * self.epsilon[0,1] * b - w**4 * self.epsilon[1,1] * self.epsilon[2,2]
-        p[3] = -w**4 * self.epsilon[0,0] * self.epsilon[1,2] * b + w**2 * self.epsilon[2,0] * a * b**2 - w**4 * self.epsilon[0,0] * b * self.epsilon[2,1] - a * w**4 * self.epsilon[1,1] * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * b * self.epsilon[0,2] + a**2 * b * w**2 * self.epsilon[1,2] + a**3 * w**2 * self.epsilon[0,2] + w**4 * self.epsilon[1,0] * self.epsilon[2,1] * a + b**3 * w**2 * self.epsilon[2,1] + a * b**2 * w**2 * self.epsilon[0,2] - w**4 * self.epsilon[2,0] * self.epsilon[1,1] * a + b**3 * w**2 * self.epsilon[1,2] + w**4 * self.epsilon[2,0] * self.epsilon[0,1] * b + w**2 * self.epsilon[2,0] * a**3 + a**2 * b * w**2 * self.epsilon[2,1] + a * w**4 * self.epsilon[0,1] * self.epsilon[1,2]
-        p[4] = w**6 * self.epsilon[2,0] * self.epsilon[0,1] * self.epsilon[1,2] - w**6 * self.epsilon[2,0] * self.epsilon[1,1] * self.epsilon[0,2] + w**4 * self.epsilon[2,0] * a**2 * self.epsilon[0,2] + w**6 * self.epsilon[0,0] * self.epsilon[1,1] * self.epsilon[2,2] - w**4 * self.epsilon[0,0] * self.epsilon[1,1] * a**2 - w**4 * self.epsilon[0,0] * self.epsilon[1,1] * b**2 - w**4 * self.epsilon[0,0] * a**2 * self.epsilon[2,2] + w**2 * self.epsilon[0,0] * a**2 * b**2 - w**6 * self.epsilon[0,0] * self.epsilon[1,2] * self.epsilon[2,1] - b**2 * w**4 * self.epsilon[1,1] * self.epsilon[2,2] + b**2 * w**2 * self.epsilon[1,1] * a**2 + b**2 * w**4 * self.epsilon[1,2] * self.epsilon[2,1] + w**6 * self.epsilon[1,0] * self.epsilon[2,1] * self.epsilon[0,2] - w**6 * self.epsilon[1,0] * self.epsilon[0,1] * self.epsilon[2,2] + w**4 * self.epsilon[1,0] * self.epsilon[0,1] * a**2 + w**4 * self.epsilon[1,0] * self.epsilon[0,1] * b**2 + w**2 * self.epsilon[1,0] * a**3 * b + w**2 * self.epsilon[1,0] * a * b**3 + a**3 * b * w**2 * self.epsilon[0,1] + a * b**3 * w**2 * self.epsilon[0,1] - w**4 * self.epsilon[1,0] * a * b * self.epsilon[2,2] + a * b * w**4 * self.epsilon[2,1] * self.epsilon[0,2] - a * b * w**4 * self.epsilon[0,1] * self.epsilon[2,2] + w**4 * self.epsilon[2,0] * a * b * self.epsilon[1,2] + w**2 * self.epsilon[0,0] * a**4 + b**4 * w**2 * self.epsilon[1,1]
+        p[0] = w**2 * self.epsilon[2, 2]
+        p[1] = w**2 * self.epsilon[2, 0] * a + b * w**2 * self.epsilon[2, 1] + a * w**2 * self.epsilon[0, 2] + w**2 * self.epsilon[1, 2] * b
+        p[2] = w**2 * self.epsilon[0, 0] * a**2 + w**2 * self.epsilon[1, 0] * b * a - w**4 * self.epsilon[0, 0] * self.epsilon[2, 2] + w**2 * self.epsilon[1, 1] * b**2 + w**4 * self.epsilon[1, 2] * self.epsilon[2, 1] + b**2 * w**2 * self.epsilon[2, 2] + w**4 * self.epsilon[2, 0] * self.epsilon[0, 2] + a**2 * w**2 * self.epsilon[2, 2] + a * w**2 * self.epsilon[0, 1] * b - w**4 * self.epsilon[1, 1] * self.epsilon[2, 2]
+        p[3] = -w**4 * self.epsilon[0, 0] * self.epsilon[1, 2] * b + w**2 * self.epsilon[2, 0] * a * b**2 - w**4 * self.epsilon[0, 0] * b * self.epsilon[2, 1] - a * w**4 * self.epsilon[1, 1] * self.epsilon[0, 2] + w**4 * self.epsilon[1, 0] * b * self.epsilon[0, 2] + a**2 * b * w**2 * self.epsilon[1, 2] + a**3 * w**2 * self.epsilon[0, 2] + w**4 * self.epsilon[1, 0] * self.epsilon[2, 1] * a + b**3 * w**2 * self.epsilon[2, 1] + a * b**2 * w**2 * self.epsilon[0, 2] - w**4 * self.epsilon[2, 0] * self.epsilon[1, 1] * a + b**3 * w**2 * self.epsilon[1, 2] + w**4 * self.epsilon[2, 0] * self.epsilon[0, 1] * b + w**2 * self.epsilon[2, 0] * a**3 + a**2 * b * w**2 * self.epsilon[2, 1] + a * w**4 * self.epsilon[0, 1] * self.epsilon[1, 2]
+        p[4] = w**6 * self.epsilon[2, 0] * self.epsilon[0, 1] * self.epsilon[1, 2] - w**6 * self.epsilon[2, 0] * self.epsilon[1, 1] * self.epsilon[0, 2] + w**4 * self.epsilon[2, 0] * a**2 * self.epsilon[0, 2] + w**6 * self.epsilon[0, 0] * self.epsilon[1, 1] * self.epsilon[2, 2] - w**4 * self.epsilon[0, 0] * self.epsilon[1, 1] * a**2 - w**4 * self.epsilon[0, 0] * self.epsilon[1, 1] * b**2 - w**4 * self.epsilon[0, 0] * a**2 * self.epsilon[2, 2] + w**2 * self.epsilon[0, 0] * a**2 * b**2 - w**6 * self.epsilon[0, 0] * self.epsilon[1, 2] * self.epsilon[2, 1] - b**2 * w**4 * self.epsilon[1, 1] * self.epsilon[2, 2] + b**2 * w**2 * self.epsilon[1, 1] * a**2 + b**2 * w**4 * self.epsilon[1, 2] * self.epsilon[2, 1] + w**6 * self.epsilon[1, 0] * self.epsilon[2, 1] * self.epsilon[0, 2] - w**6 * self.epsilon[1, 0] * self.epsilon[0, 1] * self.epsilon[2, 2] + w**4 * self.epsilon[1, 0] * self.epsilon[0, 1] * a**2 + w**4 * self.epsilon[1, 0] * self.epsilon[0, 1] * b**2 + w**2 * self.epsilon[1, 0] * a**3 * b + w**2 * self.epsilon[1, 0] * a * b**3 + a**3 * b * w**2 * self.epsilon[0, 1] + a * b**3 * w**2 * self.epsilon[0, 1] - w**4 * self.epsilon[1, 0] * a * b * self.epsilon[2, 2] + a * b * w**4 * self.epsilon[2, 1] * self.epsilon[0, 2] - a * b * w**4 * self.epsilon[0, 1] * self.epsilon[2, 2] + w**4 * self.epsilon[2, 0] * a * b * self.epsilon[1, 2] + w**2 * self.epsilon[0, 0] * a**4 + b**4 * w**2 * self.epsilon[1, 1]
 
         # the four solutions for the g's are obtained by numerically solving the polynomial equation
         # these four solutions are not yet in the right order!!
         self.g = np.roots(p)
 
+        # there are four roots, two with positive and two with negative real parts
         # force all roots to have the same sign for real and imaginary parts
+        # by conjugating the value if necessary
         self.g = np.where(np.sign(np.real(self.g)) != np.sign(np.imag(self.g)), np.conj(self.g), self.g)
 
-        # some cleaning
-        self.g = np.where(np.absolute(np.imag(self.g)) > 1e-6, self.g, np.real(self.g))
+        # some cleaning, i.e. ignore imaginary parts smaller than 1e-10
+        # this might affect solutions for very thick absorbing layers..
+        self.g = np.where(np.absolute(np.imag(self.g)) > 1e-10, self.g, np.real(self.g))
 
         # sort the solution in two steps:
         # first, sort according to the sign of Re(g) +,-,+,-
         # second, sort for polarization; this is done in the next step (calculate_p_q)
-        for i in range(4):
-            if(np.sign(np.real(self.g[i])) == np.power(-1, i + 1)):  # wrong sign
+        for i in range(3):
+            mysign = np.sign(np.real(self.g[i]))
+            if mysign != self.gsigns[i]:
                 for j in range(i + 1, 4):
-                    if(np.sign(np.real(self.g[i])) != np.sign(np.real(self.g[j]))):
+                    if mysign != np.sign(np.real(self.g[j])):
                         self.g[i], self.g[j] = self.g[j], self.g[i]         # swap values
                         break                                               # break j-for loop
 
@@ -270,6 +300,10 @@ class Layer:
 
     def calculate_p_q(self, w, a, b):
         """Calculate the electric and magnetic polarization vectors p and q for the four solutions of `self.g`.
+
+        .. versionchanged:: 02-05-2016
+
+            Removed a bug in sorting the polarization vectors.
 
         :param float w: Frequency value.
         :param complex a: In-plane propagation constant along x-axis.
@@ -283,16 +317,13 @@ class Layer:
 
         has_to_sort = False
 
-        # calculate normal vector on plane of incidence
-        nPOI = np.cross(np.array([a, b, 0]), np.array([0, 0, 1]))
-
         # iterate over the four solutions of the z-propagation constant self.g
         for i in range(4):
             # this idea is partly based on Reider's book, as the explanation in the papers is misleading
 
             # define the matrix for getting the co-factors
             # use the complex conjugate to get the phases right!!
-            M = np.conj(np.array([[w**2 * self.mu * self.epsilon[0,0] - b**2 - self.g[i]**2, w**2 * self.mu * self.epsilon[0,1] + a*b, w**2 * self.mu * self.epsilon[0,2] + a*self.g[i]], [w**2 * self.mu * self.epsilon[0,1] + a*b, w**2 * self.mu * self.epsilon[1,1] - a**2 - self.g[i]**2, w**2 * self.mu * self.epsilon[1,2] + b*self.g[i]], [w**2 * self.mu * self.epsilon[0,2] + a*self.g[i], w**2 * self.mu * self.epsilon[1,2] + b*self.g[i], w**2 * self.mu * self.epsilon[2,2] - b**2 - a**2]], dtype=np.complex128))
+            M = np.conj(np.array([[w**2 * self.mu * self.epsilon[0, 0] - b**2 - self.g[i]**2, w**2 * self.mu * self.epsilon[0, 1] + a * b, w**2 * self.mu * self.epsilon[0, 2] + a * self.g[i]], [w**2 * self.mu * self.epsilon[0, 1] + a * b, w**2 * self.mu * self.epsilon[1, 1] - a**2 - self.g[i]**2, w**2 * self.mu * self.epsilon[1, 2] + b * self.g[i]], [w**2 * self.mu * self.epsilon[0, 2] + a * self.g[i], w**2 * self.mu * self.epsilon[1, 2] + b * self.g[i], w**2 * self.mu * self.epsilon[2, 2] - b**2 - a**2]], dtype=np.complex128))
 
             # get null space to find out which polarization is associated with g[i]
             P, s = null_space(M)
@@ -306,7 +337,7 @@ class Layer:
 
                 if(i < 2):  # should be p pol
                     #   print("looking for p:", np.absolute(np.dot(nPOI, P[0])))
-                    if(np.absolute(np.dot(nPOI, P[0])) < 1e-3):
+                    if(np.absolute(np.dot(self.nPOI, P[0])) < 1e-3):
                         # polarization lies in plane of incidence made up by vectors ax + by and z
                         # => P[0] is p pol
                         self.p[i] = norm(P[0])
@@ -317,7 +348,7 @@ class Layer:
                     #   print("\t-> 1")
                 else:       # should be s pol
                     #   print("looking for s:", np.absolute(np.dot(nPOI, P[0])))
-                    if(np.absolute(np.dot(nPOI, P[0])) < 1e-3):
+                    if(np.absolute(np.dot(self.nPOI, P[0])) < 1e-3):
                         # polarization lies in plane of incidence made up by vectors ax + by and z
                         # => P[1] is s pol
                         self.p[i] = norm(P[1])
@@ -332,7 +363,7 @@ class Layer:
         # the sign of Re(g) has been taken care of already
         if has_to_sort:
             for i in range(2):
-                if(np.absolute(np.dot(nPOI, self.p[i])) > 1e-3):
+                if(np.absolute(np.dot(self.nPOI, self.p[i])) > 1e-3):
                     self.g[i], self.g[i + 2] = self.g[i + 2], self.g[i]
                     self.p[[i, i + 2]] = self.p[[i + 2, i]]                 # IMPORTANT! standard python swapping does not work for 2d numpy arrays; use advanced indexing instead
 
@@ -373,7 +404,7 @@ class Layer:
         self.D[3, 2] = self.q[2, 0]
         self.D[3, 3] = self.q[3, 0]
 
-        self.Di = np.linalg.pinv(self.D)  # , rcond=1e-20)
+        self.Di = np.linalg.pinv(self.D, rcond=1e-20)
 
         return [self.D.copy(), self.Di.copy()]
 
@@ -410,14 +441,20 @@ class Layer:
 
     # shortcut that can be used when the wavelength is changed; can be called directly after __init__()
     # uses the frequency w, and in-plane propagation constants a and b to recalculate all layer properties
-    def update(self, w, a, b):
+    def update(self, w, a, b, phi=0):
         """Shortcut to recalculate all layer properties. Can be used, for instance, when only the wavelength is changed.
+
+        .. versionchanged:: 02-05-2016
+
+            Added input parameter phi to control the plane of incidence.
 
         :param float w: Frequency value.
         :param complex a: In-plane propagation constant along x-axis.
         :param complex b: In-plane propagation constant along y-axis.
+        :param float phi: Angle phi which defines the orientation of the plane of incidence.
         :returns: Dynamic matrix D and its inverse, propagation matrix P, and layer transfer matrix T.
         """
+        self.set_plane_of_incidence(phi)
         self.calculate_epsilon(w)
         self.calculate_g(w, a, b)
         self.calculate_p_q(w, a, b)
@@ -435,7 +472,7 @@ class System:
 
     An optical system consists of the first (semi-infinite) layer (substrate), the intermediate layers and the last (semi-infinite) layer (superstrate). The *superstrate* is assumed to be **isotropic** and only the xx component of the dielectric tensor is used for the calculation of the in-plane (x, y) propagation constants.
 
-    :param float theta: Angle of incidence versus the surface normal / z-axis (deg, default = 0). The plane of incidence is the x-z-plane.
+    :param mixed theta: Angle of incidence versus the surface normal / z-axis (deg, default = 0). The plane of incidence is the x-z-plane. May be an array.
     :param float phi: Angle of rotation of the system around the z-axis (deg, default = 0).
     :param layer substrate: Layer definition of the substrate. If None, use vacuum.
     :param layer superstrate: Layer definition of the superstrate. If None, use vacuum.
@@ -458,12 +495,13 @@ class System:
         if(len(layers) > 0):
             self.layers = layers
 
-        self.a = 0.0
-        self.b = 0.0
+        self.a = 0.0 + 1j * 0.0
+        self.b = 0.0 + 1j * 0.0
         self.T = np.zeros((4, 4), dtype=np.complex128)
 
         # in-plane propagation constants are initialized with zero for normal incidence; use interface functions to change that
-        self.theta = theta * np.pi / 180.0
+        # self.theta = theta * np.pi / 180.0
+        self.set_theta(theta)
         self.phi = phi * np.pi / 180.0
 
         if(substrate is not None):
@@ -590,7 +628,7 @@ class System:
         tmpTheta = None
         if isinstance(w, np.ndarray) or isinstance(w, list):
             w = w[0]
-        if isinstance(self.theta, np.ndarray) or isinstance(w, list):
+        if isinstance(self.theta, np.ndarray):
             tmpTheta = self.theta.copy()
             self.theta = tmpTheta[0]
 
@@ -608,12 +646,12 @@ class System:
         Ttot = []
 
         # start with the dynamic matrix substrate
-        T, _, _, _ = self.substrate.update(w, self.a, self.b)
+        T, _, _, _ = self.substrate.update(w, self.a, self.b, self.phi)
 
         # now iterate through all layers and multiply the matrices
         for i in range(len(self.layers)):
             # calculate dynamic and propagation matrices
-            D, Di, P, Ttmp = self.layers[i].update(w, self.a, self.b)
+            D, Di, P, Ttmp = self.layers[i].update(w, self.a, self.b, self.phi)
 
             if self.layers[i].thick:
                 # if the layer is thick, i.e. incoherent propagation should be used, finish the existing T matrix by multiplying
@@ -629,7 +667,7 @@ class System:
                 T = np.dot(Ttmp, T)
 
         # finally add the superstrate inverse dynamic matrix
-        _, Ttmp, _, _ = self.superstrate.update(w, self.a, self.b)
+        _, Ttmp, _, _ = self.superstrate.update(w, self.a, self.b, self.phi)
         T = np.dot(Ttmp, T)
 
         # append last T matrix to Ttot
@@ -740,11 +778,11 @@ class System:
 
         # if self.theta is a list with angles, apply individual angles per wavelength
         tmpTheta = None
-        if isinstance(self.theta, np.ndarray) and len(self.theta) == len(w):
+        if isinstance(self.theta, np.ndarray):
+            assert len(self.theta) == len(w)
             tmpTheta = self.theta.copy()
 
         for i, _ in enumerate(w):
-
             if tmpTheta is not None:
                 self.theta = tmpTheta[i]
 
@@ -787,11 +825,11 @@ class System:
 
         # if self.theta is a list with angles, apply individual angles per wavelength
         tmpTheta = None
-        if isinstance(self.theta, np.ndarray) and len(self.theta) == len(w):
+        if isinstance(self.theta, np.ndarray):
+            assert len(self.theta) == len(w)
             tmpTheta = self.theta.copy()
 
         for i, _ in enumerate(w):
-
             if tmpTheta is not None:
                 self.theta = tmpTheta[i]
 
@@ -817,7 +855,7 @@ class System:
     def get_field_coefficients_AOI(self, w, AOI):
         """Shortcut to calculate all reflection / transmission coefficients as function of angle of incidence.
 
-        :param float w: Frequency value.
+        :param float w: A **single** frequency value.
         :param array AOI: List of incidence angles (deg).
         :returns: rxx, rxy, ryx, ryy, txx, txy, tyx, tyy (with same shape as AOI).
         """
@@ -829,6 +867,9 @@ class System:
         txy = np.zeros(len(AOI), dtype=np.complex128)
         tyx = np.zeros(len(AOI), dtype=np.complex128)
         tyy = np.zeros(len(AOI), dtype=np.complex128)
+
+        # store a copy
+        tmpTheta = 1 * self.theta
 
         for i in range(len(AOI)):
             # set angle
@@ -844,6 +885,8 @@ class System:
             txy[i] = self.txy()
             tyx[i] = self.tyx()
             tyy[i] = self.tyy()
+
+        self.theta = 1 * tmpTheta
 
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
@@ -865,6 +908,9 @@ class System:
         tyx = np.zeros(len(AOI), dtype=np.float64)
         tyy = np.zeros(len(AOI), dtype=np.float64)
 
+        # store a copy
+        tmpTheta = 1 * self.theta
+
         for i in range(len(AOI)):
             # set angle
             self.theta = AOI[i] * np.pi / 180.0
@@ -880,24 +926,31 @@ class System:
             tyx[i] = np.real(self.substrate.g[2] / self.superstrate.g[0]) * np.absolute(self.tyx())**2
             tyy[i] = np.real(self.substrate.g[2] / self.superstrate.g[2]) * np.absolute(self.tyy())**2
 
+        self.theta = 1 * tmpTheta
+
         return [rxx, rxy, ryx, ryy, txx, txy, tyx, tyy]
 
 
-    def get_electric_field(self, w, dz, pol=(1, 0), x = 0.0, y = 0.0):
-        """Calculate the electric field profile for a given frequency.
+    def get_electric_field(self, w, dz, pol=(1, 0), x=0.0, y=0.0):
+        """Calculate the (complex) electric field profile for a given frequency `w`.
 
-        The z-axis range is taken according to the total thickness of the layer stack plus the thicknesses of substrate and superstrate.
+        The z-axis range is calculated according to the total thickness of the layer stack plus the thicknesses of substrate and superstrate.
+
+        .. important:: This function ignores the `thick` parameter, i.e. propagation is always coherent.
+
+        .. versionchanged:: 02-05-2016
+
+            Changed type of `x` and `y` parameters to array-like to more easily support creating 2d- and 3d-field maps.
 
         :param float w: Frequency value.
         :param float dz: Step size along the z-axis.
-        :param tuple pol: (Complex) Ratio of x- and y-amplitudes of incident radiation (default = x-pol).
-        :param float x: x-coordinate.
-        :param float y: y-coordinate.
-        :returns: z-axis, complex electric field vector (3d) along z-axis ([z][Ex, Ey, Ez]), and list of z-coordinates of interfaces (zn).
-
-        .. important:: This function ignores the `thick` parameter, i.e. propagation is always coherent.
+        :param tuple pol: (Complex) Ratio of x- and y-amplitudes of incident radiation, internally normalized to unit length (default = x-pol).
+        :param array x: Array of x-coordinates to be used for field calculations. Set to 0 or None if not used.
+        :param array y: Array of y-coordinates to be used for field calculations. Set to 0 or None if not used.
+        :returns: z-axis, complex electric field vector of shape ([x])([y])[z][Ex, Ey, Ez] depending on whether `x` and `y` are used, and list of z-coordinates of interfaces (zn).
         """
-        # first calculate the overall system response
+        #  --- PART 1 ---
+        # first calculate the overall system response - THIS POPULATES ALL LAYER'S P-MATRICES
         self.calculate_T(w)
 
         # now iterate through all layers and get the necessary parameters for each layer
@@ -945,31 +998,203 @@ class System:
         # shift z-coordinates such that the top surface is at zero
         zn = zn - zn[-1]
 
+        #  --- PART 2 ---
+        # calculate the actual electric field distribution
+
+        # prepare x and y for use
+        if x is None:
+            x = np.array([0.0, ])
+        elif isinstance(x, (int, float)):
+            x = np.array([x, ])
+        if isinstance(x, list):
+            x = np.array(x)
+        if y is None:
+            y = np.array([0.0, ])
+        elif isinstance(y, (int, float)):
+            y = np.array([y, ])
+        if isinstance(y, list):
+            y = np.array(y)
+
         # generate z axis and field vector array
         z = np.arange(-self.superstrate.d, zn[0] + self.substrate.d, dz)
-        E = np.zeros((len(z), 3), dtype=np.complex128)
-
+        if len(x) == 1 and len(y) == 1:
+            E = np.zeros((len(z), 3), dtype=np.complex128)
+        elif len(x) == 1:
+            E = np.zeros((len(z), len(y), 3), dtype=np.complex128)
+            _, y = np.meshgrid(np.ones(4), y)
+        elif len(y) == 1:
+            E = np.zeros((len(z), len(x), 3), dtype=np.complex128)
+            _, x = np.meshgrid(np.ones(4), x)
+        else:
+            E = np.zeros((len(z), len(x), len(y), 3), dtype=np.complex128)
+            y, x, _ = np.meshgrid(y, x, np.ones(4))
+            print x.shape, y.shape
         current_layer = N + 1
+        L = self.superstrate
 
         # calculate the field distribution
-        for i in range(len(z)):
+        for i, zc in enumerate(z):
 
             # check for current layer
-            if z[i] > zn[current_layer] and current_layer > 0:
+            if zc > zn[current_layer] and current_layer > 0:
                 current_layer -= 1
 
-            if current_layer == 0:
-                L = self.substrate
-            elif current_layer == N + 1:
-                L = self.superstrate
-            else:
-                L = self.layers[current_layer - 1]
+                if current_layer == 0:
+                    L = self.substrate
+                else:
+                    L = self.layers[current_layer - 1]
 
             # calculate field
-            E[i] = np.dot(An[current_layer] * np.exp(1j * self.a * x + 1j * self.b * y + 1j * L.g * (z[i] - zn[current_layer])), L.p)
+            E[i] = np.dot(An[current_layer] * np.exp(1j * self.a * x + 1j * self.b * y + 1j * L.g * (zc - zn[current_layer])), L.p)
 
-        # return result
-        return z, E, zn
+        # return result - make sure that the order of axes corresponds to (x, y, z, E)
+        if len(x) == 1 and len(y) == 1:
+            return z, E, zn
+        elif len(x) == 1 or len(y) == 1:
+            return z, np.rollaxis(E, 0, 2), zn
+        else:
+            return z, np.rollaxis(E, 0, 3), zn
+
+
+    def create_animated_field_map(self, dz, dt, w, A=1, phi=0, component=0, t0=0, frames=1000, filename=None, pol=(1, 0), x=0, y=0, interval=100, repeat=False, xlabel='', ylabel='', cmap=None):
+        """Create an animated field map for the current system settings using matplotlib's `animation` module.
+
+        Supports arbitrary frequency / amplitude profiles for pulsed excitation and both 1d and 2d animations.
+        Uses the real value of the field.
+
+        .. important:: To actually see the animation, store the returned animation object in a variable until the script terminates. This is an issue related to calling `matplotlib.FuncAnimation` from within the scope of a function.
+
+        .. versionadded:: 02-05-2016
+
+        :param float dz: Step size along the z-axis.
+        :param float dt: Temporal step size between frames (physical units). Time and space are connected via t = 2 pi / x and vice versa.
+        :param mixed w: Either single frequency value or an array of frequencies whose fields are added coherently.
+        :param mixed A: Amplitude associated with each frequency. If a single float, this amplitude is applied to all frequencies. (default = 1)
+        :param mixed phi: Relative phase associated with each frequency. If a single float, this phase is applied to all frequencies. (default = 0)
+        :param int component: Which field component to use? (0 = x -default-, 1 = y, 2 = z)
+        :param float t0: Time of first frame. For zero phase, the (pulsed) field is usually centered around 0 at time 0. (physical units, default = 0)
+        :param int frames: Number of frames to calculate.
+        :param str filename: If a filename is given, the final animation will be saved to this file. (default = None).
+        :param tuple pol: (Complex) Ratio of x- and y-amplitudes of incident radiation, internally normalized to unit length (default = x-pol).
+        :param mixed x: Array of x-coordinates to be used for field calculations. Set to 0 or None if not used. **Only x OR y may be an array.**
+        :param mixed y: Array of y-coordinates to be used for field calculations. Set to 0 or None if not used. **Only x OR y may be an array.**
+        :param int interval: Waiting time between each frame in ms. (default = 100).
+        :param bool repeat: Should the animation be repeated? (default = False).
+        :param str xlabel: X-Label (default = '').
+        :param str ylabel: Y-Label (default = '').
+        :param colormap cmap: Matplotlib colormap to be used for 2d plotting or format string for 1d plotting; None defaults to 'r-'. (default = None).
+        :returns: Animation object. You have to assign this object to some variable to prevent it from being garbage collected by the python interpreter.
+        """
+        # --- PART 1 ---
+        # calculate the complex electric field map
+        if isinstance(x, (np.ndarray, list)) and isinstance(y, (np.ndarray, list)):
+            print "ERROR: Only one of x and y can be an array!"
+            return
+
+        do2d = False
+        if isinstance(x, (np.ndarray, list)) or isinstance(y, (np.ndarray, list)):
+            do2d = True
+            if isinstance(x, (np.ndarray, list)):
+                u = np.asarray(x)
+            else:
+                u = np.asarray(y)
+
+        if not isinstance(w, (np.ndarray, list)):
+            w = np.array([w, ])
+        elif isinstance(w, list):
+            w = np.asarray(w)
+        if not isinstance(A, (np.ndarray, list)):
+            A = np.array([A, ])
+        elif isinstance(A, list):
+            A = np.asarray(A)
+        if not isinstance(phi, (np.ndarray, list)):
+            phi = np.array([phi, ])
+        elif isinstance(phi, list):
+            phi = np.asarray(phi)
+
+        if len(w) > 1:
+            if A.shape != w.shape:
+                A = np.ones(w.shape) * A[0]
+            if phi.shape != w.shape:
+                phi = np.ones(w.shape) * phi[0]
+
+        # create list of electric field maps for each frequency
+        e = None
+        for i, f in enumerate(w):
+            # calculate electric field, z-axis and position of interfaces
+            z, E, zi = self.get_electric_field(f, dz, pol, x, y)
+
+            # initialize e before first use
+            if e is None:
+                e = np.zeros(tuple([len(w)] + list(E.shape[:-1])), dtype=np.complex128)
+
+            # store complex electric field for this frequency component
+            # multiplied by amplitude A and initial phase phi
+            e[i] = A[i] * E[..., component] * np.exp(-1j * phi[i])
+
+        # roll frequency axis to be the last one
+        e = np.rollaxis(e, 0, len(e.shape))
+
+        # --- PART 2 ---
+        # create actual animation by phase cycling
+
+        im = None
+        line = None
+
+        # create phase increment per time step and frequency
+        dPhi = np.exp(-1j * w * dt)
+
+        # create plot
+        fig = pl.figure()
+        pl.xlabel(xlabel)
+        pl.ylabel(ylabel)
+        vextend = np.amax(np.absolute(np.sum(e, axis=-1)))
+
+        if do2d:
+            if cmap is None:
+                cmap = pl.cm.bwr
+            im = pl.imshow(np.real(np.sum(e, axis=-1)), aspect='auto', vmin=-vextend, vmax=vextend, extent=(np.amin(z), np.amax(z), np.amin(u), np.amax(u)), animated=True, cmap=cmap)
+        else:
+            pl.ylim((-vextend * 1.1, vextend * 1.1))
+            pl.xlim((np.amin(z), np.amax(z)))
+            if cmap is None:
+                cmap = 'r-'
+            line, = pl.plot([], [], cmap)
+            # line, = pl.plot(z, np.real(np.sum(e, axis=-1)), cmap)
+
+        # plot interfaces
+        for z0 in zi:
+            pl.axvline(z0, color='k', linestyle='-')
+
+        # shift to time t0
+        e = e * np.exp(-1j * w * t0)
+
+        # update functions for animation
+        def update2d(*args):
+            i, z, e, dPhi = args
+            E = e * np.power(dPhi, i)
+            im.set_array(np.real(np.sum(E, axis=-1)))
+            return im,
+
+        def update1d(*args):
+            i, z, e, dPhi = args
+            E = e * np.power(dPhi, i)
+            line.set_data(z, np.real(np.sum(E, axis=-1)))
+            return line,
+
+        if do2d:
+            upd = update2d
+        else:
+            upd = update1d
+
+        # start the actual animation
+        ani = animation.FuncAnimation(fig, upd, frames=frames, fargs=(z, e, dPhi), interval=interval, repeat=repeat, blit=False)
+
+        # and save if desired
+        if filename is not None:
+            ani.save(filename)
+
+        return ani
 
 
 # ******************************************************************************************************************************* #
