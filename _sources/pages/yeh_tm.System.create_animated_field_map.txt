@@ -1,0 +1,6 @@
+yeh_tm.System.create_animated_field_map
+=======================================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: System.create_animated_field_map

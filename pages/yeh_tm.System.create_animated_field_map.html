@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>yeh_tm.System.get_electric_field &mdash; FSRStools 1.1 documentation</title>
+    <title>yeh_tm.System.create_animated_field_map &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
-    <link rel="next" title="yeh_tm.System.get_field_coefficients" href="yeh_tm.System.get_field_coefficients.html" />
-    <link rel="prev" title="yeh_tm.System.create_animated_field_map" href="yeh_tm.System.create_animated_field_map.html" /> 
+    <link rel="next" title="yeh_tm.System.get_electric_field" href="yeh_tm.System.get_electric_field.html" />
+    <link rel="prev" title="yeh_tm.System.calculate_T" href="yeh_tm.System.calculate_T.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,10 +40,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.get_field_coefficients.html" title="yeh_tm.System.get_field_coefficients"
+          <a href="yeh_tm.System.get_electric_field.html" title="yeh_tm.System.get_electric_field"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.create_animated_field_map.html" title="yeh_tm.System.create_animated_field_map"
+          <a href="yeh_tm.System.calculate_T.html" title="yeh_tm.System.calculate_T"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="yeh_tm.System.create_animated_field_map.html"
-                        title="previous chapter">yeh_tm.System.create_animated_field_map</a></p>
+  <p class="topless"><a href="yeh_tm.System.calculate_T.html"
+                        title="previous chapter">yeh_tm.System.calculate_T</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="yeh_tm.System.get_field_coefficients.html"
-                        title="next chapter">yeh_tm.System.get_field_coefficients</a></p>
+  <p class="topless"><a href="yeh_tm.System.get_electric_field.html"
+                        title="next chapter">yeh_tm.System.get_electric_field</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/yeh_tm.System.get_electric_field.txt"
+      <li><a href="../_sources/pages/yeh_tm.System.create_animated_field_map.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,34 +88,47 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="yeh-tm-system-get-electric-field">
-<h1>yeh_tm.System.get_electric_field<a class="headerlink" href="#yeh-tm-system-get-electric-field" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="yeh-tm-system-create-animated-field-map">
+<h1>yeh_tm.System.create_animated_field_map<a class="headerlink" href="#yeh-tm-system-create-animated-field-map" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="yeh_tm.System.get_electric_field">
-<code class="descclassname">System.</code><code class="descname">get_electric_field</code><span class="sig-paren">(</span><em>w</em>, <em>dz</em>, <em>pol=(1</em>, <em>0)</em>, <em>x=0.0</em>, <em>y=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.get_electric_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the (complex) electric field profile for a given frequency <cite>w</cite>.</p>
-<p>The z-axis range is calculated according to the total thickness of the layer stack plus the thicknesses of substrate and superstrate.</p>
+<dt id="yeh_tm.System.create_animated_field_map">
+<code class="descclassname">System.</code><code class="descname">create_animated_field_map</code><span class="sig-paren">(</span><em>dz</em>, <em>dt</em>, <em>w</em>, <em>A=1</em>, <em>phi=0</em>, <em>component=0</em>, <em>t0=0</em>, <em>frames=1000</em>, <em>filename=None</em>, <em>pol=(1</em>, <em>0)</em>, <em>x=0</em>, <em>y=0</em>, <em>interval=100</em>, <em>repeat=False</em>, <em>xlabel=''</em>, <em>ylabel=''</em>, <em>cmap=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.System.create_animated_field_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an animated field map for the current system settings using matplotlib&#8217;s <cite>animation</cite> module.</p>
+<p>Supports arbitrary frequency / amplitude profiles for pulsed excitation and both 1d and 2d animations.
+Uses the real value of the field.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">This function ignores the <cite>thick</cite> parameter, i.e. propagation is always coherent.</p>
+<p class="last">To actually see the animation, store the returned animation object in a variable until the script terminates. This is an issue related to calling <cite>matplotlib.FuncAnimation</cite> from within the scope of a function.</p>
 </div>
-<div class="versionchanged">
-<p><span class="versionmodified">Changed in version 02-05-2016: </span>Changed type of <cite>x</cite> and <cite>y</cite> parameters to array-like to more easily support creating 2d- and 3d-field maps.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 02-05-2016.</span></p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>w</strong> (<em>float</em>) &#8211; Frequency value.</li>
 <li><strong>dz</strong> (<em>float</em>) &#8211; Step size along the z-axis.</li>
+<li><strong>dt</strong> (<em>float</em>) &#8211; Temporal step size between frames (physical units). Time and space are connected via t = 2 pi / x and vice versa.</li>
+<li><strong>w</strong> (<em>mixed</em>) &#8211; Either single frequency value or an array of frequencies whose fields are added coherently.</li>
+<li><strong>A</strong> (<em>mixed</em>) &#8211; Amplitude associated with each frequency. If a single float, this amplitude is applied to all frequencies. (default = 1)</li>
+<li><strong>phi</strong> (<em>mixed</em>) &#8211; Relative phase associated with each frequency. If a single float, this phase is applied to all frequencies. (default = 0)</li>
+<li><strong>component</strong> (<em>int</em>) &#8211; Which field component to use? (0 = x -default-, 1 = y, 2 = z)</li>
+<li><strong>t0</strong> (<em>float</em>) &#8211; Time of first frame. For zero phase, the (pulsed) field is usually centered around 0 at time 0. (physical units, default = 0)</li>
+<li><strong>frames</strong> (<em>int</em>) &#8211; Number of frames to calculate.</li>
+<li><strong>filename</strong> (<em>str</em>) &#8211; If a filename is given, the final animation will be saved to this file. (default = None).</li>
 <li><strong>pol</strong> (<em>tuple</em>) &#8211; (Complex) Ratio of x- and y-amplitudes of incident radiation, internally normalized to unit length (default = x-pol).</li>
-<li><strong>x</strong> (<em>array</em>) &#8211; Array of x-coordinates to be used for field calculations. Set to 0 or None if not used.</li>
-<li><strong>y</strong> (<em>array</em>) &#8211; Array of y-coordinates to be used for field calculations. Set to 0 or None if not used.</li>
+<li><strong>x</strong> (<em>mixed</em>) &#8211; Array of x-coordinates to be used for field calculations. Set to 0 or None if not used. <strong>Only x OR y may be an array.</strong></li>
+<li><strong>y</strong> (<em>mixed</em>) &#8211; Array of y-coordinates to be used for field calculations. Set to 0 or None if not used. <strong>Only x OR y may be an array.</strong></li>
+<li><strong>interval</strong> (<em>int</em>) &#8211; Waiting time between each frame in ms. (default = 100).</li>
+<li><strong>repeat</strong> (<em>bool</em>) &#8211; Should the animation be repeated? (default = False).</li>
+<li><strong>xlabel</strong> (<em>str</em>) &#8211; X-Label (default = &#8216;&#8217;).</li>
+<li><strong>ylabel</strong> (<em>str</em>) &#8211; Y-Label (default = &#8216;&#8217;).</li>
+<li><strong>cmap</strong> (<em>colormap</em>) &#8211; Matplotlib colormap to be used for 2d plotting or format string for 1d plotting; None defaults to &#8216;r-&#8216;. (default = None).</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">z-axis, complex electric field vector of shape ([x])([y])[z][Ex, Ey, Ez] depending on whether <cite>x</cite> and <cite>y</cite> are used, and list of z-coordinates of interfaces (zn).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Animation object. You have to assign this object to some variable to prevent it from being garbage collected by the python interpreter.</p>
 </td>
 </tr>
 </tbody>
@@ -140,10 +153,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.get_field_coefficients.html" title="yeh_tm.System.get_field_coefficients"
+          <a href="yeh_tm.System.get_electric_field.html" title="yeh_tm.System.get_electric_field"
              >next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.System.create_animated_field_map.html" title="yeh_tm.System.create_animated_field_map"
+          <a href="yeh_tm.System.calculate_T.html" title="yeh_tm.System.calculate_T"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 

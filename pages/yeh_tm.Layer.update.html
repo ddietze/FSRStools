@@ -92,8 +92,11 @@
 <h1>yeh_tm.Layer.update<a class="headerlink" href="#yeh-tm-layer-update" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="yeh_tm.Layer.update">
-<code class="descclassname">Layer.</code><code class="descname">update</code><span class="sig-paren">(</span><em>w</em>, <em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.Layer.update" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Layer.</code><code class="descname">update</code><span class="sig-paren">(</span><em>w</em>, <em>a</em>, <em>b</em>, <em>phi=0</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.Layer.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut to recalculate all layer properties. Can be used, for instance, when only the wavelength is changed.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 02-05-2016: </span>Added input parameter phi to control the plane of incidence.</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -102,6 +105,7 @@
 <li><strong>w</strong> (<em>float</em>) &#8211; Frequency value.</li>
 <li><strong>a</strong> (<em>complex</em>) &#8211; In-plane propagation constant along x-axis.</li>
 <li><strong>b</strong> (<em>complex</em>) &#8211; In-plane propagation constant along y-axis.</li>
+<li><strong>phi</strong> (<em>float</em>) &#8211; Angle phi which defines the orientation of the plane of incidence.</li>
 </ul>
 </td>
 </tr>

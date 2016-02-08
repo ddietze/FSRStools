@@ -100,7 +100,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>theta</strong> (<em>float</em>) &#8211; Angle of incidence versus the surface normal / z-axis (deg, default = 0). The plane of incidence is the x-z-plane.</li>
+<li><strong>theta</strong> (<em>mixed</em>) &#8211; Angle of incidence versus the surface normal / z-axis (deg, default = 0). The plane of incidence is the x-z-plane. May be an array.</li>
 <li><strong>phi</strong> (<em>float</em>) &#8211; Angle of rotation of the system around the z-axis (deg, default = 0).</li>
 <li><strong>substrate</strong> (<em>layer</em>) &#8211; Layer definition of the substrate. If None, use vacuum.</li>
 <li><strong>superstrate</strong> (<em>layer</em>) &#8211; Layer definition of the superstrate. If None, use vacuum.</li>
@@ -136,7 +136,7 @@
 <td>Calculate the system transfer matrix <img class="math" src="../_images/math/543378e6711a8292a39598fcd4539054b10298a8.png" alt="T_{0,S}"/> for a given frequency.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="yeh_tm.System.get_electric_field.html#yeh_tm.System.get_electric_field" title="yeh_tm.System.get_electric_field"><code class="xref py py-obj docutils literal"><span class="pre">get_electric_field</span></code></a>(w,&nbsp;dz[,&nbsp;pol,&nbsp;x,&nbsp;y])</td>
-<td>Calculate the electric field profile for a given frequency.</td>
+<td>Calculate the (complex) electric field profile for a given frequency <cite>w</cite>.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="yeh_tm.System.get_field_coefficients.html#yeh_tm.System.get_field_coefficients" title="yeh_tm.System.get_field_coefficients"><code class="xref py py-obj docutils literal"><span class="pre">get_field_coefficients</span></code></a>(w)</td>
 <td>Shortcut to calculate all reflection / transmission coefficients as function of frequency w.</td>
