@@ -626,6 +626,7 @@ def getBrownianDampingSlowMod(t, lmbda, T=298.0):
     lmb = lmbda / hbar      # convert to fs-1
     return np.exp(-(lmb * kB * np.absolute(T) * t**2 / hbar + 1j * lmb * t))
 
+
 # ---------------------------------------------------------------------------------------------------------------------------------
 #
 def applyInhomogeneousBroadening(wn, y, sig, alpha=1):
@@ -711,9 +712,10 @@ def getCrossSections(t, wn, E0, ovlps, sshift, M, IOR, damp=1, sig=0, ialpha=1):
 
     :param array t: Time axis in (fs). This axis is used for the calculation of the zero-zero energy term in the time domain.
     :param array wn: Wavenumber axis in (cm-1). Same shape as t.
-    :param array tdpart: Zero-zero energy and damping terms in the time domain, same shape as wn.
+    :param array E0: Zero-zero energy. This function then calculates the time domain part using `getZeroZeroEnergy`.
     :param array ovlps: M + 2 Absorption, fluorescence and Raman overlap integrals.
     :param float sshift: Vibrational freqencies of M Raman modes to calculate (cm-1).
+    :param float M: Electronic transition dipole length (A).
     :param float IOR: Index of refraction of surrounding medium / solvent.
     :param array damp: Damping function in the time domain. Same shape as t. Set to 1 if no damping is used (default).
     :param float sig: Linewidth for inhomogeneous damping (standard deviation of Gaussian), set to zero if not used (default).
@@ -721,7 +723,7 @@ def getCrossSections(t, wn, E0, ovlps, sshift, M, IOR, damp=1, sig=0, ialpha=1):
 
                            - 1 = Gaussian (default),
                            - 0 = Lorentzian.
-    :returns: Absorption, sigmaA, M Raman cross sections, sigmaR[M], and fluorescence efficiency spectrum, kF (arrays have same shape as wn).
+    :returns: Absorption (sigmaA), M Raman cross sections (sigmaR[M]), both in A**2 / mol., and fluorescence efficiency spectrum, kF (arrays have same shape as wn); all as function of excitation wavenumber.
     """
     Npoints = len(wn)
     dt = t[1] - t[0]

@@ -17,6 +17,12 @@ wavelength. Furthermore, functions for conversion from refractive index to group
 
     - Changed syntax in `load_data` in response to numpy V 1.10 changes.
 
+*02-09-2016*:
+
+    - Added gadolinium gallium garnet to `n_glass`.
+    - Added polystyrene to `n_polymer`.
+    - Updated `kramers_kronig`.
+
 ..
    This file is part of the FSRStools python module.
 
@@ -158,25 +164,42 @@ def applyInhomogeneousBroadening(x, y, dx):
 # calculate the Kramers-Kronig transformation of absorption spectrum k as function of frequency w
 # IMPORTANT: k and w have to be sampled on a uniform grid!!!
 # this formulation is to be used for the refractive index!
-def kramers_kronig(w, k):
-    """Calculate the Kramers-Kronig transformation of absorption spectrum k as function of angular frequency w.
-    This formulation is to be used for the refractive index, not for the permittivity!
+def kramers_kronig(nu, k, dir='forward'):
+    """Calculate the Kramers-Kronig transformation of extinction coefficient spectrum k as function of wavenumber nu (or frequency) and vice-versa.
 
-    :param array w: Angular frequency axis.
-    :param array k: Absorption spectrum (same shape as w).
-    :returns: Real part of refractive index as obtained by Kramers-Kronig transformation.
+    The extinction coefficient is the imaginary part of the refractive index, which is related to the absorption coefficient alpha through k = alpha x lambda0 / (4 pi), where lambda0 is the vacuum wavelength.
+    Calculates dn = n(nu') - n(infinity) = 2/pi x Pint( nu x k / (nu^2 - nu'^2) dnu), where Pint is Cauchy's principal value integral.
 
-    .. important:: k and w have to be sampled on a uniform grid!!!
+    The method is based on Maclaurin's formula and details are found in Ohta et a., Appl. Spectrosc. 42, 952 (1988).
+
+    .. note:: The same function can be used for angular frequency instead of wavenumber and for susceptibility instead of refractive index.
+
+    .. important:: k and nu have to be sampled on the same **uniform** grid!!!
+
+    :param array nu: Wavenumber axis.
+    :param array k: Extinction coefficient spectrum (same shape as nu).
+    :param str dir: Direction is 'forward' (default) or 'backward', where 'forward' calculates the real part and 'backward' calculates the imaginary part.
+    :returns: Real part of refractive index change, dn, as obtained by Kramers-Kronig transformation (same shape as nu).
     """
-    h = np.absolute(w[1] - w[0])
+    h = np.absolute(nu[1] - nu[0])
     S = np.zeros(len(k))
-    for i, _ in enumerate(k):
-        if(i % 2 == 1):     # odd
-            S[i] = np.sum(0.5 * (k[0::2] / (w[0::2] - w[i]) + k[0::2] / (w[0::2] + w[i])))
-        else:               # even
-            S[i] = np.sum(0.5 * (k[1::2] / (w[1::2] - w[i]) + k[1::2] / (w[1::2] + w[i])))
 
-    return 2.0 / np.pi * 2.0 * h * S
+    if dir != 'backward':       # forward
+        for i, _ in enumerate(k):
+            if(i % 2 == 1):     # odd
+                S[i] = np.sum(0.5 * (k[0::2] / (nu[0::2] - nu[i]) + k[0::2] / (nu[0::2] + nu[i])))
+            else:               # even
+                S[i] = np.sum(0.5 * (k[1::2] / (nu[1::2] - nu[i]) + k[1::2] / (nu[1::2] + nu[i])))
+
+        return 2.0 / np.pi * 2.0 * h * S
+    else:                       # backward - difference are two minus signs
+        for i, _ in enumerate(k):
+            if(i % 2 == 1):     # odd
+                S[i] = np.sum(0.5 * (k[0::2] / (nu[0::2] - nu[i]) - k[0::2] / (nu[0::2] + nu[i])))
+            else:               # even
+                S[i] = np.sum(0.5 * (k[1::2] / (nu[1::2] - nu[i]) - k[1::2] / (nu[1::2] + nu[i])))
+
+        return -2.0 / np.pi * 2.0 * h * S
 
 
 # #################################################################################################################
@@ -203,7 +226,7 @@ def n_metal(wl, type='gold'):
             n0 = A[3] + 1j * A[4]
         elif type == "copper" or type == "Cu":
             n0 = A[1] + 1j * A[2]
-        else:
+        else:   # gold
             n0 = A[5] + 1j * A[6]
 
         B = interp1d(np.flipud(w0), np.flipud(n0), kind='cubic')
@@ -219,7 +242,6 @@ def n_metal(wl, type='gold'):
         A = load_data("Cr.txt", skiprows=2)
         n0 = A[1] + 1j * A[2]
         B = interp1d(A[0] / 1000.0, n0, kind='cubic')
-
     return B(wl)
 
 
@@ -284,8 +306,12 @@ def n_air(wl):
 def n_glass(wl, type="SiO2"):
     """Refractive index of some common glasses using their respective Sellmeier coefficients.
 
+    .. versionchanged:: 02-09-2016
+
+        Added Gadolinium Gallium Garnet 'GGG'.
+
     :param array wl: Wavelength axis in um.
-    :param str type: Type of glass ('SiO2', 'F2', 'NF2', 'SF10', 'SF11', 'BK7', 'Sapphire_E', 'Sapphire_O', 'CoverGlass'). Cover glass refers to silanized microscope cover glasses with parameters fitted to experimental data.
+    :param str type: Type of glass ('SiO2', 'F2', 'NF2', 'SF10', 'SF11', 'BK7', 'Sapphire_E', 'Sapphire_O', 'CoverGlass', 'GGG'). 'CoverGlass' refers to silanized microscope cover glasses with parameters fitted to experimental data. 'GGG' is Gadolinium Gallium Garnet.
     :returns: Refractive index (same shape as wl).
     """
     Bdict = {"SiO2": [0.696166300, 0.407942600, 0.897479400],
@@ -296,7 +322,8 @@ def n_glass(wl, type="SiO2"):
              "SF10": [1.61625977, 0.259229334, 1.07762317],
              "Sapphire_E": [1.50397590, 0.550691410, 6.5927379],
              "Sapphire_O": [1.43134930, 0.650547130, 5.34140210],
-             "CoverGlass": [4.21885399e-03, 3.80246387e-01, 1.27271765e+00]}
+             "CoverGlass": [4.21885399e-03, 3.80246387e-01, 1.27271765e+00],
+             "GGG": [1.7727, 0.9767, 4.9668]}
 
     Cdict = {"SiO2": [0.00467914826, 0.0135120631, 97.9340025],
              "F2": [0.00997743871, 0.0470450767, 111.886764],
@@ -306,7 +333,8 @@ def n_glass(wl, type="SiO2"):
              "SF10": [0.0127534559, 0.0581983954, 116.607680],
              "Sapphire_E": [0.00548041129, 0.0147994281, 402.895140],
              "Sapphire_O": [0.00527992610, 0.0142382647, 325.017834],
-             "CoverGlass": [1.14731882e-01, 9.92082291e-04, 6.53964380e+02]}
+             "CoverGlass": [1.14731882e-01, 9.92082291e-04, 6.53964380e+02],
+             "GGG": [0.1567, 0.01375, 22.715]}
 
     try:
         args = Bdict[type] + Cdict[type]
@@ -386,12 +414,15 @@ def n_polymer(wl, type="PVA"):
     """Refractive index of some polymers. Data for PVA taken from *J. Phys. D* **44**, 205105 (2011).
 
     :param array wl: Wavelength axis in um.
-    :param str type: Type of polymer ('PVA').
+    :param str type: Type of polymer ('PVA', 'PS' or 'polystyrene').
     :returns: Rerfractive index (same shape as wl).
     """
     if type == "PVA":
         # taken from J. Phys. D 44, 205105 (2011)
         return np.lib.scimath.sqrt(2.34 - 3.06e-2 * wl**2)
+    elif type == "PS" or type == "polystyrene":
+        # taken from refractiveindex.info
+        return np.lib.scimath.sqrt(1.0 + 1.4435 * wl**2 / (wl**2 - 0.020216))
 
     return []
 

@@ -26,6 +26,12 @@ Layers are represented by the :py:class:`Layer` class that holds all parameters 
     - Added support for 2d and 3d-field maps.
     - Added support for creating field animations.
 
+*03-07-2016*:
+
+    - Added `set_epsilon` to `Layer` class to allow changing dielectric function after initialization.
+    - Changed some entries in `calculate_p_q` to allow gain materials and very small imaginary parts.
+    - Fixed bug in `System.set_substrate` and `System.set_superstrate` functions.
+
 Example
 -------
 
@@ -122,6 +128,55 @@ def null_space(A, eps=1e-4):
     return null_space, np.compress(s <= eps * np.amax(s), s, axis=0)
 
 
+def inv(M):
+    """Compute the 'exact' inverse of a 4x4 matrix using the analytical result. This should give a higher precision and speed at a reduced noise.
+
+    :param matrix M: 4x4 Matrix.
+    :returns: Inverse of this matrix or Moore-Penrose approximation if matrix cannot be inverted.
+
+    .. seealso:: http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
+    """
+    assert M.shape == (4, 4)
+
+    # the following equations use algebraic indexing; transpose input matrix to get indexing right
+    A = M.T
+    detA = A[0, 0] * A[1, 1] * A[2, 2] * A[3, 3] + A[0, 0] * A[1, 2] * A[2, 3] * A[3, 1] + A[0, 0] * A[1, 3] * A[2, 1] * A[3, 2]
+    detA = detA + A[0, 1] * A[1, 0] * A[2, 3] * A[3, 2] + A[0, 1] * A[1, 2] * A[2, 0] * A[3, 3] + A[0, 1] * A[1, 3] * A[2, 2] * A[3, 0]
+    detA = detA + A[0, 2] * A[1, 0] * A[2, 1] * A[3, 3] + A[0, 2] * A[1, 1] * A[2, 3] * A[3, 0] + A[0, 2] * A[1, 3] * A[2, 0] * A[3, 1]
+    detA = detA + A[0, 3] * A[1, 0] * A[2, 2] * A[3, 1] + A[0, 3] * A[1, 1] * A[2, 0] * A[3, 2] + A[0, 3] * A[1, 2] * A[2, 1] * A[3, 0]
+
+    detA = detA - A[0, 0] * A[1, 1] * A[2, 3] * A[3, 2] - A[0, 0] * A[1, 2] * A[2, 1] * A[3, 3] - A[0, 0] * A[1, 3] * A[2, 2] * A[3, 1]
+    detA = detA - A[0, 1] * A[1, 0] * A[2, 2] * A[3, 3] - A[0, 1] * A[1, 2] * A[2, 3] * A[3, 0] - A[0, 1] * A[1, 3] * A[2, 0] * A[3, 2]
+    detA = detA - A[0, 2] * A[1, 0] * A[2, 3] * A[3, 1] - A[0, 2] * A[1, 1] * A[2, 0] * A[3, 3] - A[0, 2] * A[1, 3] * A[2, 1] * A[3, 0]
+    detA = detA - A[0, 3] * A[1, 0] * A[2, 1] * A[3, 2] - A[0, 3] * A[1, 1] * A[2, 2] * A[3, 0] - A[0, 3] * A[1, 2] * A[2, 0] * A[3, 1]
+
+    if detA == 0:
+        return np.linalg.pinv(M)
+
+    B = np.zeros(A.shape, dtype=np.complex128)
+    B[0, 0] = A[1, 1] * A[2, 2] * A[3, 3] + A[1, 2] * A[2, 3] * A[3, 1] + A[1, 3] * A[2, 1] * A[3, 2] - A[1, 1] * A[2, 3] * A[3, 2] - A[1, 2] * A[2, 1] * A[3, 3] - A[1, 3] * A[2, 2] * A[3, 1]
+    B[0, 1] = A[0, 1] * A[2, 3] * A[3, 2] + A[0, 2] * A[2, 1] * A[3, 3] + A[0, 3] * A[2, 2] * A[3, 1] - A[0, 1] * A[2, 2] * A[3, 3] - A[0, 2] * A[2, 3] * A[3, 1] - A[0, 3] * A[2, 1] * A[3, 2]
+    B[0, 2] = A[0, 1] * A[1, 2] * A[3, 3] + A[0, 2] * A[1, 3] * A[3, 1] + A[0, 3] * A[1, 1] * A[3, 2] - A[0, 1] * A[1, 3] * A[3, 2] - A[0, 2] * A[1, 1] * A[3, 3] - A[0, 3] * A[1, 2] * A[3, 1]
+    B[0, 3] = A[0, 1] * A[1, 3] * A[2, 2] + A[0, 2] * A[1, 1] * A[2, 3] + A[0, 3] * A[1, 2] * A[2, 1] - A[0, 1] * A[1, 2] * A[2, 3] - A[0, 2] * A[1, 3] * A[2, 1] - A[0, 3] * A[1, 1] * A[2, 2]
+
+    B[1, 0] = A[1, 0] * A[2, 3] * A[3, 2] + A[1, 2] * A[2, 0] * A[3, 3] + A[1, 3] * A[2, 2] * A[3, 0] - A[1, 0] * A[2, 2] * A[3, 3] - A[1, 2] * A[2, 3] * A[3, 0] - A[1, 3] * A[2, 0] * A[3, 2]
+    B[1, 1] = A[0, 0] * A[2, 2] * A[3, 3] + A[0, 2] * A[2, 3] * A[3, 0] + A[0, 3] * A[2, 0] * A[3, 2] - A[0, 0] * A[2, 3] * A[3, 2] - A[0, 2] * A[2, 0] * A[3, 3] - A[0, 3] * A[2, 2] * A[3, 0]
+    B[1, 2] = A[0, 0] * A[1, 3] * A[3, 2] + A[0, 2] * A[1, 0] * A[3, 3] + A[0, 3] * A[1, 2] * A[3, 0] - A[0, 0] * A[1, 2] * A[3, 3] - A[0, 2] * A[1, 3] * A[3, 0] - A[0, 3] * A[1, 0] * A[3, 2]
+    B[1, 3] = A[0, 0] * A[1, 2] * A[2, 3] + A[0, 2] * A[1, 3] * A[2, 0] + A[0, 3] * A[1, 0] * A[2, 2] - A[0, 0] * A[1, 3] * A[2, 2] - A[0, 2] * A[1, 0] * A[2, 3] - A[0, 3] * A[1, 2] * A[2, 0]
+
+    B[2, 0] = A[1, 0] * A[2, 1] * A[3, 3] + A[1, 1] * A[2, 3] * A[3, 0] + A[1, 3] * A[2, 0] * A[3, 1] - A[1, 0] * A[2, 3] * A[3, 1] - A[1, 1] * A[2, 0] * A[3, 3] - A[1, 3] * A[2, 1] * A[3, 0]
+    B[2, 1] = A[0, 0] * A[2, 3] * A[3, 1] + A[0, 1] * A[2, 0] * A[3, 3] + A[0, 3] * A[2, 1] * A[3, 0] - A[0, 0] * A[2, 1] * A[3, 3] - A[0, 1] * A[2, 3] * A[3, 0] - A[0, 3] * A[2, 0] * A[3, 1]
+    B[2, 2] = A[0, 0] * A[1, 1] * A[3, 3] + A[0, 1] * A[1, 3] * A[3, 0] + A[0, 3] * A[1, 0] * A[3, 1] - A[0, 0] * A[1, 3] * A[3, 1] - A[0, 1] * A[1, 0] * A[3, 3] - A[0, 3] * A[1, 1] * A[3, 0]
+    B[2, 3] = A[0, 0] * A[1, 3] * A[2, 1] + A[0, 1] * A[1, 0] * A[2, 3] + A[0, 3] * A[1, 1] * A[2, 0] - A[0, 0] * A[1, 1] * A[2, 3] - A[0, 1] * A[1, 3] * A[2, 0] - A[0, 3] * A[1, 0] * A[2, 1]
+
+    B[3, 0] = A[1, 0] * A[2, 2] * A[3, 1] + A[1, 1] * A[2, 0] * A[3, 2] + A[1, 2] * A[2, 1] * A[3, 0] - A[1, 0] * A[2, 1] * A[3, 2] - A[1, 1] * A[2, 2] * A[3, 0] - A[1, 2] * A[2, 0] * A[3, 1]
+    B[3, 1] = A[0, 0] * A[2, 1] * A[3, 2] + A[0, 1] * A[2, 2] * A[3, 0] + A[0, 2] * A[2, 0] * A[3, 1] - A[0, 0] * A[2, 2] * A[3, 1] - A[0, 1] * A[2, 0] * A[3, 2] - A[0, 2] * A[2, 1] * A[3, 0]
+    B[3, 2] = A[0, 0] * A[1, 2] * A[3, 1] + A[0, 1] * A[1, 0] * A[3, 2] + A[0, 2] * A[1, 1] * A[3, 0] - A[0, 0] * A[1, 1] * A[3, 2] - A[0, 1] * A[1, 2] * A[3, 0] - A[0, 2] * A[1, 0] * A[3, 1]
+    B[3, 3] = A[0, 0] * A[1, 1] * A[2, 2] + A[0, 1] * A[1, 2] * A[2, 0] + A[0, 2] * A[1, 0] * A[2, 1] - A[0, 0] * A[1, 2] * A[2, 1] - A[0, 1] * A[1, 0] * A[2, 2] - A[0, 2] * A[1, 1] * A[2, 0]
+
+    return B.T / detA
+
+
 # evanescent root - see Orfanidis book, Ch 7
 def eroot(a):
     """Returns the evanescent root of a number, where the imaginary part has the physically correct sign.
@@ -161,9 +216,9 @@ class Layer:
     """Construct a layer class instance, which controls the physical properties of a single layer.
 
     :param float thickness: Thickness of layer in same units as wavelength.
-    :param function epsilon1: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to vacuum.
-    :param function epsilon2: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to epsilon1.
-    :param function epsilon3: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to epsilon1.
+    :param function epsilon1: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to vacuum.
+    :param function epsilon2: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.
+    :param function epsilon3: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.
     :param float theta: Euler angle :math:`\\theta`.
     :param float phi: Euler angle :math:`\\phi`.
     :param float psi: Euler angle :math:`\\psi`.
@@ -194,19 +249,10 @@ class Layer:
         self.T = np.zeros((4, 4), dtype=np.complex128)
 
         # layer thickness
-        self.d = thickness
+        self.d = thickness      #: thickness of layer
 
-        # dielectric tensor in crystal frame
-        if(epsilon1 is not None):
-            self.fepsilon1 = epsilon1
-        else:
-            self.fepsilon1 = evacuum
-        self.fepsilon2 = epsilon2
-        self.fepsilon3 = epsilon3
-        if(self.fepsilon2 is None):
-            self.fepsilon2 = self.fepsilon1
-        if(self.fepsilon3 is None):
-            self.fepsilon3 = self.fepsilon1
+        # set dielectric functions
+        self.set_epsilon(epsilon1, epsilon2, epsilon3)
 
         # this variable tells us whether propagation through this layer should be handled coherently or not
         # thick: False = coherent; True = incoherent
@@ -231,12 +277,37 @@ class Layer:
 
     def set_plane_of_incidence(self, phi):
         """Set the plane of incidence according to the angle phi in rad (rotation of the plane of incidence around z-axis).
-        Call this function only if you change the angle phi in the system matrix and do not use the `update` function.
+        Call this function only if you change the angle phi in the system matrix and **do not** use the `update` function.
+
+        .. versionadded:: 02-05-2016
         """
         self.nPOI = np.array([np.sin(phi), np.cos(phi), 0.0])
 
+    def set_epsilon(self, epsilon1=None, epsilon2=None, epsilon3=None):
+        """Assign the dielectric functions to the main axes (x=1, y=2, z=3) of the layer in the crystal frame.
+
+        .. versionadded:: 03-07-2016
+
+        :param function epsilon1: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to vacuum.
+        :param function epsilon2: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.
+        :param function epsilon3: Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.
+        """
+        # dielectric tensor in crystal frame
+        if(epsilon1 is not None):
+            self.fepsilon1 = epsilon1
+        else:
+            self.fepsilon1 = evacuum
+        self.fepsilon2 = epsilon2
+        self.fepsilon3 = epsilon3
+        if(self.fepsilon2 is None):
+            self.fepsilon2 = self.fepsilon1
+        if(self.fepsilon3 is None):
+            self.fepsilon3 = self.fepsilon1
+
     def calculate_epsilon(self, w):
         """Calculate the dielectric tensor for given frequency w. Stores the result in `self.epsilon`, which can be used for repeated access.
+
+        Call this function only if you **do not** use the `update` function.
 
         :param float w: Frequency value.
         :returns: Dielectric tensor (4x4).
@@ -278,11 +349,11 @@ class Layer:
         # there are four roots, two with positive and two with negative real parts
         # force all roots to have the same sign for real and imaginary parts
         # by conjugating the value if necessary
-        self.g = np.where(np.sign(np.real(self.g)) != np.sign(np.imag(self.g)), np.conj(self.g), self.g)
+        # self.g = np.where(np.sign(np.real(self.g)) != np.sign(np.imag(self.g)), np.conj(self.g), self.g)
 
         # some cleaning, i.e. ignore imaginary parts smaller than 1e-10
         # this might affect solutions for very thick absorbing layers..
-        self.g = np.where(np.absolute(np.imag(self.g)) > 1e-10, self.g, np.real(self.g))
+        # self.g = np.where(np.absolute(np.imag(self.g)) > 1e-10, self.g, np.real(self.g))
 
         # sort the solution in two steps:
         # first, sort according to the sign of Re(g) +,-,+,-
@@ -404,7 +475,8 @@ class Layer:
         self.D[3, 2] = self.q[2, 0]
         self.D[3, 3] = self.q[3, 0]
 
-        self.Di = np.linalg.pinv(self.D, rcond=1e-20)
+        # self.Di = np.linalg.pinv(self.D, rcond=1e-20)
+        self.Di = inv(self.D)
 
         return [self.D.copy(), self.Di.copy()]
 
@@ -442,7 +514,17 @@ class Layer:
     # shortcut that can be used when the wavelength is changed; can be called directly after __init__()
     # uses the frequency w, and in-plane propagation constants a and b to recalculate all layer properties
     def update(self, w, a, b, phi=0):
-        """Shortcut to recalculate all layer properties. Can be used, for instance, when only the wavelength is changed.
+        """Shortcut to recalculate all layer properties.
+
+        This function calls the following functions::
+
+            self.set_plane_of_incidence(phi)
+            self.calculate_epsilon(w)
+            self.calculate_g(w, a, b)
+            self.calculate_p_q(w, a, b)
+            self.calculate_D()
+            self.calculate_P()
+            self.calculate_T()
 
         .. versionchanged:: 02-05-2016
 
@@ -453,6 +535,7 @@ class Layer:
         :param complex b: In-plane propagation constant along y-axis.
         :param float phi: Angle phi which defines the orientation of the plane of incidence.
         :returns: Dynamic matrix D and its inverse, propagation matrix P, and layer transfer matrix T.
+
         """
         self.set_plane_of_incidence(phi)
         self.calculate_epsilon(w)
@@ -517,13 +600,13 @@ class System:
     def set_substrate(self, S):
         """Set the substrate to S.
         """
-        self.substrate = np.copy(S)
+        self.substrate = S
 
 
     def set_superstrate(self, S):
         """Set the superstrate to S.
         """
-        self.superstrate = np.copy(S)
+        self.superstrate = S
 
 
     def get_substrate(self):
@@ -1049,11 +1132,11 @@ class System:
 
         # return result - make sure that the order of axes corresponds to (x, y, z, E)
         if len(x) == 1 and len(y) == 1:
-            return z, E, zn
+            return z, E, zn[1:]
         elif len(x) == 1 or len(y) == 1:
-            return z, np.rollaxis(E, 0, 2), zn
+            return z, np.rollaxis(E, 0, 2), zn[1:]
         else:
-            return z, np.rollaxis(E, 0, 3), zn
+            return z, np.rollaxis(E, 0, 3), zn[1:]
 
 
     def create_animated_field_map(self, dz, dt, w, A=1, phi=0, component=0, t0=0, frames=1000, filename=None, pol=(1, 0), x=0, y=0, interval=100, repeat=False, xlabel='', ylabel='', cmap=None):
