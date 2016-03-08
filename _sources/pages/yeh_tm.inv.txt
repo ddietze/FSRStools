@@ -1,0 +1,6 @@
+yeh_tm.inv
+==========
+
+.. currentmodule:: yeh_tm
+
+.. autofunction:: inv

@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
-    <link rel="next" title="yeh_tm.Layer.calculate_epsilon" href="yeh_tm.Layer.calculate_epsilon.html" />
+    <link rel="next" title="yeh_tm.Layer.set_plane_of_incidence" href="yeh_tm.Layer.set_plane_of_incidence.html" />
     <link rel="prev" title="yeh_tm.evacuum" href="yeh_tm.evacuum.html" /> 
   </head>
   <body role="document">
@@ -40,7 +40,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.Layer.calculate_epsilon.html" title="yeh_tm.Layer.calculate_epsilon"
+          <a href="yeh_tm.Layer.set_plane_of_incidence.html" title="yeh_tm.Layer.set_plane_of_incidence"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="yeh_tm.evacuum.html" title="yeh_tm.evacuum"
@@ -58,8 +58,8 @@
   <p class="topless"><a href="yeh_tm.evacuum.html"
                         title="previous chapter">yeh_tm.evacuum</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="yeh_tm.Layer.calculate_epsilon.html"
-                        title="next chapter">yeh_tm.Layer.calculate_epsilon</a></p>
+  <p class="topless"><a href="yeh_tm.Layer.set_plane_of_incidence.html"
+                        title="next chapter">yeh_tm.Layer.set_plane_of_incidence</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -100,9 +100,9 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>thickness</strong> (<em>float</em>) &#8211; Thickness of layer in same units as wavelength.</li>
-<li><strong>epsilon1</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to vacuum.</li>
-<li><strong>epsilon2</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to epsilon1.</li>
-<li><strong>epsilon3</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function if provided, defaults to epsilon1.</li>
+<li><strong>epsilon1</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to vacuum.</li>
+<li><strong>epsilon2</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.</li>
+<li><strong>epsilon3</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.</li>
 <li><strong>theta</strong> (<em>float</em>) &#8211; Euler angle <img class="math" src="../_images/math/a9cfbeb8ebee1f365919e147a79e242dcb67ee5d.png" alt="\theta"/>.</li>
 <li><strong>phi</strong> (<em>float</em>) &#8211; Euler angle <img class="math" src="../_images/math/10e009bdb83f96c5f47c58b34d5d4b12ef268d5b.png" alt="\phi"/>.</li>
 <li><strong>psi</strong> (<em>float</em>) &#8211; Euler angle <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/>.</li>
@@ -185,7 +185,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.Layer.calculate_epsilon.html" title="yeh_tm.Layer.calculate_epsilon"
+          <a href="yeh_tm.Layer.set_plane_of_incidence.html" title="yeh_tm.Layer.set_plane_of_incidence"
              >next</a> |</li>
         <li class="right" >
           <a href="yeh_tm.evacuum.html" title="yeh_tm.evacuum"

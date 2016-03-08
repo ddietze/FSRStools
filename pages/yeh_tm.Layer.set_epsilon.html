@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>yeh_tm.null_space &mdash; FSRStools 1.1 documentation</title>
+    <title>yeh_tm.Layer.set_epsilon &mdash; FSRStools 1.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,8 +26,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
-    <link rel="next" title="yeh_tm.eroot" href="yeh_tm.eroot.html" />
-    <link rel="prev" title="yeh_tm.inv" href="yeh_tm.inv.html" /> 
+    <link rel="next" title="yeh_tm.Layer.calculate_epsilon" href="yeh_tm.Layer.calculate_epsilon.html" />
+    <link rel="prev" title="yeh_tm.Layer.set_plane_of_incidence" href="yeh_tm.Layer.set_plane_of_incidence.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,10 +40,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.eroot.html" title="yeh_tm.eroot"
+          <a href="yeh_tm.Layer.calculate_epsilon.html" title="yeh_tm.Layer.calculate_epsilon"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.inv.html" title="yeh_tm.inv"
+          <a href="yeh_tm.Layer.set_plane_of_incidence.html" title="yeh_tm.Layer.set_plane_of_incidence"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
@@ -55,15 +55,15 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="yeh_tm.inv.html"
-                        title="previous chapter">yeh_tm.inv</a></p>
+  <p class="topless"><a href="yeh_tm.Layer.set_plane_of_incidence.html"
+                        title="previous chapter">yeh_tm.Layer.set_plane_of_incidence</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="yeh_tm.eroot.html"
-                        title="next chapter">yeh_tm.eroot</a></p>
+  <p class="topless"><a href="yeh_tm.Layer.calculate_epsilon.html"
+                        title="next chapter">yeh_tm.Layer.calculate_epsilon</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/pages/yeh_tm.null_space.txt"
+      <li><a href="../_sources/pages/yeh_tm.Layer.set_epsilon.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -88,31 +88,28 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="yeh-tm-null-space">
-<h1>yeh_tm.null_space<a class="headerlink" href="#yeh-tm-null-space" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="yeh_tm.null_space">
-<code class="descclassname">yeh_tm.</code><code class="descname">null_space</code><span class="sig-paren">(</span><em>A</em>, <em>eps=0.0001</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.null_space" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the null space of matrix A which is the solution set x to the homogeneous equation Ax = 0.</p>
+  <div class="section" id="yeh-tm-layer-set-epsilon">
+<h1>yeh_tm.Layer.set_epsilon<a class="headerlink" href="#yeh-tm-layer-set-epsilon" title="Permalink to this headline">¶</a></h1>
+<dl class="method">
+<dt id="yeh_tm.Layer.set_epsilon">
+<code class="descclassname">Layer.</code><code class="descname">set_epsilon</code><span class="sig-paren">(</span><em>epsilon1=None</em>, <em>epsilon2=None</em>, <em>epsilon3=None</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.Layer.set_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign the dielectric functions to the main axes (x=1, y=2, z=3) of the layer in the crystal frame.</p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 03-07-2016.</span></p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>A</strong> (<em>matrix</em>) &#8211; Matrix.</li>
-<li><strong>eps</strong> (<em>float</em>) &#8211; Maximum size of selected singular value relative to maximum.</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>epsilon1</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to vacuum.</li>
+<li><strong>epsilon2</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.</li>
+<li><strong>epsilon3</strong> (<em>function</em>) &#8211; Function that takes the frequency w as argument and returns a value for the dielectric constant along this axis. If no function is provided, defaults to epsilon1.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Null space (list of vectors) and associated singular components.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">Wikipedia and <a class="reference external" href="http://stackoverflow.com/questions/1835246/how-to-solve-homogeneous-linear-equations-with-numpy">http://stackoverflow.com/questions/1835246/how-to-solve-homogeneous-linear-equations-with-numpy</a>.</p>
-</div>
 </dd></dl>
 
 </div>
@@ -133,10 +130,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.eroot.html" title="yeh_tm.eroot"
+          <a href="yeh_tm.Layer.calculate_epsilon.html" title="yeh_tm.Layer.calculate_epsilon"
              >next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.inv.html" title="yeh_tm.inv"
+          <a href="yeh_tm.Layer.set_plane_of_incidence.html" title="yeh_tm.Layer.set_plane_of_incidence"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 

@@ -114,6 +114,14 @@ wavelength. Furthermore, functions for conversion from refractive index to group
 <li>Changed syntax in <cite>load_data</cite> in response to numpy V 1.10 changes.</li>
 </ul>
 </div></blockquote>
+<p><em>02-09-2016</em>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Added gadolinium gallium garnet to <cite>n_glass</cite>.</li>
+<li>Added polystyrene to <cite>n_polymer</cite>.</li>
+<li>Updated <cite>kramers_kronig</cite>.</li>
+</ul>
+</div></blockquote>
 <div class="section" id="conversion-manipulation-functions">
 <h2>Conversion / Manipulation Functions<a class="headerlink" href="#conversion-manipulation-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
@@ -140,8 +148,8 @@ wavelength. Furthermore, functions for conversion from refractive index to group
 <tr class="row-even"><td><a class="reference internal" href="pages/refind.eps_to_n.html#refind.eps_to_n" title="refind.eps_to_n"><code class="xref py py-obj docutils literal"><span class="pre">eps_to_n</span></code></a>(eps)</td>
 <td>Convert (complex) permittivity to (complex) refractive index.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/refind.kramers_kronig.html#refind.kramers_kronig" title="refind.kramers_kronig"><code class="xref py py-obj docutils literal"><span class="pre">kramers_kronig</span></code></a>(w,&nbsp;k)</td>
-<td>Calculate the Kramers-Kronig transformation of absorption spectrum k as function of angular frequency w.</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/refind.kramers_kronig.html#refind.kramers_kronig" title="refind.kramers_kronig"><code class="xref py py-obj docutils literal"><span class="pre">kramers_kronig</span></code></a>(nu,&nbsp;k[,&nbsp;dir])</td>
+<td>Calculate the Kramers-Kronig transformation of extinction coefficient spectrum k as function of wavenumber nu (or frequency) and vice-versa.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/refind.applyInhomogeneousBroadening.html#refind.applyInhomogeneousBroadening" title="refind.applyInhomogeneousBroadening"><code class="xref py py-obj docutils literal"><span class="pre">applyInhomogeneousBroadening</span></code></a>(x,&nbsp;y,&nbsp;dx)</td>
 <td>Convolute a refractive index / permittivity profile with a Gaussian to introduce inhomogeneous broadening.</td>

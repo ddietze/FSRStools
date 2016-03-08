@@ -14,6 +14,8 @@ Each layer is represented by an instance of the :py:class:`Layer` class. This cl
    :toctree: pages
 
    Layer
+   Layer.set_plane_of_incidence
+   Layer.set_epsilon
    Layer.calculate_epsilon
    Layer.calculate_g
    Layer.calculate_p_q
@@ -21,6 +23,7 @@ Each layer is represented by an instance of the :py:class:`Layer` class. This cl
    Layer.calculate_P
    Layer.calculate_T
    Layer.update
+
 
 Class :py:class:`System`
 ------------------------
@@ -94,6 +97,7 @@ These functions are called internally by the :py:class:`Layer` and :py:class:`Sy
 .. autosummary::
    :toctree: pages
 
+   inv
    null_space
    eroot
    norm

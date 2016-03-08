@@ -1,0 +1,6 @@
+yeh_tm.Layer.set_plane_of_incidence
+===================================
+
+.. currentmodule:: yeh_tm
+
+.. automethod:: Layer.set_plane_of_incidence

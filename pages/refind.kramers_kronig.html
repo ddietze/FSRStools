@@ -92,28 +92,35 @@
 <h1>refind.kramers_kronig<a class="headerlink" href="#refind-kramers-kronig" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="refind.kramers_kronig">
-<code class="descclassname">refind.</code><code class="descname">kramers_kronig</code><span class="sig-paren">(</span><em>w</em>, <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#refind.kramers_kronig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Kramers-Kronig transformation of absorption spectrum k as function of angular frequency w.
-This formulation is to be used for the refractive index, not for the permittivity!</p>
+<code class="descclassname">refind.</code><code class="descname">kramers_kronig</code><span class="sig-paren">(</span><em>nu</em>, <em>k</em>, <em>dir='forward'</em><span class="sig-paren">)</span><a class="headerlink" href="#refind.kramers_kronig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Kramers-Kronig transformation of extinction coefficient spectrum k as function of wavenumber nu (or frequency) and vice-versa.</p>
+<p>The extinction coefficient is the imaginary part of the refractive index, which is related to the absorption coefficient alpha through k = alpha x lambda0 / (4 pi), where lambda0 is the vacuum wavelength.
+Calculates dn = n(nu&#8217;) - n(infinity) = 2/pi x Pint( nu x k / (nu^2 - nu&#8217;^2) dnu), where Pint is Cauchy&#8217;s principal value integral.</p>
+<p>The method is based on Maclaurin&#8217;s formula and details are found in Ohta et a., Appl. Spectrosc. 42, 952 (1988).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The same function can be used for angular frequency instead of wavenumber and for susceptibility instead of refractive index.</p>
+</div>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">k and nu have to be sampled on the same <strong>uniform</strong> grid!!!</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>w</strong> (<em>array</em>) &#8211; Angular frequency axis.</li>
-<li><strong>k</strong> (<em>array</em>) &#8211; Absorption spectrum (same shape as w).</li>
+<li><strong>nu</strong> (<em>array</em>) &#8211; Wavenumber axis.</li>
+<li><strong>k</strong> (<em>array</em>) &#8211; Extinction coefficient spectrum (same shape as nu).</li>
+<li><strong>dir</strong> (<em>str</em>) &#8211; Direction is &#8216;forward&#8217; (default) or &#8216;backward&#8217;, where &#8216;forward&#8217; calculates the real part and &#8216;backward&#8217; calculates the imaginary part.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Real part of refractive index as obtained by Kramers-Kronig transformation.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Real part of refractive index change, dn, as obtained by Kramers-Kronig transformation (same shape as nu).</p>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">k and w have to be sampled on a uniform grid!!!</p>
-</div>
 </dd></dl>
 
 </div>

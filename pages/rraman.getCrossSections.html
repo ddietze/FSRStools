@@ -106,9 +106,10 @@ to calculate the fluorescence rate (=rate of spontaneous emission) by integratin
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>t</strong> (<em>array</em>) &#8211; Time axis in (fs). This axis is used for the calculation of the zero-zero energy term in the time domain.</li>
 <li><strong>wn</strong> (<em>array</em>) &#8211; Wavenumber axis in (cm-1). Same shape as t.</li>
-<li><strong>tdpart</strong> (<em>array</em>) &#8211; Zero-zero energy and damping terms in the time domain, same shape as wn.</li>
+<li><strong>E0</strong> (<em>array</em>) &#8211; Zero-zero energy. This function then calculates the time domain part using <cite>getZeroZeroEnergy</cite>.</li>
 <li><strong>ovlps</strong> (<em>array</em>) &#8211; M + 2 Absorption, fluorescence and Raman overlap integrals.</li>
 <li><strong>sshift</strong> (<em>float</em>) &#8211; Vibrational freqencies of M Raman modes to calculate (cm-1).</li>
+<li><strong>M</strong> (<em>float</em>) &#8211; Electronic transition dipole length (A).</li>
 <li><strong>IOR</strong> (<em>float</em>) &#8211; Index of refraction of surrounding medium / solvent.</li>
 <li><strong>damp</strong> (<em>array</em>) &#8211; Damping function in the time domain. Same shape as t. Set to 1 if no damping is used (default).</li>
 <li><strong>sig</strong> (<em>float</em>) &#8211; Linewidth for inhomogeneous damping (standard deviation of Gaussian), set to zero if not used (default).</li>
@@ -121,7 +122,7 @@ to calculate the fluorescence rate (=rate of spontaneous emission) by integratin
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Absorption, sigmaA, M Raman cross sections, sigmaR[M], and fluorescence efficiency spectrum, kF (arrays have same shape as wn).</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Absorption (sigmaA), M Raman cross sections (sigmaR[M]), both in A**2 / mol., and fluorescence efficiency spectrum, kF (arrays have same shape as wn); all as function of excitation wavenumber.</p>
 </td>
 </tr>
 </tbody>

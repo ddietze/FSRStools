@@ -126,6 +126,14 @@
 <li>Added support for creating field animations.</li>
 </ul>
 </div></blockquote>
+<p><em>03-07-2016</em>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Added <cite>set_epsilon</cite> to <cite>Layer</cite> class to allow changing dielectric function after initialization.</li>
+<li>Changed some entries in <cite>calculate_p_q</cite> to allow gain materials and very small imaginary parts.</li>
+<li>Fixed bug in <cite>System.set_substrate</cite> and <cite>System.set_superstrate</cite> functions.</li>
+</ul>
+</div></blockquote>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Reflection spectrum of an 8-layer high-reflector designed for 800nm:</p>
@@ -187,6 +195,12 @@
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.html#yeh_tm.Layer" title="yeh_tm.Layer"><code class="xref py py-obj docutils literal"><span class="pre">Layer</span></code></a>([thickness,&nbsp;epsilon1,&nbsp;epsilon2,&nbsp;...])</td>
 <td>Construct a layer class instance, which controls the physical properties of a single layer.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.set_plane_of_incidence.html#yeh_tm.Layer.set_plane_of_incidence" title="yeh_tm.Layer.set_plane_of_incidence"><code class="xref py py-obj docutils literal"><span class="pre">Layer.set_plane_of_incidence</span></code></a>(phi)</td>
+<td>Set the plane of incidence according to the angle phi in rad (rotation of the plane of incidence around z-axis).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.Layer.set_epsilon.html#yeh_tm.Layer.set_epsilon" title="yeh_tm.Layer.set_epsilon"><code class="xref py py-obj docutils literal"><span class="pre">Layer.set_epsilon</span></code></a>([epsilon1,&nbsp;epsilon2,&nbsp;epsilon3])</td>
+<td>Assign the dielectric functions to the main axes (x=1, y=2, z=3) of the layer in the crystal frame.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.Layer.calculate_epsilon.html#yeh_tm.Layer.calculate_epsilon" title="yeh_tm.Layer.calculate_epsilon"><code class="xref py py-obj docutils literal"><span class="pre">Layer.calculate_epsilon</span></code></a>(w)</td>
 <td>Calculate the dielectric tensor for given frequency w.</td>
@@ -359,16 +373,19 @@ design is already close to the target. Currently, the design can only be optimiz
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.null_space.html#yeh_tm.null_space" title="yeh_tm.null_space"><code class="xref py py-obj docutils literal"><span class="pre">null_space</span></code></a>(A[,&nbsp;eps])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.inv.html#yeh_tm.inv" title="yeh_tm.inv"><code class="xref py py-obj docutils literal"><span class="pre">inv</span></code></a>(M)</td>
+<td>Compute the &#8216;exact&#8217; inverse of a 4x4 matrix using the analytical result.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.null_space.html#yeh_tm.null_space" title="yeh_tm.null_space"><code class="xref py py-obj docutils literal"><span class="pre">null_space</span></code></a>(A[,&nbsp;eps])</td>
 <td>Compute the null space of matrix A which is the solution set x to the homogeneous equation Ax = 0.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.eroot.html#yeh_tm.eroot" title="yeh_tm.eroot"><code class="xref py py-obj docutils literal"><span class="pre">eroot</span></code></a>(a)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.eroot.html#yeh_tm.eroot" title="yeh_tm.eroot"><code class="xref py py-obj docutils literal"><span class="pre">eroot</span></code></a>(a)</td>
 <td>Returns the evanescent root of a number, where the imaginary part has the physically correct sign.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.norm.html#yeh_tm.norm" title="yeh_tm.norm"><code class="xref py py-obj docutils literal"><span class="pre">norm</span></code></a>(a)</td>
+<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.norm.html#yeh_tm.norm" title="yeh_tm.norm"><code class="xref py py-obj docutils literal"><span class="pre">norm</span></code></a>(a)</td>
 <td>Normalize a vector to its length.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pages/yeh_tm.evacuum.html#yeh_tm.evacuum" title="yeh_tm.evacuum"><code class="xref py py-obj docutils literal"><span class="pre">evacuum</span></code></a>(x)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pages/yeh_tm.evacuum.html#yeh_tm.evacuum" title="yeh_tm.evacuum"><code class="xref py py-obj docutils literal"><span class="pre">evacuum</span></code></a>(x)</td>
 <td>Returns the dielectric function of vacuum (1).</td>
 </tr>
 </tbody>

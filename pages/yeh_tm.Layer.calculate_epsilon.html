@@ -27,7 +27,7 @@
     <link rel="top" title="FSRStools 1.1 documentation" href="../index.html" />
     <link rel="up" title="yeh_tm - Yeh’s 4x4 Transfer Matrix Formalism" href="../yeh_tm.html" />
     <link rel="next" title="yeh_tm.Layer.calculate_g" href="yeh_tm.Layer.calculate_g.html" />
-    <link rel="prev" title="yeh_tm.Layer" href="yeh_tm.Layer.html" /> 
+    <link rel="prev" title="yeh_tm.Layer.set_epsilon" href="yeh_tm.Layer.set_epsilon.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -43,7 +43,7 @@
           <a href="yeh_tm.Layer.calculate_g.html" title="yeh_tm.Layer.calculate_g"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.Layer.html" title="yeh_tm.Layer"
+          <a href="yeh_tm.Layer.set_epsilon.html" title="yeh_tm.Layer.set_epsilon"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" accesskey="U"><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
@@ -55,8 +55,8 @@
               <img class="logo" src="../_static/logo.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="yeh_tm.Layer.html"
-                        title="previous chapter">yeh_tm.Layer</a></p>
+  <p class="topless"><a href="yeh_tm.Layer.set_epsilon.html"
+                        title="previous chapter">yeh_tm.Layer.set_epsilon</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="yeh_tm.Layer.calculate_g.html"
                         title="next chapter">yeh_tm.Layer.calculate_g</a></p>
@@ -94,6 +94,7 @@
 <dt id="yeh_tm.Layer.calculate_epsilon">
 <code class="descclassname">Layer.</code><code class="descname">calculate_epsilon</code><span class="sig-paren">(</span><em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#yeh_tm.Layer.calculate_epsilon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the dielectric tensor for given frequency w. Stores the result in <cite>self.epsilon</cite>, which can be used for repeated access.</p>
+<p>Call this function only if you <strong>do not</strong> use the <cite>update</cite> function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -127,7 +128,7 @@
           <a href="yeh_tm.Layer.calculate_g.html" title="yeh_tm.Layer.calculate_g"
              >next</a> |</li>
         <li class="right" >
-          <a href="yeh_tm.Layer.html" title="yeh_tm.Layer"
+          <a href="yeh_tm.Layer.set_epsilon.html" title="yeh_tm.Layer.set_epsilon"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">FSRStools 1.1 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="../yeh_tm.html" ><code class="docutils literal"><span class="pre">yeh_tm</span></code> - Yeh&#8217;s 4x4 Transfer Matrix Formalism</a> &raquo;</li> 
